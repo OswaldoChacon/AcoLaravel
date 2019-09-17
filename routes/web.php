@@ -172,7 +172,9 @@ Route::get('mostrarEvaluacion/{id}', 'AlumnoController@mostrarEvaluacion')->name
 
 // Acceso a la vista de horarios donde se creara todo lo de las hormigas
 Route::get('horarios', function(){
-	return view('oficina.horarios.horarios');
+	$foros = DB::table('foros')->where('accesosecundario','=',1)->get();	
+	// dd($foro);
+	return view('oficina.horarios.horarios',compact('foros'));
 });
 
 Route::get('profes/horarios/{id?}','Horario\addHourController@agregarHorarios')->name('horariomaestro');

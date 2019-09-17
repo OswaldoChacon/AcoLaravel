@@ -34,9 +34,9 @@
           <tr>
             <td>{{$token->token}}</td>
             @if ($token->uso==0)
-            <td><img src="{{asset('x.png')}}" style="height:20px;left:5%; top:30px;"></td>
+            <td><img src="{{asset('img/x.png')}}" style="height:20px;left:5%; top:30px;"></td>
             @else
-            <td><img src="{{asset('palomita.png')}}" style="height:20px;left:5%; top:30px;"></td>
+            <td><img src="{{asset('img/palomita.png')}}" style="height:20px;left:5%; top:30px;"></td>
             @endif
             <td>{{$token->id_usuario}}</td>
           </tr>

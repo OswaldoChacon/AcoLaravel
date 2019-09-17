@@ -8,10 +8,6 @@ body {
     background: #fafafa;
     
 }
-.content-layout{
-    min-height: 51.5rem;
-    padding-top: 5rem;
-}
 
 p {
     font-family: 'Poppins', sans-serif;
@@ -78,7 +74,8 @@ a, a:hover, a:focus {
 
 #sidebar ul.components {
     padding: 20px 0;
-    border-bottom: 1px solid #47748b;
+    /* border-bottom: 1px solid #47748b; */
+    margin-top:20px;
 }
 
 #sidebar ul p {
@@ -88,7 +85,9 @@ a, a:hover, a:focus {
 
 #sidebar ul li a {
     padding: 10px;
-    font-size: 1.1em;
+    margin-top:5px;
+    /* font-size: 1.1em; */
+    font-size: 13px;
     display: block;
 }
 
@@ -170,12 +169,14 @@ a.article, a.article:hover {
     }
 }
 
-.card{            
-    
+.card{                
     /* margin-right:10px; */
     /* margin-left:10px; */
     margin:0 auto;
     margin-top:10px;
     margin-bottom:10px;        
-    
+}
+.content-layout{
+    /* min-height: 51.5rem; */
+    padding-top: 65px;
 }

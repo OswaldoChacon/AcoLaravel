@@ -34,9 +34,8 @@
 				</td>
 				<td>{{ $seminario->periodo }}</td>
 				<td>{{ $seminario->anio }}</td>
-				{{-- <td>{{ $seminario->foro->pluck('noforo')->implode(' , ') }}</td> --}}
-				<td>{{ $seminario->foro->noforo }}</td>
-
+				<!-- Aqui borré el noforo -->
+				<td>Aqui borre noforo</td>
 				{{-- <td>{{ $seminario->proyectoforo->pluck('maestro')->implode('') }}</td> --}}
 				<td>
 					<a class="btn btn-info btn-xs" href="{{ route('projects', $seminario->id) }}">Proyectos</a>

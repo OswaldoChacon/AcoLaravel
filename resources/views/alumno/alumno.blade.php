@@ -10,22 +10,19 @@
 
 	<!-- Bootstrap CSS CDN -->
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-	<!-- Jquery CDN -->
-	<!-- Bootstrap JS CDN -->
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-	<!-- Popper CDN -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 	<!-- Our Custom CSS	 -->
 	<link rel="stylesheet" href="{{ URL::asset('css/app.css') }}">
-
-
 	<!-- Font Awesome JS -->
 	<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
 	<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
-
 	<!-- Font Awesome Icons -->
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+	<!-- Bootstrap JS CDN -->
+	<!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> -->
+	<!-- Jquery CDN -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<!-- Popper CDN -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -34,78 +31,45 @@
 		<nav id="sidebar">
 			<div class="sidebar-header">
 			</div>
-			<ul class="list-unstyled components">
+			<ul class="list-unstyled components" style="position:fixed">
 				<li>
-					<a href="{{route('oficina')}}"> Inicio</a>
+					<a href="{{route('alumno')}}"> Inicio</a>
+				</li>
+				@if (Auth::guard('alumnos')->user()->acceso==0)
+				<li>
+					<a href="/registraProyecto>">Registrar Poryecto</a>
+				</li>
+				@endif
+				<li>
+					<a href="/proyectoAlumno/{{Crypt::encrypt(Auth::guard('alumnos')->user()->id)}}">Proyecto</a>
 				</li>
 				<li>
-					<a href="{{route('lineaDeInvetigacion')}}">Linea de investigación</a>
+					<a href="{{route('notificaciones')}}">Notificaciones</a>
 				</li>
 				<li>
-					<a href="{{route('tokenProfe')}}">Registrar token para docentes</a>
-				</li>
-				<li>
-					<a href="{{route('tokenAlumno')}}">Registrar token para alumnos</a>
-				</li>
-				<!-- <li> -->
-				<li class="active">
-					<a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Foros</a>
-					<ul class="collapse list-unstyled" id="homeSubmenu">
-						<li>
-							<a href="{{route('crearForo')}}">Crear Foros</a>
-						</li>
-						<li>
-							<a href="{{route('foros')}}">Foros</a>
-						</li>
-					</ul>
-				</li>
-				<li>
-					<a href="/horarios">Horarios</a>
-				</li>
-				<li>
-					<a href="{{route('alumnos')}}">Alumnos</a>
-				</li>
-				<li>
-					<a href="{{route('profes')}}">Docentes</a>
-				</li>
-				<li>
-					<a href="{{ route('seminarios.create') }}">Seminario</a>
-				</li>
-				<li>
-					<a href="{{ route('juradosprojects') }}">Asignar jurado</a>
-				</li>
-				<li>
-					<a href="{{ route('criterios') }}">Asignar criterios</a>
-				</li>
-				<li>
-					<a href="{{ route('sheets') }}">Hojas de evaluaciones del seminario</a>
+					<a href="{{ route('dictamen') }}">Calificación del seminario</a>
 				</li>
 			</ul>
 		</nav>
 
 		<!-- Page Content  -->
 		<div id="content">
-
 			<nav class="navbar navbar-expand-lg navbar-light fixed-top">
 				<div class="container-fluid">
 					<button type="button" id="sidebarCollapse" class="btn btn-default">
-						<i class="fas fa-align-justify" style="color:#fff"></i>						
+						<i class="fas fa-align-justify" style="color:#fff"></i>
 					</button>
-					<span style="color:#fff">Oficina de .......</span>
+					<span style="color:#fff">Alumno de .......</span>
 					<!-- Arreglar para el boton de usuario -->
-					<!-- <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-						<i class='fas fa-user' style='font-size:24px; color:#fff'></i>
-
-					</button> -->
 					<button class="btn  d-print-inline-block d-lg-none ml-auto dropdown" type="button" data-toggle="dropdown" style="background: transparent !important; border:none;">
 						<i class='fas fa-user' style='font-size:24px; color:#fff'></i>
 					</button>
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-						<a class="dropdown-item" method="POTS" href="{{route('logout')}}">
+						<a class="dropdown-item" method="POTS" href="{{route('logoutAlumno')}}">
 							{{csrf_field()}}
 							<i class="fas fa-sign-out-alt"></i><span>Cerrar sesion</span>
 						</a>
-						<a class="dropdown-item" method="POST" href="/editar/{{Crypt::encrypt(auth()->user()->id)}}">
+						<a class="dropdown-item" method="POTS" href="/editar/alumno/{{Crypt::encrypt(Auth::guard('alumnos')->user()->id)}}">
 							{{csrf_field()}}
 							<i class="far fa-edit"></i><span>Editar</span>
 						</a>
@@ -125,11 +89,11 @@
 									<i class='fas fa-user' style='font-size:24px; color:#fff'></i>
 								</button>
 								<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-									<a class="dropdown-item" method="POTS" href="{{route('logout')}}">
+									<a class="dropdown-item" method="POTS" href="{{route('logoutAlumno')}}">
 										{{csrf_field()}}
-										<i class="fas fa-sign-out-alt"></i><span>cerrar sesion</span>
+										<i class="fas fa-sign-out-alt"></i><span>Cerrar sesion</span>
 									</a>
-									<a class="dropdown-item" method="POST" href="/editar/{{Crypt::encrypt(auth()->user()->id)}}">
+									<a class="dropdown-item" method="POTS" href="/editar/alumno/{{Crypt::encrypt(Auth::guard('alumnos')->user()->id)}}">
 										{{csrf_field()}}
 										<i class="far fa-edit"></i><span>Editar</span>
 									</a>
@@ -144,8 +108,6 @@
 			</div>
 		</div>
 	</div>
-
-	<!-- jQuery CDN - Slim version (=without AJAX) -->
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 	<!-- Popper.JS -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
