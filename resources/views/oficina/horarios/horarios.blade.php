@@ -12,7 +12,7 @@
             <option>{{$foro->noforo}}</option>
             @endforeach
         </select>
-        hhhh
+        hhhh  aaaaaaaaaaaaaaa
     </div>
 </div>
 @endsection
