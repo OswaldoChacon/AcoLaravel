@@ -357,7 +357,7 @@ class OficinaController extends Controller
     $foro = Foro::find($id);
     DB::table('forodoncentes')->insert([
       [
-        'id_foro' => $foro->noforo,
+        'id_foro' => $foro->id,
         'id_profe' => $request->maestro,
         'n_profe' => $docentes->nombre . ' ' . $docentes->paterno . ' ' . $docentes->materno,
       ]

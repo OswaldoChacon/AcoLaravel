@@ -21,7 +21,6 @@ class HorarioController extends Controller
     public function addHourForo(Request $request, $id)
     {
         $date = "2012-01-21";
-
         //Get the day of the week using PHP's date function.        
         //dd($dayOfWeek);
         $fecha = count($request->fecha, COUNT_RECURSIVE);
@@ -41,8 +40,9 @@ class HorarioController extends Controller
 
         for ($i = 0; $i < $fecha; $i++) {
             $countFechas = Horarioforo::where('fecha_foro', '=', $request->fecha[$i])
+                ->where('id_foro', '=', $id)
                 ->count();
-            $dayOfWeek = date("l", strtotime($request->fecha[i]));                
+            $dayOfWeek = date("l", strtotime($request->fecha[$i]));
             if ($countFechas > 0) {
                 $insertarbool = false;
             } else {
@@ -53,7 +53,7 @@ class HorarioController extends Controller
             for ($i = 0; $i < $fecha; $i++) {
                 DB::table('horarioforos')->insert([
                     [
-                        'id_foro' => 1,
+                        'id_foro' => $id,
                         'horario_inicio' => $request->h_inicio[$i],
                         'horario_termino' => $request->h_end[$i],
                         'fecha_foro' => $request->fecha[$i],
