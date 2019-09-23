@@ -23,7 +23,7 @@
 </style>
 <div class="card">
   <div class="card-header">
-    <h5 class="card-title">Registrar linea de investigación</h5>
+    <h5 class="card-title" >Registrar linea de investigación</h5>
   </div>
   <div class="card-body">
     @if(session('mensaje'))
@@ -44,7 +44,13 @@
 
     @endif
     <!-- <div class="panel-body"> -->
-    <div class="row">
+    <div class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead>
+          <td><h6>{{$foro->noforo}}º {{$foro->titulo}}</h6>
+        <h6 >{{$foro->periodo}} {{$foro->anoo}}</h6></td>
+
+        <td>
       <ul class="list-inline">
         <a method="POTS" href="/activar/{{Crypt::encrypt($foro->id)}} ">
           <button class="btn btn-success btn-xs bnt-block">Activar</button>
@@ -57,9 +63,23 @@
           <button class="btn btn-danger btn-xs bnt-block">Cerrar Registro</button>
         </a>
       </ul>
+        </td>
+        </thead>
+        <tr>
+            <td colspan="1">Oficina:</td>
+            <td>{{$foro->oficina}}</td>
+
+        </tr>
+
+        <tbody>
+
+
+        </tbody>
+      </table>
     </div>
-    <h5>{{$foro->noforo}}º {{$foro->titulo}}</h5>
-    <h5>{{$foro->periodo}} {{$foro->anoo}}</h5>
+
+
+
     <table>
       <tr>
         <th>Oficina : </th>
@@ -150,12 +170,12 @@
     var addButton = $('.add_button'); //Add button selector
     var wrapper = $('.field_wrapper'); //Input field wrapper
     var fieldHTML =
-      // <input type="text" name="field_name" value=""/>    
+      // <input type="text" name="field_name" value=""/>
       '<div><input type="date" name="fecha[]" class="form-control" min="<?php $hoy = date('Y-m-d');
                                                                         echo $hoy; ?>"/>' +
       '<a href="javascript:void(0);" class="remove_button"><img src="remove-icon.png"/></a></div>' +
       ' <input type="time" name="h_inicio[]" />' +
-      ' <input type="time" name="h_end[]" />'; //New input field html 
+      ' <input type="time" name="h_end[]" />'; //New input field html
     var x = 1; //Initial field counter is 1
 
     //Once add button is clicked
