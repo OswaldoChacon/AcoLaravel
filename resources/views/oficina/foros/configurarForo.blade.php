@@ -74,14 +74,14 @@
       </ul>
         </td>
         </thead>
+
+
+        <tbody>
         <tr>
-            <td colspan="1">Oficina:</td>
+            <td weight="5">Oficina:</td>
             <td>{{$foro->oficina}}</td>
 
         </tr>
-
-        <tbody>
-
 
         </tbody>
       </table>

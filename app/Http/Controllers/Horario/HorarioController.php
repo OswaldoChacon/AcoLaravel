@@ -41,6 +41,7 @@ class HorarioController extends Controller
 
         for ($i = 0; $i < $fecha; $i++) {
             $countFechas = Horarioforo::where('fecha_foro', '=', $request->fecha[$i])
+            ->where('id_foro','=',$id)
                 ->count();
             $dayOfWeek = date("l", strtotime($request->fecha[i]));
             if ($countFechas > 0) {
