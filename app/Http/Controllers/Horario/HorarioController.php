@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 namespace App\Http\Controllers\Horario;
 
 use App\Http\Controllers\Controller;
@@ -19,29 +20,43 @@ class HorarioController extends Controller
     public function addHourForo(Request $request, $id)
     {
         $fecha = count($request->fecha, COUNT_RECURSIVE);
+        $insertarbool = true;
+        $rules = [
+            'h_inicio.*' => 'required',
+            'h_end.*' => 'required|after:h_inicio.*',
+            'fecha.*' => 'required',
+        ];
+        $messages = [
+            'h_inicio.*.required' => 'Campo necesario',
+            'h_end.*.required' => 'Coloca una hora adecuada',
+            'fecha.*.required' => 'El evento no puede terminar antes que la hora de inicio',            
+            'h_end.*.after' => 'La hora fin debe ser superior a inicio'
+        ];
+        $this->validate($request, $rules, $messages);
+
         for ($i = 0; $i < $fecha; $i++) {
-            // $token = Tokendocente::where('id_usuario', $request->emails[$i])->first();
-            // if ($token == null) {
-            // if ($request->emails[$i] != null) {
-            DB::table('horarioforos')->insert([
-                [
-                    'id_foro' => 1,
-                    'horario_inicio' => $request->h_inicio[$i],
-                    'horario_termino' => $request->h_end[$i],
-                    'fecha_foro' => $request->fecha[$i],
-                ],
-            ]);
+            $countFechas = Horarioforo::where('fecha_foro', '=', $request->fecha[$i])
+                ->count();            
+            if ($countFechas > 0) {
+                $insertarbool = false;               
+            } else {
+                $insertarbool = true;
+            }
         }
-        // $forohorario = new horarioforo;
-        // // $forohorario = $request->all()->except('id_diaForo');        
-        // $forohorario->fecha_foro = $request->fecha;
-        // $forohorario->horario_inicio = $request->h_inicio;
-        // $forohorario->horario_termino = $request->h_end;        
-        // $forohorario->id_foro = $id;
-        // $forohorario->save();
+        if ($insertarbool == true) {
+            for ($i = 0; $i < $fecha; $i++) {
+                DB::table('horarioforos')->insert([
+                    [
+                        'id_foro' => 1,
+                        'horario_inicio' => $request->h_inicio[$i],
+                        'horario_termino' => $request->h_end[$i],
+                        'fecha_foro' => $request->fecha[$i],
+                    ],
+                ]);                
+            }
+        }
+        return back()->with('mensaje', 'Horario del foro registrado');
         $id = Crypt::encrypt($id);
-
-
         return redirect("configurarForo/$id");
     }
 }

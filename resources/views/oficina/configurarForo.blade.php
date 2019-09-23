@@ -26,6 +26,23 @@
     <h5 class="card-title">Registrar linea de investigación</h5>
   </div>
   <div class="card-body">
+    @if(session('mensaje'))
+    <div class="alert alert-success">
+      <p>{{session('mensaje')}}</p>
+    </div>
+    @endif
+    <div class="container">
+      @if($errors->any())
+      <div class="alert alert-danger">
+        <ul>
+          @foreach($errors->all() as $error)
+          <li>{{$error}}</li>
+          @endforeach
+        </ul>
+      </div>
+    </div>
+
+    @endif
     <!-- <div class="panel-body"> -->
     <div class="row">
       <ul class="list-inline">
@@ -134,11 +151,11 @@
     var wrapper = $('.field_wrapper'); //Input field wrapper
     var fieldHTML =
       // <input type="text" name="field_name" value=""/>    
-      '<div><input type="date" name="fecha[]" class="form-control" min="<?php $hoy = date("Y-m-d");
-                                                                        echo $hoy; ?>"/>'
-    '<a href="javascript:void(0);" class="remove_button"><img src="remove-icon.png"/></a></div>' +
-    ' <input type="time" name="h_inicio[]" />' +
-    ' <input type="time" name="h_end[]" />'; //New input field html 
+      '<div><input type="date" name="fecha[]" class="form-control" min="<?php $hoy = date('Y-m-d');
+                                                                        echo $hoy; ?>"/>' +
+      '<a href="javascript:void(0);" class="remove_button"><img src="remove-icon.png"/></a></div>' +
+      ' <input type="time" name="h_inicio[]" />' +
+      ' <input type="time" name="h_end[]" />'; //New input field html 
     var x = 1; //Initial field counter is 1
 
     //Once add button is clicked
