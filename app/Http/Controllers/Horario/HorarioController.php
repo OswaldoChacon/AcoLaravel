@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Horarioforo;
 use DB;
 use Illuminate\Support\Facades\Crypt;
+use Carbon\Carbon;
 
 class HorarioController extends Controller
 {
@@ -19,6 +20,10 @@ class HorarioController extends Controller
     }
     public function addHourForo(Request $request, $id)
     {
+        $date = "2012-01-21";
+
+        //Get the day of the week using PHP's date function.
+        //dd($dayOfWeek);
         $fecha = count($request->fecha, COUNT_RECURSIVE);
         $insertarbool = true;
         $rules = [
@@ -36,8 +41,8 @@ class HorarioController extends Controller
 
         for ($i = 0; $i < $fecha; $i++) {
             $countFechas = Horarioforo::where('fecha_foro', '=', $request->fecha[$i])
-            // ->where('id_foro','=',$request->id[$i]),
-            ->count();
+                ->count();
+            $dayOfWeek = date("l", strtotime($request->fecha[i]));
             if ($countFechas > 0) {
                 $insertarbool = false;
             } else {

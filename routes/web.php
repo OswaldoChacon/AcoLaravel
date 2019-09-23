@@ -177,6 +177,8 @@ Route::get('horarios', function(){
 	return view('oficina.horarios.horarios',compact('foros'));
 });
 
+
+
 Route::get('profes/horarios/{id?}','Horario\addHourController@agregarHorarios')->name('horariomaestro');
 
 Route::post('addHourForo/{id}','Horario\HorarioController@addHourForo')->name('addHourForo');

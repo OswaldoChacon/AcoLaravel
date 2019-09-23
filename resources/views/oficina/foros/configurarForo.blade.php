@@ -3,16 +3,16 @@
 @section('content')
 
 <script>
-  function mostrar(id, buttondisabled) {
-    var objeto = document.getElementById(id)
-    var buttondis = document.getElementById(buttondisabled)
-    if (objeto.style.display == "block") {
-      objeto.style.display = "none";
-      buttondis.disabled = false;
-    } else {
-      objeto.style.display = "block";
-      buttondis.disabled = true;
-    }
+  function mostrar(show, hide) {
+    var show = document.getElementById(show)
+    var hide = document.getElementById(hide)
+    //if (show.style.display == "block") {
+      show.style.display = "block";
+      hide.style.display = "none";
+    //} else {
+      /*objeto.style.display = "block";
+      buttondis.disabled = true;*/
+    //}
   }
 </script>
 
@@ -23,7 +23,16 @@
 </style>
 <div class="card">
   <div class="card-header">
-    <h5 class="card-title" >Registrar linea de investigación</h5>
+    <h5 class="card-title">Registrar linea de investigación</h5>
+    <ul class="nav justify-content-end">
+      <li class="nav-item">
+        <a class="nav-link" onclick="mostrar('contenido1','addHour')" id="agregarProfesor" href="#">Agregar profesor</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" onclick="mostrar('addHour','contenido1')" id="agregarHora" href="#">Agregar hora</a>
+      </li>
+    </ul>
+
   </div>
   <div class="card-body">
     @if(session('mensaje'))
@@ -103,19 +112,18 @@
         @endforeach
       </tr>
     </table>
-    <form method="post" action="/actulizar/{{Crypt::encrypt($foro->id)}}" class="form-center">
-      {{csrf_field()}}
-      <label for="name">Limite de alumnos por proyecto</label>
-      <input class="form-inline" type="number" name="no_alumnos" inputmode="Numero de  foro ">
-      {!! $errors->first('no_alumnos','<span class="help-block alert alert-danger">:message</span>')!!}
-      <br>
-      <button type="submit" class="btn btn-primary" value="Registrar" name="">Acceder</button>
-      <br>
-    </form>
+    <div class="row">
+      <form method="post" action="/actulizar/{{Crypt::encrypt($foro->id)}}" class="form-center">
+        {{csrf_field()}}
+        <label for="name">Limite de alumnos por proyecto</label>
+        <input class="form-inline" type="number" name="no_alumnos" inputmode="Numero de  foro " />
+        {!! $errors->first('no_alumnos','<span class="help-block alert alert-danger">:message</span>')!!}
+        <button type="submit" class="btn btn-primary" value="Registrar" name="">Acceder</button>
+        <br>
+      </form>
+    </div>
     <br>
     @if ($foro->acceso==1 || $foro->accesosecundario==1)
-    <input type="button" onclick="mostrar('contenido1','agregarHora')" id="agregarProfesor" value="Agregar Profesor">
-    <input type="button" onclick="mostrar('addHour','agregarProfesor')" id="agregarHora" value="Agregar hora">
     <!-- Formullario para agregar un docente como maestro de taller de investigación -->
     <form class="oculto" id="contenido1" method="post" action="/agregarProfeAforo/{{Crypt::encrypt($foro->id)}}" class="form-center">
       {{csrf_field()}}
@@ -143,12 +151,12 @@
       {{csrf_field()}}
       <div class="field_wrapper">
         <div class="form-group">
-          <div class='input-group date' id='datetimepicker2'>
+          <div class='input-group date'>
             <input type='date' name="fecha[]" class="form-control" min="<?php $hoy = date("Y-m-d");
                                                                         echo $hoy; ?>" />
             <input type="time" name="h_inicio[]" min="07:00" max="18:00" />
             <input type="time" name="h_end[]" min="07:00" max="18:00" />
-            <a href="javascript:void(0);" class="add_button" title="Add field"><img src="add-icon.png" /></a>
+            <a href="javascript:void(0);" class="add_button" title="Add field"><i class="fas fa-plus-circle"></i></a>
           </div>
         </div>
         <!-- <input type="text" name="field_name" value="" /> -->
@@ -159,7 +167,8 @@
     </form>
   </div>
 </div>
-<div class="panel-heading">docente que imparte materia </div>
+
+<!-- <div class="panel-heading">docente que imparte materia </div> -->
 
 
 
@@ -173,8 +182,8 @@
       // <input type="text" name="field_name" value=""/>
       '<div><input type="date" name="fecha[]" class="form-control" min="<?php $hoy = date('Y-m-d');
                                                                         echo $hoy; ?>"/>' +
-      '<a href="javascript:void(0);" class="remove_button"><img src="remove-icon.png"/></a></div>' +
       ' <input type="time" name="h_inicio[]" />' +
+      '<a href="javascript:void(0);" class="remove_button"><i class="fas fa-minus"></i></a></div>' +
       ' <input type="time" name="h_end[]" />'; //New input field html
     var x = 1; //Initial field counter is 1
 
