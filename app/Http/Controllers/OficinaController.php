@@ -284,7 +284,7 @@ class OficinaController extends Controller
   }
   public function crearForo(Request $request)
   {
-    return view('oficina.crearForo');
+    return view('oficina.foros.crearForo');
   }
   public function guardarForo(Request $request)
   {
@@ -330,7 +330,7 @@ class OficinaController extends Controller
       return view('oficina.foros', compact('foro'));
     } else {
       Session::flash('message', "Numero de foro ya existentes");
-      return view('oficina.crearForo');
+      return view('oficina.foros.crearForo');
     }
   }
 
@@ -347,7 +347,7 @@ class OficinaController extends Controller
     $horarioForo = $foro->forohoras()->where('id_foro', $id)->get();
     $forodoncente = Forodoncente::all();
     // $horarioForo = 
-    return view('oficina.configurarForo', compact('foro', 'docente', 'forodoncente', 'horarioForo'));
+    return view('oficina.foros.configurarForo', compact('foro', 'docente', 'forodoncente', 'horarioForo'));
   }
 
   public function agregarProfeAforo(Request $request, $id)

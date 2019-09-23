@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Horarioforo;
 use DB;
 use Illuminate\Support\Facades\Crypt;
+use Carbon\Carbon;
 
 class HorarioController extends Controller
 {
@@ -19,6 +20,10 @@ class HorarioController extends Controller
     }
     public function addHourForo(Request $request, $id)
     {
+        $date = "2012-01-21";
+
+        //Get the day of the week using PHP's date function.        
+        //dd($dayOfWeek);
         $fecha = count($request->fecha, COUNT_RECURSIVE);
         $insertarbool = true;
         $rules = [
@@ -29,16 +34,17 @@ class HorarioController extends Controller
         $messages = [
             'h_inicio.*.required' => 'Campo necesario',
             'h_end.*.required' => 'Coloca una hora adecuada',
-            'fecha.*.required' => 'El evento no puede terminar antes que la hora de inicio',            
+            'fecha.*.required' => 'El evento no puede terminar antes que la hora de inicio',
             'h_end.*.after' => 'La hora fin debe ser superior a inicio'
         ];
         $this->validate($request, $rules, $messages);
 
         for ($i = 0; $i < $fecha; $i++) {
             $countFechas = Horarioforo::where('fecha_foro', '=', $request->fecha[$i])
-                ->count();            
+                ->count();
+            $dayOfWeek = date("l", strtotime($request->fecha[i]));                
             if ($countFechas > 0) {
-                $insertarbool = false;               
+                $insertarbool = false;
             } else {
                 $insertarbool = true;
             }
@@ -52,7 +58,7 @@ class HorarioController extends Controller
                         'horario_termino' => $request->h_end[$i],
                         'fecha_foro' => $request->fecha[$i],
                     ],
-                ]);                
+                ]);
             }
         }
         return back()->with('mensaje', 'Horario del foro registrado');
