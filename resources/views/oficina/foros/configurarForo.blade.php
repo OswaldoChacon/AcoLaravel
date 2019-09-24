@@ -7,11 +7,11 @@
     var show = document.getElementById(show)
     var hide = document.getElementById(hide)
     //if (show.style.display == "block") {
-      show.style.display = "block";
-      hide.style.display = "none";
+    show.style.display = "block";
+    hide.style.display = "none";
     //} else {
-      /*objeto.style.display = "block";
-      buttondis.disabled = true;*/
+    /*objeto.style.display = "block";
+    buttondis.disabled = true;*/
     //}
   }
 </script>
@@ -30,7 +30,7 @@
       </li>
       <li class="nav-item">
         <a class="nav-link" onclick="mostrar('addHour','contenido1')" id="agregarHora" href="#">Agregar hora</a>
-      </li>      
+      </li>
     </ul>
 
   </div>
@@ -103,22 +103,30 @@
       </form>
     </div>
     <br>
-    @if ($foro->acceso==1 || $foro->accesosecundario==1)        
+    @if ($foro->acceso==1 || $foro->accesosecundario==1)
     <!-- Formullario para agregar un docente como maestro de taller de investigación -->
+
     <form class="oculto" id="contenido1" method="post" action="/agregarProfeAforo/{{Crypt::encrypt($foro->id)}}" class="form-center">
       {{csrf_field()}}
       <br>
-      <select name="maestro">
-        <option disabled selected class="dropdown-toggle">Profesores</option>
-        @foreach($docente as $doc)
-        @if ($doc->acceso==0)
-        <option value="{{$doc->id}}">{{$doc->prefijo}} {{$doc->nombre}} {{$doc->paterno}} {{$doc->materno}}</option>
-        @endif
-        @endforeach
-      </select>
-      <button type="submit" class="btn btn-primary" value="Registrar">Registarar</button>
-      <a href="#" class="btn btn-danger" onclick="mostrar('contenido1','agregarHora')">Cancelar</a>
+      <div class="container form-row">
+        <div class="form-group col-12">
+          <select name="maestro" class="form-control">
+            <option disabled selected class="dropdown-toggle">Profesores</option>
+            @foreach($docente as $doc)
+            @if ($doc->acceso==0)
+            <option value="{{$doc->id}}">{{$doc->prefijo}} {{$doc->nombre}} {{$doc->paterno}} {{$doc->materno}}</option>
+            @endif
+            @endforeach
+          </select>
+        </div>
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary" value="Registrar">Registrar</button>
+          <!-- <a href="#" class="btn btn-danger" onclick="mostrar('contenido1','addHour')">Cancelar</a> -->
+        </div>
+      </div>
     </form>
+
     <!-- Formulario para agregar hora al foro -->
     <!-- <form class="oculto" id="addHour" method="post" action="/addHourForo/{{$foro->id}}" class="form-center"> -->
     <!-- {{csrf_field()}} -->
@@ -126,25 +134,35 @@
     @endif
     <!-- </div> -->
 
-
-    <form class="oculto" id="addHour" method="post" action="/addHourForo/{{$foro->id}}" class="form-center">
+    <!-- <div class="form-group row"> -->
+    <form class="oculto" id="addHour" method="post" action="/addHourForo/{{$foro->id}}">
       {{csrf_field()}}
       <div class="field_wrapper">
-        <div class="form-group">
-          <div class='input-group date'>
-            <input type='date' name="fecha[]" class="form-control" min="<?php $hoy = date("Y-m-d");
-                                                                        echo $hoy; ?>" />
-            <input type="time" name="h_inicio[]" min="07:00" max="18:00" />
-            <input type="time" name="h_end[]" min="07:00" max="18:00" />
-            <a href="javascript:void(0);" class="add_button" title="Add field"><i class="fas fa-plus-circle"></i></a>
+        <div>
+          <div class="form-group row">
+            <div class="form-group col-xl-3">
+              <label>Fecha</label>
+              <input type='date' name="fecha[]" class="form-control" min="<?php $hoy = date("Y-m-d");
+                                                                          echo $hoy; ?>" />
+            </div>
+            <div class="form-group col-xl-3">
+              <label>Horario de inicio</label>
+              <input type="time" name="h_inicio[]" class="form-control" min="07:00" max="18:00" />
+            </div>
+            <div class="form-group col-xl-3">
+              <label>Horario de finalización</label>
+              <input type="time" name="h_end[]" class="form-control" min="07:00" max="18:00" />
+            </div>
+            <div class="form-group col-xl-2">
+              <br>
+              <a href="javascript:void(0);" class="add_button" title="Agregar más fechas"><i class="fas fa-plus-circle" style="font-size:30px"></i></a>
+            </div>
           </div>
         </div>
-        <!-- <input type="text" name="field_name" value="" /> -->
-        <!-- <a href="javascript:void(0);" class="add_button" title="Add field"><img src="add-icon.png" /></a> -->
-        <!--  -->
       </div>
       <button type="submit" class="btn-primary">Guardar hora</button>
     </form>
+    <!-- </div> -->
   </div>
 </div>
 
@@ -159,12 +177,14 @@
     var addButton = $('.add_button'); //Add button selector
     var wrapper = $('.field_wrapper'); //Input field wrapper
     var fieldHTML =
-      // <input type="text" name="field_name" value=""/>    
-      '<div><input type="date" name="fecha[]" class="form-control" min="<?php $hoy = date('Y-m-d');
-                                                                        echo $hoy; ?>"/>' +
-      ' <input type="time" name="h_inicio[]" />' +                                                                        
-      '<a href="javascript:void(0);" class="remove_button"><i class="fas fa-minus"></i></a></div>' +      
-      ' <input type="time" name="h_end[]" />'; //New input field html 
+      '<div class="remove">' +
+      '<div class="form-group row">' +
+      '<div class="form-group col-xl-3"><label>Fecha</label><input type="date" name="fecha[]" class="form-control" min="<?php $hoy = date('Y-m-d');
+                                                                                                                        echo $hoy; ?>"/></div>' +
+      '<div class="form-group col-xl-3"><label>Horario de inicio</label><input type="time" name="h_inicio[]" class="form-control" min="07:00" max="18:00" /></div>' +
+      '<div class="form-group col-xl-3"><label>Horario de finalización</label><input type="time" name="h_inicio[]" class="form-control"  min="07:00" max="18:00" /></div>' +
+      '<div class="form-group col-xl-2"><br><a href="javascript:void(0);" class="remove_button"><i class="fas fa-minus" style="font-size:30px"></i></a></div>' +
+      '</div></div>';
     var x = 1; //Initial field counter is 1
 
     //Once add button is clicked
@@ -181,7 +201,7 @@
     // Remueve los input
     $(wrapper).on('click', '.remove_button', function(e) {
       e.preventDefault();
-      $(this).parent('div').remove(); //Remove field html
+      $(this).closest('.remove').remove(); //Remove field html
       x--; //Decrement field counter
     });
   });
