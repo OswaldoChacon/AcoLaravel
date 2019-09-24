@@ -73,17 +73,14 @@
         </a>
       </ul>
         </td>
-        </thead>
-
 
         <tbody>
-        <tr>
-            <td weight="5">Oficina:</td>
+            <td  weight="5"> Oficina:</td>
             <td>{{$foro->oficina}}</td>
 
-        </tr>
+</tbody>
 
-        </tbody>
+        </thead>
       </table>
     </div>
 
