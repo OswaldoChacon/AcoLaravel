@@ -17,6 +17,7 @@ class CreateHorarioforosTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('id_foro');
             $table->foreign('id_foro')->references('id')->on('foros');
+            $table->string('dia');
             $table->time('horario_inicio');
             $table->time('horario_termino');
             $table->date('fecha_foro');

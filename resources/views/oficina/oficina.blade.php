@@ -159,6 +159,7 @@
 			});
 		});
 	</script>
+	@stack('srcProfesores')
 </body>
 
 </html>

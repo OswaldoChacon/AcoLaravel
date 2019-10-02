@@ -24,10 +24,7 @@ use Storage;
 
 
 class AlumnoController extends Controller
-{	
-
-
-
+{
     public function __construct()
 	{
 		$this->middleware('auth:alumnos');
@@ -58,7 +55,6 @@ class AlumnoController extends Controller
         'password' => 'required',
       ]);
 
-
       $alumno = Alumno::find($id);
       $alumno->name = $request->name;
       $alumno->email = $request->email;
@@ -73,7 +69,7 @@ class AlumnoController extends Controller
     }
 
     public function registraProyecto()
-    { 
+    {
         $notificacione=Notificacione::where('id_alumno',Auth::guard('alumnos')->user()->id)->where('envio',1)->count();
         $forodoncente=Forodoncente::all();
         $docente=Docente::all();
@@ -125,9 +121,9 @@ class AlumnoController extends Controller
         $ProyectoForo->alumno_id = $alumno->id;
         $ProyectoForo->save();
 
-        $alumnos=count($request->alumno, COUNT_RECURSIVE); 
+        $alumnos=count($request->alumno, COUNT_RECURSIVE);
         for ($i=0; $i <$alumnos; $i++)
-         { if ($request->alumno[$i]!='alumos') 
+         { if ($request->alumno[$i]!='alumos')
           {
               $Notificacione = New Notificacione;
               $Notificacione->id_foro = $foro->id;
@@ -169,7 +165,7 @@ class AlumnoController extends Controller
     {
     return Aredeconocimiento::where('linea',$id)->get();
     }
-   
+
     public function descarga($id)
     {
 
@@ -281,7 +277,7 @@ class AlumnoController extends Controller
     }
 
 public function save(Request $request ,$id)
-{   
+{
 
         $validator = $this->validate(request(),[
         'protocolo' => 'required',
@@ -289,16 +285,14 @@ public function save(Request $request ,$id)
 
        $id =Crypt::decrypt($id);
 
-
        $archivo=Archivo::where('id_proyecto',$id)->first();
 
-       
        //obtenemos el campo file definido en el formulario
        $file = $request->file('protocolo');
- 
+
        //obtenemos el nombre del archivo
        $nombre = $id.time().$file->getClientOriginalName();
- 
+
     if($archivo==null)
        {
         $Archivo_foro = New Archivo;
@@ -318,9 +312,8 @@ public function save(Request $request ,$id)
        return redirect("alumno");
 }
 
-
 public function save1(Request $request ,$id)
-{   
+{
 
         $validator = $this->validate(request(),[
         'protocolo' => 'required',
@@ -329,15 +322,15 @@ public function save1(Request $request ,$id)
        $id =Crypt::decrypt($id);
        $archivo=Archivo::where('id_proyecto',$id)->first();
 
-    
+
        //obtenemos el campo file definido en el formulario
        $file = $request->file('protocolo');
- 
+
        //obtenemos el nombre del archivo
        $nombre = $id.time().$file->getClientOriginalName();
- 
+
        //indicamos que queremos guardar un nuevo archivo en el disco local
-      
+
       if($archivo==null)
        {
         $Archivo_foro = New Archivo;
@@ -358,7 +351,7 @@ public function save1(Request $request ,$id)
 }
 
 public function save2(Request $request ,$id)
-{   
+{
 
         $validator = $this->validate(request(),[
         'protocolo' => 'required',
@@ -367,14 +360,14 @@ public function save2(Request $request ,$id)
        $id =Crypt::decrypt($id);
        $archivo=Archivo::where('id_proyecto',$id)->first();
 
-    
+
        //obtenemos el campo file definido en el formulario
        $file = $request->file('protocolo');
- 
+
        //obtenemos el nombre del archivo
        $nombre = $id.time().$file->getClientOriginalName();
- 
-       
+
+
 
        if($archivo==null)
        {

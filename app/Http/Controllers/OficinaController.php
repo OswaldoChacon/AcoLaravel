@@ -71,24 +71,52 @@ class OficinaController extends Controller
   }
 
   public function profes()
-  {  
-    $profes = DB::table('docentes')->select('docentes.*')        
+  {
+
+    $profes = DB::table('docentes')->select('docentes.*')
     ->selectRaw('group_concat(horariodocentes.fecha) as fechas,
     group_concat(horariodocentes.hora_entrada) as hora_entrada,
     group_concat(horariodocentes.hora_salida) as hora_salida,
-    count(horariodocentes.hora_salida) as numberFechas')    
-    ->leftjoin('horariodocentes','docentes.id','=','horariodocentes.id_docente')    
-    ->groupBy('docentes.id')  
+    count(horariodocentes.hora_salida) as numberFechas')
+    ->leftjoin('horariodocentes','docentes.id','=','horariodocentes.id_docente')
+    ->groupBy('docentes.id')
     ->get();
-    
+    // $foroactivo=DB::table('foros')->select('accesosecundario')
+    // ->where('accesosecundario','=', 1)->count();
+    // if ($foroactivo == 1) {
+    //     $insertarbool = true;
+    //     $countFechas = Horarioforo::where('fecha_foro')
+    //             ->where('id_foro', '=', 'id_foro')
+    //             ->count();
+    // } else {
+    //     $insertarbool = false;
+    // }
+    // dd($profes);
+    $fechasForoActivo = DB::table('horarioforos')
+    ->select('foros.id as idForo',
+             'horarioforos.id_foro as fIdHorarioForo',
+             'foros.accesosecundario as foroActivo',
+             'horarioforos.id as idHForo',
+             'horarioforos.horario_inicio as inicio',
+             'horarioforos.horario_termino as termino',
+             'horarioforos.fecha_foro as fechaForo')
+    ->join('foros','foros.id','=','horarioforos.id_foro')
+    ->where('foros.accesosecundario',1)
+    ->get();
+    $horariosDocentes = DB::table('horariodocentes')
+    ->select('hora_entrada as inicio',
+             'hora_salida as termino',
+             'id as id',
+             'id_docente as idDocente')
+    ->get();
     // codigo extra
     foreach($profes as $profe)
     {
       $profe->fechas = explode(',',$profe->fechas);
       $profe->hora_entrada = explode(',',$profe->hora_entrada);
       $profe->hora_salida = explode(',',$profe->hora_salida);
-    }   
-    return view('oficina.profesores', compact('profes'));    
+    }
+    return view('oficina.profesores', compact('profes', 'fechasForoActivo', 'horariosDocentes'));
   }
   public function profe(Request $request)
   {
@@ -103,22 +131,42 @@ class OficinaController extends Controller
       return view('oficina.tokenProfe', compact('tokendocente'));
     }
   }
-
+  public function enviaHorario(Request $request){
+    $fechaForos = $request->get('fechasForo');
+    $fechaInicio = $request->get('fechasInicio');
+    $fechaTermino = $request->get('fechasTermino');
+    foreach($fechaForos as $key => $item){
+      DB::table('horariodocentes')->insert([
+        [
+          'hora_entrada' => $fechaInicio[$key],
+          'hora_salida' => $fechaTermino[$key],
+          'fecha' => $fechaForos[$key],
+          'id_docente' => $request->get('idDocente'),
+        ],
+      ]);
+    }
+  }
   public function dartokenAlumno(Request $request)
   {
+    //  dd($request->profe);
     $doc = Docente::all();
     $nocontrol = count($request->nocontrol, COUNT_RECURSIVE);
     $uso = 0;
     $con = 0;
+    $idprofe =  DB::table('docentes')->select('id')
+    ->where(DB::raw('CONCAT(prefijo," ",nombre," ",paterno," ", materno) '),'=',$request->profe)
+    ->get();
+    //dd($idprofe[0]->id);
     for ($i = 0; $i < $nocontrol; $i++) {
       $token = Tokenalumno::where('numerocontrol', $request->nocontrol[$i])->first();
+
       if ($token == null) {
         if ($request->nocontrol[$i] != null) {
           DB::table('tokenalumnos')->insert([
             [
               'numerocontrol' => $request->nocontrol[$i],
               'uso' => $uso,
-              'profe' => $request->profe,
+              'profe' => $idprofe[0]->id,
               'grupo' => $request->grupo,
             ],
           ]);
@@ -188,10 +236,10 @@ class OficinaController extends Controller
     $user = User::find($id);
     return view('oficina.editar', compact('user'));
   }
-  // 
-  // 
-  // 
-  // 
+  //
+  //
+  //
+  //
   public function guardar(Request $request, $id)
   {
 
@@ -346,7 +394,7 @@ class OficinaController extends Controller
     $foro = Foro::find($id);
     $horarioForo = $foro->forohoras()->where('id_foro', $id)->get();
     $forodoncente = Forodoncente::all();
-    // $horarioForo = 
+    // $horarioForo =
     return view('oficina.foros.configurarForo', compact('foro', 'docente', 'forodoncente', 'horarioForo'));
   }
 
@@ -369,10 +417,17 @@ class OficinaController extends Controller
   }
   public function activar($id)
   {
+    //   $nombredocentes = DB::
+    // $nombredocentes = DB::table('forodocentes')->('CONCAT(prefijo," ",nombre," ",paterno," ", materno) ')
+    // $idprofe =  DB::table('docentes')->select('id')
+    // ->where(DB::raw('CONCAT(prefijo," ",nombre," ",paterno," ", materno) '),'=',$request->profe)
+    // ->get();
     $id = Crypt::decrypt($id);
     $activar = Foro::find($id);
     $activar->accesosecundario = 1;
     $activar->save();
+    // $docentes->acceso = 1;
+    // $docentes->save();
     $id = Crypt::encrypt($id);
     return redirect("configurarForo/$id");
   }
@@ -385,6 +440,7 @@ class OficinaController extends Controller
     $activar->acceso = 0;
     $activar->accesosecundario = 0;
     $activar->save();
+
 
     $docenteacceso = Docente::where('acceso', 1)->first();
     if ($docenteacceso != null) {

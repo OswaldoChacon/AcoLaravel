@@ -5,9 +5,9 @@ use Auth;
 use App\Http\Controllers\Controller;
 
 
-class LoginController extends Controller 
+class LoginController extends Controller
 {
-	
+
 	 public function showLoginFrom()
     {
         return view('docentes.login');
@@ -24,14 +24,14 @@ class LoginController extends Controller
         if(Auth::guard('docentes')->attempt($credentials))
         {
              return redirect()->route('docenteLogin');
-        } else 
+        } else
         {
             return back()
         ->withErrors([$this->username() =>trans('auth.failed')])
-        ->withInput(request([$this->username()]));   
+        ->withInput(request([$this->username()]));
 
         }
-    }    
+    }
 
     public function logout()
     {
@@ -45,7 +45,7 @@ class LoginController extends Controller
     }
 
 
-   
+
 
 }
 

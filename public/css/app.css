@@ -8,7 +8,16 @@ body {
     background: #fafafa;
     
 }
-
+/* universal classes */
+.none{
+    display: none;
+}
+.input-invalid{
+    border: 1px solid #e44e44;
+    box-shadow: 0px 1px 5px 0px #e44e;
+    transition: ease all 0.3s;
+}
+/* end universal classes */
 p {
     font-family: 'Poppins', sans-serif;
     font-size: 1.1em;
@@ -180,3 +189,28 @@ a.article, a.article:hover {
     /* min-height: 51.5rem; */
     padding-top: 65px;
 }
+
+
+
+/* ADDED CLASSES BY JENNIFER 1/OCTOBER/2019 */
+
+.table-docentes tr td:last-child a{
+    width: 100%;
+    margin-bottom: 15px;
+    color: #fff;
+}
+.table-docentes tr td{
+    vertical-align: middle;
+}
+.table-docentes p{
+    color: #333;
+}
+.table-docentes input{
+    margin-bottom: 15px;
+    background-color: transparent;
+    width: 100%;
+    border: 1px solid #777;
+    border-radius: 5px;
+    padding: 2% 4%;
+}
+/* END ADDED CLASSES BY JENNIFER */

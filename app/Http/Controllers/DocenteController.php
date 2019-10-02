@@ -29,7 +29,8 @@ class DocenteController extends Controller
 
   public function __construct()
 	{
-		$this->middleware('auth:docentes');
+        $this->middleware('auth:docentes');
+
 	}
      public function index()
     {
@@ -57,18 +58,18 @@ class DocenteController extends Controller
         return view('docentes.registaralumno',compact('notificacione'));
        }
 
-     
+
     }
 
     public function dartokenAlumnoP(Request $request)
     {
       $notificacione=Notificacione::where('id_alumno',Auth::guard('docentes')->user()->id)->where('envio',2)->count();
         $doc=Docente::all();
-        $nocontrol=count($request->nocontrol, COUNT_RECURSIVE); 
+        $nocontrol=count($request->nocontrol, COUNT_RECURSIVE);
         $uso=0;
         $con=0;
          for ($i=0; $i <$nocontrol ; $i++)
-         { 
+         {
           $token=Tokenalumno::where('numerocontrol',$request->nocontrol[$i])->first();
            if($token==null)
               {
@@ -91,7 +92,7 @@ class DocenteController extends Controller
          }
          if($con>0)
          {
-           $tokenN=count($request->nocontrol, COUNT_RECURSIVE)-$con; 
+           $tokenN=count($request->nocontrol, COUNT_RECURSIVE)-$con;
           Session::flash('message',$errors);
          return view('docentes.dartokenAlumno',compact('tokenN','doc','notificacione'));
          }
@@ -134,7 +135,7 @@ class DocenteController extends Controller
       $docente->password = Hash::make($request->password);
       $docente->save();
 
-       return view ('docentes.docente', compact('docente'));     
+       return view ('docentes.docente', compact('docente'));
     }
 
     public function notificaciones()
@@ -171,7 +172,7 @@ class DocenteController extends Controller
     {
       $id =Crypt::decrypt($id);
       $notificacione=Notificacione::where('id_alumno',Auth::guard('docentes')->user()->id)->where('envio',2)->get()->count();
-       $pro=ProyectoForo::where('id',$id)->first(); 
+       $pro=ProyectoForo::where('id',$id)->first();
      $ProyectoForoAlumno = ProyectoForoAlumno::find($id);
       $alumnoenproyecto = ProyectoForoAlumno::all();
       $alumno = alumno::all();
@@ -180,10 +181,10 @@ class DocenteController extends Controller
       $foro=Foro::find($ProyectoForoAlumno->id_foro);
       $proyectoForo=ProyectoForo::find($pro->id);
       return view('docentes.proyectoDescripcion',compact('foro','proyectoForo','ProyectoForoAlumno','notificacione','alumnoenproyecto','alumno','docente','Forodoncente'));
-    
+
     }
 
-    public function archivo($id) 
+    public function archivo($id)
     {
        $notificacione=Notificacione::where('id_alumno',Auth::guard('docentes')->user()->id)->where('envio',2)->get()->count();
        $user = Archivo::where('id_proyecto',$id)->first();
@@ -201,7 +202,7 @@ class DocenteController extends Controller
           return view('docentes.docente',compact('notificacione'));
       }
      }
-     public function archivo1($id) 
+     public function archivo1($id)
     {
        $notificacione=Notificacione::where('id_alumno',Auth::guard('docentes')->user()->id)->where('envio',2)->get()->count();
        $user = Archivo::where('id_proyecto',$id)->first();
@@ -211,7 +212,7 @@ class DocenteController extends Controller
        $public_path = public_path();
        $url = '/storage/'.$archivo1;
      //verificamos si el archivo existe y lo retornamos
- 
+
        return view('docentes.documento1',compact('archivo1','notificacione','url'));
         }
         else
@@ -219,7 +220,7 @@ class DocenteController extends Controller
           return view('docentes.docente',compact('notificacione'));
       }
      }
-     public function archivo2($id) 
+     public function archivo2($id)
     {
        $notificacione=Notificacione::where('id_alumno',Auth::guard('docentes')->user()->id)->where('envio',2)->get()->count();
        $user = Archivo::where('id_proyecto',$id)->first();
@@ -229,7 +230,7 @@ class DocenteController extends Controller
        $public_path = public_path();
        $url = '/storage/'.$archivo2;
      //verificamos si el archivo existe y lo retornamos
-       
+
        return view('docentes.documento2',compact('archivo2','notificacione','url'));
         }
         else
@@ -242,10 +243,10 @@ class DocenteController extends Controller
   public function showprojects()
   {
       $docente = Docente::where('id', Auth::guard('docentes')->user()->id)->first();
-      
+
       $notificacione=Notificacione::where('id_alumno',Auth::guard('docentes')->user()->id)->where('envio',2)->get()->count();
 
-      return view('docentes.index', compact('notificacione', 'docente'));      
+      return view('docentes.index', compact('notificacione', 'docente'));
   }
-  
+
 }

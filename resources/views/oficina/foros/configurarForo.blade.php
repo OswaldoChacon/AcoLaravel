@@ -29,7 +29,7 @@
         <a class="nav-link" onclick="mostrar('contenido1','addHour')" id="agregarProfesor" href="#">Agregar profesor</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" onclick="mostrar('addHour','contenido1')" id="agregarHora" href="#">Agregar hora</a>
+        <a class="nav-link" onclick="mostrar('addHour','contenido1')" id="agregarHora" href="#">Agregar horario</a>
       </li>
     </ul>
 
@@ -40,6 +40,13 @@
       <p>{{session('mensaje')}}</p>
     </div>
     @endif
+    <div class="card-body">
+    @if(session('mensaje1'))
+    <div class="alert alert-success">
+      <p>{{session('mensaje1')}}</p>
+    </div>
+    @endif
+
     <div class="container">
       @if($errors->any())
       <div class="alert alert-danger">
@@ -56,58 +63,70 @@
     <div class="table-responsive">
       <table class="table table-striped table-hover">
         <thead>
-          <td><h6>{{$foro->noforo}}º {{$foro->titulo}}</h6>
-        <h6 >{{$foro->periodo}} {{$foro->anoo}}</h6></td>
+          <th>
+            <h6> <strong>{{$foro->noforo}}º {{$foro->titulo}}</strong></h6>
+            <h6><strong>{{$foro->periodo}} {{$foro->anoo}}</strong></h6>
+          </th>
 
-        <td>
-      <ul class="list-inline">
-        <a method="POTS" href="/activar/{{Crypt::encrypt($foro->id)}} ">
-          <button class="btn btn-success btn-xs bnt-block">Activar</button>
-        </a>
-        <a method="POTS" href="/desactivar/{{Crypt::encrypt($foro->id)}}">
-          <!-- {{Crypt::encrypt($foro->id)}} -->
-          <button class="btn btn-danger btn-xs bnt-block">Desactivar</button>
-        </a>
-        <a method="POTS" href="/cerrar/{{$foro->id}}">
-          <button class="btn btn-danger btn-xs bnt-block">Cerrar Registro</button>
-        </a>
-      </ul>
-        </td>
-
-        <tbody>
-            <td  weight="5"> Oficina:</td>
-            <td>{{$foro->oficina}}</td>
-
-</tbody>
-
+          <th>
+            <ul class="list-inline">
+              <a method="POTS" href="/activar/{{Crypt::encrypt($foro->id)}} ">
+                <button class="btn btn-success btn-xs bnt-block">Activar</button>
+              </a>
+              <a method="POTS" href="/desactivar/{{Crypt::encrypt($foro->id)}}">
+                <!-- {{Crypt::encrypt($foro->id)}} -->
+                <button class="btn btn-danger btn-xs bnt-block">Desactivar</button>
+              </a>
+              <a method="POTS" href="/cerrar/{{$foro->id}}">
+                <button class="btn btn-danger btn-xs bnt-block">Cerrar Registro</button>
+              </a>
+            </ul>
+          </th>
         </thead>
+        <tbody style="table-layout:fixed">
+          <td weight="2"> Jefe de Oficina:</td>
+          <td>{{$foro->oficina}}</td>
+
+          @foreach ($forodoncente as $profe)
+          @if ($profe->id_foro==$foro->id)
+          <tr>
+            <td>Profesor de Taller: </td>
+            <td>{{$profe->n_profe}}</td>
+            @endif
+          </tr>
+          @endforeach
+          <tr>
+          <div class="row">
+            <form class="form-inline" method="post" action="/actulizar/{{Crypt::encrypt($foro->id)}}" >
+              {{csrf_field()}}
+                <td>Limite de alumnos por proyecto: <strong>{{$foro->no_alumnos}}</strong> </td>
+              <td><input class="form-inline" type="number" name="no_alumnos" inputmode="Numero de  foro" style='width:70px; height:25px'/>
+              <button type="submit" class="btn btn-primary"  class="form-inline" value="Registrar" name="" >Guardar</button>
+              {!! $errors->first('no_alumnos','<span class="help-block alert alert-danger">:message</span>')!!}
+              </td>
+
+            </form>
+          </div>
+          </tr>
+          <tr>
+            <th>Fecha y horario programado</th>
+          </tr>
+          @foreach ($horarioForo as $object)
+          <tr>
+            <td>Fecha: {{$object->fecha_foro}}</td>
+            <td>Horario: {{$object->horario_inicio}} - {{$object->horario_termino}} </td>
+          </tr>
+          @endforeach
+          <tr>
+            <th></th>
+          </tr>
+        </tbody>
       </table>
     </div>
 
 
-
     <table>
-      <tr>
-        <th>Oficina : </th>
-        <th>{{$foro->oficina}}</th>
-      </tr>
-      @foreach ($forodoncente as $profe)
-      @if ($profe->id_foro==$foro->id)
-      <tr>
-        <th>Profe de :</th>
-        <th>{{$profe->n_profe}} </th>
-        @endif
-      </tr>
-      @endforeach
-    </table>
 
-    <table>
-      <tr>
-        <th>Limite de alumnos por proyecto:{{$foro->no_alumnos}} </th>
-        @foreach ($horarioForo as $object)
-        <th>Horario: {{$object->fecha_foro}} </th>
-        @endforeach
-      </tr>
     </table>
     <div class="row">
       <form method="post" action="/actulizar/{{Crypt::encrypt($foro->id)}}" class="form-center">

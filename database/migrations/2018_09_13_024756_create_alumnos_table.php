@@ -27,7 +27,7 @@ class CreateAlumnosTable extends Migration
             $table->string('grupo')->nullable();
             $table->string('password');
             $table->string('acceso');
-            $table->string('nocontrol')->unique();
+            $table->string('nocontro')->unique();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

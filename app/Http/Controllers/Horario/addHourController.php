@@ -33,7 +33,7 @@ class addHourController extends Controller
                     'fecha' => $request->fecha[$i],
                 ],
             ]);
-        }      
+        }
         $id = Crypt::encrypt($id);
         return redirect("profes/horarios/$id");
 

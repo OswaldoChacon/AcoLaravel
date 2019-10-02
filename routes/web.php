@@ -28,6 +28,7 @@ Route::post('dartokenProfe','OficinaController@dartokenProfe')->name('dartokenPr
 Route::post('dartokenAlumno','OficinaController@dartokenAlumno')->name('dartokenAlumno');
 Route::get('alumnos','OficinaController@alumnos')->name('alumnos');
 Route::get('profes','OficinaController@profes')->name('profes');
+Route::post('profes-envia-horario','OficinaController@enviaHorario');
 Route::get('lineaDeInvetigacion','OficinaController@lineaDeInvetigacion')->name('lineaDeInvetigacion');
 Route::post('lineaDeInvetigacionguardar','OficinaController@lineaDeInvetigacionguardar')->name('lineaDeInvetigacionguardar');
 Route::get('areadeconocimiento','OficinaController@areadeconocimiento')->name('areadeconocimiento');

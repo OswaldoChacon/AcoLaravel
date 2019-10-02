@@ -20,9 +20,10 @@ class HorarioController extends Controller
     }
     public function addHourForo(Request $request, $id)
     {
-        $date = "2012-01-21";
+// dd($request);
         //Get the day of the week using PHP's date function.
         //dd($dayOfWeek);
+        $data = array();
         $fecha = count($request->fecha, COUNT_RECURSIVE);
         $insertarbool = true;
         $rules = [
@@ -43,14 +44,16 @@ class HorarioController extends Controller
                 ->where('id_foro', '=', $id)
                 ->count();
             $dayOfWeek = date("l", strtotime($request->fecha[$i]));
-            if ($countFechas > 0) {
-                $insertarbool = false;
-            } else {
-                $insertarbool = true;
+            if ($countFechas > 0 || $dayOfWeek == 'Saturday' || $dayOfWeek == 'Sunday') {
+                $data[$i] = [
+                    "fecha"=>$request->fecha[$i],
+                    "h_in"=>$request->h_inicio[$i],
+                    "h_end"=>$request->h_end[$i]
+                ];
+                 //return back()->with('mensaje1', 'Horario NO registrado la fecha es repetida o es fin de semana');
+                // mandar mensaje de los registros que no se guardaron
             }
-        }
-        if ($insertarbool == true) {
-            for ($i = 0; $i < $fecha; $i++) {
+            else {
                 DB::table('horarioforos')->insert([
                     [
                         'id_foro' => $id,
@@ -59,9 +62,10 @@ class HorarioController extends Controller
                         'fecha_foro' => $request->fecha[$i],
                     ],
                 ]);
+                return back()->with('mensaje', 'Horario del foro registrado');
             }
         }
-        return back()->with('mensaje', 'Horario del foro registrado');
+        dd($data);
         $id = Crypt::encrypt($id);
         return redirect("configurarForo/$id");
     }

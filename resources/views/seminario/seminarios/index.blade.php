@@ -35,15 +35,17 @@
 				<td>{{ $seminario->periodo }}</td>
 				<td>{{ $seminario->anio }}</td>
 				<!-- Aqui borré el noforo -->
-				<td>Aqui borre noforo</td>
+                <!-- <td>Aqui borre noforo</td> -->
+                {{--<td>{{$seminario->foro->pluck('noforo')->implode(',')}}</td>--}}
+                <td>{{ $seminario->foro->noforo }}</td>
 				{{-- <td>{{ $seminario->proyectoforo->pluck('maestro')->implode('') }}</td> --}}
 				<td>
 					<a class="btn btn-info btn-xs" href="{{ route('projects', $seminario->id) }}">Proyectos</a>
 				</td>
 				<td>
 					<a class="btn btn-info btn-xs" href="{{ route('seminarios.edit', $seminario->id) }}">Editar</a>
-					{{-- <form style="display: inline" 
-								method="POST" 
+					{{-- <form style="display: inline"
+								method="POST"
 								action="{{ route('seminarios.destroy', $seminario->id) }}">
 					{!! csrf_field() !!}
 					{!! method_field('DELETE') !!}

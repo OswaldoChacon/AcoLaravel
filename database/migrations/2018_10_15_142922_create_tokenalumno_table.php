@@ -20,7 +20,7 @@ class CreateTokenalumnoTable extends Migration
             $table->integer('uso');
             $table->unsignedInteger('id_usuario');//->nullable();
             $table->foreign('id_usuario')->references('id')->on('users');
-            $table->string('profe')->nullable();
+            $table->integer('profe');
             $table->string('grupo')->nullable();
             $table->timestamps();
             $table->softDeletes();
