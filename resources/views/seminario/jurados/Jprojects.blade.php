@@ -32,28 +32,7 @@
 					<th>Acciones</th>
 				</tr>
 			</thead>
-			<tbody>
-				@foreach ($proyectos as $proyecto)
-				@if($proyecto->id == 'NULL')
 
-				@else
-				<tr>
-					<td>{{ $proyecto->id_foro }}</td>
-					<td>{{ $proyecto->titulo }}</td>
-					<td>
-						@foreach($proyecto->docentes as $docente)
-						<u>
-							<p>{{ $docente->prefijo }} {{ $docente->nombre }} {{ $docente->paterno }},</p>
-						</u>
-						@endforeach
-						{{-- {{ $proyecto->docentes->pluck('nombre')->implode(', ') }} --}}</td>
-					<td>
-						<a class="btn btn-info btn-xs" href="{{ route('jurados.edit', $proyecto->id) }}">Asignar Jurado</a>
-					</td>
-				</tr>
-				@endif
-				@endforeach
-			</tbody>
 		</table>
 	</div>
 </div>

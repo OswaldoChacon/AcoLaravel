@@ -128,7 +128,7 @@ Route::get('/archivo2/{id}','DocenteController@archivo2')->name('archivo');
 Route::get('seminarios/projects/{id}', 'SeminariosController@projects')->name('projects');
 Route::resource('seminarios', 'SeminariosController');
 
-Route::get('jurados/projects/{id?}', 'JuradosController@projects')->name('juradosprojects');
+Route::get('jurados/projects', 'JuradosController@projects')->name('juradosprojects');
 Route::resource('jurados', 'JuradosController')->only(['edit', 'update', 'index']);
 
 Route::get('evaluaciones/{id}/editDiapo', 'HojasController@editDiapo')->name('editDiapo');
@@ -173,7 +173,7 @@ Route::get('mostrarEvaluacion/{id}', 'AlumnoController@mostrarEvaluacion')->name
 
 // Acceso a la vista de horarios donde se creara todo lo de las hormigas
 Route::get('horarios', function(){
-	$foros = DB::table('foros')->where('accesosecundario','=',1)->get();	
+	$foros = DB::table('foros')->where('accesosecundario','=',1)->get();
 	// dd($foro);
 	return view('oficina.horarios.horarios',compact('foros'));
 });

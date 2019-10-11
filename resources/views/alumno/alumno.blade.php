@@ -37,7 +37,7 @@
 				</li>
 				@if (Auth::guard('alumnos')->user()->acceso==0)
 				<li>
-					<a href="/registraProyecto>">Registrar Poryecto</a>
+					<a href="/registraProyecto">Registrar Poryecto</a>
 				</li>
 				@endif
 				<li>

@@ -357,7 +357,7 @@ class OficinaController extends Controller
         $docenteacceso = Docente::where('acceso', 1)->first();
         if ($docenteacceso != null) {
           $docenteacceso->acceso = 0;
-          dd($docenteacceso);
+         // dd($docenteacceso);
           $docenteacceso->save();
         }
       }

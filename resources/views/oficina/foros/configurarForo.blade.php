@@ -104,9 +104,9 @@
               <button type="submit" class="btn btn-primary"  class="form-inline" value="Registrar" name="" >Guardar</button>
               {!! $errors->first('no_alumnos','<span class="help-block alert alert-danger">:message</span>')!!}
               </td>
-
             </form>
           </div>
+          <!-- <p id="agregarHora">&nbsp;</p> -->
           </tr>
           <tr>
             <th>Fecha y horario programado</th>
@@ -128,16 +128,6 @@
     <table>
 
     </table>
-    <div class="row">
-      <form method="post" action="/actulizar/{{Crypt::encrypt($foro->id)}}" class="form-center">
-        {{csrf_field()}}
-        <label for="name">Limite de alumnos por proyecto</label>
-        <input class="form-inline" type="number" name="no_alumnos" inputmode="Numero de  foro " />
-        {!! $errors->first('no_alumnos','<span class="help-block alert alert-danger">:message</span>')!!}
-        <button type="submit" class="btn btn-primary" value="Registrar" name="">Acceder</button>
-        <br>
-      </form>
-    </div>
     <br>
     @if ($foro->acceso==1 || $foro->accesosecundario==1)
     <!-- Formullario para agregar un docente como maestro de taller de investigación -->

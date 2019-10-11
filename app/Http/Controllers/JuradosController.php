@@ -61,7 +61,7 @@ class JuradosController extends Controller
     public function edit($id)
     {
         $proyecto = ProyectoForo::findOrFail($id);
-        
+
         $docentes = Docente::pluck('nombre', 'id');
 
         return view('seminario.jurados.edit', compact('proyecto', 'docentes'));
@@ -96,15 +96,15 @@ class JuradosController extends Controller
         //
     }
 
-    public function projects($id = '1')
+    public function projects()
     {
         $foros = Foro::all();
 
-        $proyectos = ProyectoForo::findOrFail($id)->where([
-                            ['id_foro', '=', $id]
-                        ])
-                        ->get();
+        // $proyectos = ProyectoForo::findOrFail($id)->where([
+                            // ['id_foro', '=', $id]
+                        // ])
+                        // ->get();
 
-        return view('seminario.jurados.Jprojects', compact('proyectos','foros'));
+        return view('seminario.jurados.Jprojects', compact('foros'));
     }
 }

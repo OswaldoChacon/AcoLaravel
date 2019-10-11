@@ -16,7 +16,8 @@
 </script>
 
 
-<div name='foro' class="panel-heading"> {{$foro->noforo}}º {{$foro->titulo}}
+<div name='foro' class="panel-heading">
+{{$foro->noforo}}º {{$foro->titulo}}
   <br>
   <th> {{$foro->periodo}} {{$foro->anoo}} </th>
   <br>
