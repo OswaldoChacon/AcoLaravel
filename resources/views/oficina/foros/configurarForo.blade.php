@@ -109,7 +109,7 @@
           <!-- <p id="agregarHora">&nbsp;</p> -->
           </tr>
           <tr>
-            <th>Fecha y horario programado</th>
+            <th colspan="2">Fecha y horario programado</th>
           </tr>
           @foreach ($horarioForo as $object)
           <tr>
@@ -117,9 +117,6 @@
             <td>Horario: {{$object->horario_inicio}} - {{$object->horario_termino}} </td>
           </tr>
           @endforeach
-          <tr>
-            <th></th>
-          </tr>
         </tbody>
       </table>
     </div>

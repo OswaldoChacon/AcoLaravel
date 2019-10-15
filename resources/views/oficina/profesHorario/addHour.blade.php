@@ -2,30 +2,50 @@
 
 @section('content')
 
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title">Horario del Jurado</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover table-docentes">
+                <thead>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Horas disponibles</th>
+                </thead>
+                <tbody>
+                    @foreach($jurado as $item)
+                    <tr>
+                        <td>
+                            {{$item->id_docente}}
+                        </td>
+                        <td>
+                            {{$item->nombre}}
+                        </td>
+                        <td>
+                        @foreach($horarios as $itemB)
+                        <ul class="list-unstyled components">
+                            <li class="active">
+                                <a href="#horas-{{$itemB->id}}" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Editar horarios de fecha {{$itemB->fecha}}</a>
+                                <ul class="collapse list-unstyled" id="horas-{{$itemB->id}}">
+                                @foreach ($horas as $h)
+                                <li>
+                                    <input id-proyecto-foro="" style="width: 25px; height: 25px" type="checkbox" name="status" value="participa" > {{$h}}
+                                    </li>
+                                    @endforeach
 
-
-<div class="panel-heading bg-primary">{{$docente->nombre}} </div>
-<div class="panel-body">
-    <form method="POST" action="/addHourDocente/{{$docente->id}}" class="form-center">
-        {{csrf_field()}}
-        <div class="form-group">
-            <input type="date" name="fecha[]">
-            <input type='time' class="name" name="h_entrada[]" min="07:00:am " max="16:00:pm" />
-            <input type='time' class="name" name="h_salida[]" min="07:00:am " max="16:00:pm" />            
-            <input type="date" name="fecha[]">
-            <input type='time' class="name" name="h_entrada[]" min="07:00:am " max="16:00:pm" />
-            <input type='time' class="name" name="h_salida[]" min="07:00:am " max="16:00:pm" />            
+                                </ul>
+                            </li>
+                        </ul>
+                        @endforeach
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
-        <button type="submit" class="btn btn-primary" value="Registrar" name="">Asignar hora</button>
-        {!! $errors->first('password','<span class="help-block">:message</span>')!!}
-    </form>
+        <button style="text-align:right" class="btn btn-success btn-xs bnt-block">Guardar</button></h5>
+    </div>
 </div>
-
-<script type="text/javascript">
-    $(function() {
-        $('#datetimepicker3').datetimepicker({
-            format: 'LT'
-        });
-    });
-</script>
 @endsection
