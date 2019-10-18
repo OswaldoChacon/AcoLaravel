@@ -10,7 +10,7 @@ class HorarioProyectosController extends Controller
     public function index()
     {
         $foros = DB::table('foros')->get();
-    
+
         return view('oficina.horarios.horarios', compact('foros'));
     }
     public function editarParticipa(Request $request){

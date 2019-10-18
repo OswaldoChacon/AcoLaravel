@@ -23,7 +23,7 @@
 </style>
 <div class="card">
   <div class="card-header">
-    <h5 class="card-title">Registrar linea de investigación</h5>
+    <h5 class="card-title">Configuracion del Foro: {{$foro->noforo}}º</h5>
     <ul class="nav justify-content-end">
       <li class="nav-item">
         <a class="nav-link" onclick="mostrar('contenido1','addHour')" id="agregarProfesor" href="#">Agregar profesor</a>
@@ -63,12 +63,12 @@
     <div class="table-responsive">
       <table class="table table-striped table-hover">
         <thead>
-          <th>
+          <th colspan="1">
             <h6> <strong>{{$foro->noforo}}º {{$foro->titulo}}</strong></h6>
             <h6><strong>{{$foro->periodo}} {{$foro->anoo}}</strong></h6>
           </th>
 
-          <th>
+          <th colspan="2"
             <ul class="list-inline">
               <a method="POTS" href="/activar/{{Crypt::encrypt($foro->id)}} ">
                 <button class="btn btn-success btn-xs bnt-block">Activar</button>
@@ -83,15 +83,16 @@
             </ul>
           </th>
         </thead>
-        <tbody style="table-layout:fixed">
-          <td weight="2"> Jefe de Oficina:</td>
-          <td>{{$foro->oficina}}</td>
-
+        <tbody style="table-layout:fixed" >
+        <tr>
+          <td colspan="1"> Jefe de Oficina: </td>
+          <td colspan="2">  {{$foro->oficina}}</td>
+          </tr>
           @foreach ($forodoncente as $profe)
           @if ($profe->id_foro==$foro->id)
           <tr>
-            <td>Profesor de Taller: </td>
-            <td>{{$profe->n_profe}}</td>
+            <td colspan="1">Profesor de Taller: </td>
+            <td  colspan="2">{{$profe->n_profe}}</td>
             @endif
           </tr>
           @endforeach
@@ -100,8 +101,8 @@
             <form class="form-inline" method="post" action="/actulizar/{{Crypt::encrypt($foro->id)}}" >
               {{csrf_field()}}
                 <td>Limite de alumnos por proyecto: <strong>{{$foro->no_alumnos}}</strong> </td>
-              <td><input class="form-inline" type="number" name="no_alumnos" inputmode="Numero de  foro" style='width:70px; height:25px'/>
-              <button type="submit" class="btn btn-primary"  class="form-inline" value="Registrar" name="" >Guardar</button>
+              <td><input class="form-inline" type="number" name="no_alumnos" inputmode="Numero de  foro" style='width:70px; height:25px' required/></td>
+              <td><button type="submit" class="btn btn-primary"  class="form-inline" value="Registrar" name="lim" >Guardar</button>
               {!! $errors->first('no_alumnos','<span class="help-block alert alert-danger">:message</span>')!!}
               </td>
             </form>
@@ -109,12 +110,41 @@
           <!-- <p id="agregarHora">&nbsp;</p> -->
           </tr>
           <tr>
-            <th colspan="2">Fecha y horario programado</th>
+          <div class="row">
+            <form class="form-inline" method="post" action="/actualizarDuracion/{{Crypt::encrypt($foro->id)}} " >
+              {{csrf_field()}}
+              <td>Duración de exposición por evento: <strong> {{$foro->duracion}}  min </strong></td>
+            <td><input class="form-inline" type="number" name="duracion" class="form-control" min="10" max="59" pattern="[0-9]" style='width:70px; height:25px' required/></td>
+            <td> <button class="btn btn-primary  class="form-inline" value="Registrar" name="btnGuardar">Guardar</button></td>
+              {!! $errors->first('duracion','<span class="help-block alert alert-danger">:message</span>')!!}
+              </td>
+            </form>
+          </div>
+          </tr>
+          <tr>
+              <td colspan="5"</td>
+          </tr>
+          </tbody>
+      </table>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead>
+        <h6> <strong> Fecha y horario programado</strong></h6>
+        </thead>
+        <tbody>
+          <tr>
+            <th>Fecha</th>
+            <th>Horario</th>
+            <th>Horario de Break</th>
+            <th> </th>
           </tr>
           @foreach ($horarioForo as $object)
           <tr>
-            <td>Fecha: {{$object->fecha_foro}}</td>
-            <td>Horario: {{$object->horario_inicio}} - {{$object->horario_termino}} </td>
+            <td>{{$object->fecha_foro}} </td>
+            <td>{{$object->horario_inicio}} - {{$object->horario_termino}}</td>
+            <td>{{$object->inicio_break}} - {{$object->fin_break}} </td>
+            <td> <button class="btn btn-primary  btnEditar">Editar</button></td>
           </tr>
           @endforeach
         </tbody>
@@ -169,21 +199,28 @@
                                                                           echo $hoy; ?>" />
             </div>
             <div class="form-group col-xl-3">
-              <label>Horario de inicio</label>
+              <label style""">Hora de inicio</label>
               <input type="time" name="h_inicio[]" class="form-control" min="07:00" max="18:00" />
             </div>
             <div class="form-group col-xl-3">
-              <label>Horario de finalización</label>
+              <label>Hora de finalización</label>
               <input type="time" name="h_end[]" class="form-control" min="07:00" max="18:00" />
             </div>
+            <div class="form-group col-xl-3">
+              <label>Hora de inicio de Break</label>
+              <input type="time" name="b_inicio[]" class="form-control" min="07:00" max="18:00" />
+            </div>
+            <div class="form-group col-xl-3">
+              <label>Hora de fin de Break</label>
+              <input type="time" name="b_end[]" class="form-control" min="07:00" max="18:00" />
+            </div>
             <div class="form-group col-xl-2">
-              <br>
               <a href="javascript:void(0);" class="add_button" title="Agregar más fechas"><i class="fas fa-plus-circle" style="font-size:30px"></i></a>
             </div>
           </div>
         </div>
       </div>
-      <button type="submit" class="btn-primary">Guardar hora</button>
+      <button type="submit" class="btn-primary">Guardar horario</button>
     </form>
     <!-- </div> -->
   </div>
@@ -204,8 +241,10 @@
       '<div class="form-group row">' +
       '<div class="form-group col-xl-3"><label>Fecha</label><input type="date" name="fecha[]" class="form-control" min="<?php $hoy = date('Y-m-d');
                                                                                                                         echo $hoy; ?>"/></div>' +
-      '<div class="form-group col-xl-3"><label>Horario de inicio</label><input type="time" name="h_inicio[]" class="form-control" min="07:00" max="18:00" /></div>' +
-      '<div class="form-group col-xl-3"><label>Horario de finalización</label><input type="time" name="h_inicio[]" class="form-control"  min="07:00" max="18:00" /></div>' +
+      '<div class="form-group col-xl-3"><label>Hora de inicio</label><input type="time" name="h_inicio[]" class="form-control" min="07:00" max="18:00" /></div>' +
+      '<div class="form-group col-xl-3"><label>Hora de finalización</label><input type="time" name="h_inicio[]" class="form-control"  min="07:00" max="18:00" /></div>' +
+      '<div class="form-group col-xl-3"><label>Hora de inicio de Break</label><input type="time" name="b_inicio[]" class="form-control" min="07:00" max="18:00" /></div>'+
+      '<div class="form-group col-xl-3"><label>Hora de fin de Break</label><input type="time" name="b_end[]" class="form-control" min="07:00" max="18:00" /></div>'+
       '<div class="form-group col-xl-2"><br><a href="javascript:void(0);" class="remove_button"><i class="fas fa-minus" style="font-size:30px"></i></a></div>' +
       '</div></div>';
     var x = 1; //Initial field counter is 1

@@ -13,7 +13,7 @@ class Horarioforo extends Model
      * @var array
      */
     protected $fillable = [
-        'id_foro', 'dia', 'horario_inicio','horario_termino','fecha_foro'
+        'id_foro', 'dia', 'horario_inicio','horario_termino','fecha_foro', 'duracion','no_alumnos',
     ];
 
     /**

@@ -476,13 +476,24 @@ class OficinaController extends Controller
     //return view('oficina.proyectoDescripcion',compact('foro','proyectoForo','ProyectoForoAlumno','notificacione','alumnoenproyecto','alumno','docente','Forodoncente'));
     return view('oficina.proyectoDescripcion', compact('foro', 'proyectoForo', 'ProyectoForoAlumno', 'alumnoenproyecto', 'alumno', 'docente', 'Forodoncente'));
   }
+
   public function actulizar(Request $r, $id)
   {
     $id = Crypt::decrypt($id);
     $activar = Foro::find($id);
     $activar->no_alumnos = $r->no_alumnos;
-    $activar->no_profesores = $r->no_profesores;
+    // $activar->no_profesores = $r->no_profesores;
     $activar->save();
+    $id = Crypt::encrypt($id);
+    return redirect("configurarForo/$id");
+  }
+
+  public function actualizarDuracion(Request $request, $id)
+  {
+    $id = Crypt::decrypt($id);
+    $duracio = Foro::find($id);
+    $duracio->duracion=$request->duracion;
+    $duracio->save();
     $id = Crypt::encrypt($id);
     return redirect("configurarForo/$id");
   }

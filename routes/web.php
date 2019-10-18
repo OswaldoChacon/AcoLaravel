@@ -185,6 +185,8 @@ Route::get('addHour', 'Horario\HorarioJuradoController@index');
 Route::get('profes/horarios/{id?}','Horario\addHourController@agregarHorarios')->name('horariomaestro');
 
 Route::post('addHourForo/{id}','Horario\HorarioController@addHourForo')->name('addHourForo');
+Route::post('actualizarDuracion/{id}','OficinaController@actualizarDuracion')->name('actualizarDuracion');
+
 
 Route::post('addHourDocente/{id}','Horario\addHourController@addHourDocente')->name('addHourForo');
 // Route::post('agregarProfeAforo/{id}','OficinaController@agregarProfeAforo')->name('agregarProfeAforo');
