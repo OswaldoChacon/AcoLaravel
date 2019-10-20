@@ -2,9 +2,7 @@
 
 @section('content')
 <div class="card">
-	<div class="card-header">
-		<h5>Asignar Jurado</h5>
-	</div>
+	<h5 class="card-header">Asignar Jurado</h5>
 	<div class="card-body">
 		<form class="form-inline">
 			<div class="form-group">

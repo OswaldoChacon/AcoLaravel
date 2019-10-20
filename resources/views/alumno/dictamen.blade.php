@@ -2,9 +2,7 @@
 
 @section('content')
 <div class="card">
-	<div class="card-header">
-		<h5 class="card-title">HOJA DE EVALUACIÓN</h5>
-	</div>
+	<h5 class="card-header">HOJA DE EVALUACIÓN</h5>
 	<div class="card-body">
 		<!-- <div class="container-fluid"> -->
 		<div class="table-responsive">

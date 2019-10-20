@@ -1,10 +1,8 @@
 @extends('oficina.oficina')
 
 @section('content')
-<div class="card">
-  <div class="card-header">
-    <h5>Alumnos registrados</h5>
-  </div>
+<div class="card">  
+    <h5 class="card-header">Alumnos registrados</h5>  
   <div class="card-body">
     <h5 class="card-title">
       Total de alumnos: <span style="font-weight: bold">{{$alumnos->count()}}</span>

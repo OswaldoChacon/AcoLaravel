@@ -31,7 +31,7 @@
 		<nav id="sidebar">
 			<div class="sidebar-header">
 			</div>
-			<ul class="list-unstyled components" style="position:fixed">
+			<ul class="list-unstyled components">
 				<li>
 					<a href="{{route('alumno')}}"> Inicio</a>
 				</li>

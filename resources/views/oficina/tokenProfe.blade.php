@@ -2,9 +2,7 @@
 
 @section('content')
 <div class="card">
-  <div class="card-header">
-    <h5>Token a crear para Docentes</h5>
-  </div>
+  <h5 class="card-header">Token a crear para Docentes</h5>
   <div class="card-body">
     <form method="post" action="/profe" class="form-center">
       {{csrf_field()}}

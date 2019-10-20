@@ -3,9 +3,7 @@
 @section('content')
 
 <div class="card">
-   <div class="card-header">
-      <h5 class="card-title">Crear foro</h5>
-   </div>
+   <h5 class="card-header">Crear foro</h5>
    <div class="card-body">
       @if (Session::has('message'))
       <div class="alert alert alert-danger">{{ Session::get('message') }}</div>

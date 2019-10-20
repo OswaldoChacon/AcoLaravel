@@ -2,9 +2,7 @@
 
 @section('content')
 <div class="card">
-	<div class="card-header">
-		<h5><strong>Hojas de evaluación</strong></h5>
-	</div>
+	<h5 class="card-header">Hojas de evaluación</h5>
 	<div class="card-body">
 		<br>
 		@if (session()->has('info'))

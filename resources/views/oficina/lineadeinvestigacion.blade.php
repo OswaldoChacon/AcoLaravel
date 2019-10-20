@@ -4,9 +4,7 @@
 <div class="container-fluid">
   <div class="row">
     <div class="card col-xl-4 col-md-5">
-      <div class="card-header">
-        <h5 class="card-title">Registrar linea de investigación</h5>
-      </div>
+      <h5 class="card-header">Registrar linea de investigación</h5>
       <div class="card-body">
         <form method="post" action="{{ route('lineaDeInvetigacionguardar') }}" class="form-center">
           {{csrf_field()}}
@@ -36,9 +34,7 @@
 
 
     <div class="card col-xl-7 col-md-6">
-      <div class="card-header">
-        <h5 class="panel-title">Lineas de Investigacion: <span style="font-weight: bold">{{$lineadeinvestigacion->count()}}</span></h5>
-      </div>
+      <h5 class="card-header">Lineas de Investigacion: <span style="font-weight: bold">{{$lineadeinvestigacion->count()}}</span></h5>
       <div class="card-body">
         <div class="table-responsive">
           <table class="table table-striped table-hover">
