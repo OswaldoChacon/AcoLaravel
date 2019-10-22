@@ -16,6 +16,7 @@ Route::post('/profe', 'OficinaController@profe')->name('profe');
 //Registrar token para alumno
 Route::get('oficina','OficinaController@index')->name('oficina');
 Route::get('tokenAlumno','OficinaController@tokenAlumno')->name('tokenAlumno');
+Route::get('tokenAlumno/clean-screen','OficinaController@cleanScreen');
 Route::get('tokenProfe','OficinaController@tokenProfe')->name('tokenProfe');
 Route::post('/alumnoT', 'OficinaController@alumno')->name('alumnoT');
 
@@ -36,7 +37,7 @@ Route::post('areadeconocimientoguardar','OficinaController@areadeconocimientogua
 Route::get('crearForo','OficinaController@crearForo')->name('crearForo');
 Route::post('guardarForo','OficinaController@guardarForo')->name('guardarForo');
 Route::get('foros','OficinaController@foros')->name('foros');
-Route::get('configurarForo/{id}','OficinaController@configurarForo')->name('configurarForo');
+Route::get('configurarForo/{id_foro}/{id_user}','OficinaController@configurarForo')->name('configurarForo');
 Route::post('agregarProfeAforo/{id}','OficinaController@agregarProfeAforo')->name('agregarProfeAforo');
 Route::get('/activar/{id}','OficinaController@activar')->name('activar');
 Route::get('/desactivar/{id}','OficinaController@desactivar')->name('desactivar');

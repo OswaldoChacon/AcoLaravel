@@ -13,6 +13,9 @@
                     <th>Horas disponibles</th>
                 </thead>
                 <tbody>
+                    @php
+                    $cont = 0;
+                    @endphp
                     @foreach($jurado as $item)
                     <tr>
                         <td>
@@ -22,21 +25,34 @@
                             {{$item->nombre}}
                         </td>
                         <td>
-                            @foreach($horarios as $itemB)
-                            <ul class="list-unstyled components">
-                                <li class="active">
-                                    <a href="#horas-{{$itemB->id}}" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Editar horarios de fecha {{$itemB->fecha}}</a>
-                                    <ul class="collapse list-unstyled" id="horas-{{$itemB->id}}">
-                                        @foreach ($horas as $h)
-                                        <li>
-                                            <input id-proyecto-foro="" style="width: 25px; height: 25px" type="checkbox" name="status" value="participa"> {{$h}}
-                                        </li>
-                                        @endforeach
 
-                                    </ul>
+                        @foreach($horarios as $key => $itemB)
+                        <ul class="list-unstyled components">
+                            <li class="">
+                                <a href="#horas-{{$cont + 1}}" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Editar horarios de fecha {{$itemB->fecha}}</a>
+                                <ul class="collapse list-unstyled" id="horas-{{$cont + 1}}">
+
+                                    @php
+                                for($i = 0; $i < count($intervalosContainer); $i++){
+                                    if($key == $i){
+                                    for($j = 0; $j < count($intervalosContainer[$i]) ; $j++  ){
+                                    @endphp
+                                <li>
+                                    <input id-proyecto-foro="" style="width: 25px; height: 25px" type="checkbox" name="status" value="participa" > {{$intervalosContainer[$i][$j]}}
                                 </li>
-                            </ul>
-                            @endforeach
+                                    @php
+                                    }
+                                }
+                                }
+                                    @endphp
+
+                                </ul>
+                            </li>
+                        </ul>
+                        @php
+                        $cont++;
+                        @endphp
+                        @endforeach
                         </td>
                     </tr>
                     @endforeach

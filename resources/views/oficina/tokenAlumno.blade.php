@@ -60,10 +60,10 @@
     <h5 class="card-title">
       Tokens generados: <span style="font-weight: bold">{{$tokealumno->count()}}</span>
       <ul class="nav justify-content-end">
-        <li class="nav-item">
-          <button class="btn btn-primary btn-xs bnt-block btnLimpiar">Limpiar Pantalla</button>
-        </li>
-      </ul>
+      <li class="nav-item">
+      <a href="/tokenAlumno/clean-screen" class="btn btn-primary btn-xs bnt-block btnLimpiar">Limpiar Pantalla</a>
+      </li>
+    </ul>
 
     </h5>
     <div class="table-responsive">
@@ -74,6 +74,7 @@
         </thead>
         <tbody>
           @foreach ($tokealumno as $token)
+          @if($token->ver == 1)
           <tr>
             <td>{{$token->numerocontrol}}</td>
             @if ($token->uso==0)
@@ -82,6 +83,7 @@
             <td><img src="{{asset('img/palomita.png')}}" style="height:20px;left:5%; top:30px;"></td>
             @endif
           </tr>
+        @endif
           @endforeach
         </tbody>
 

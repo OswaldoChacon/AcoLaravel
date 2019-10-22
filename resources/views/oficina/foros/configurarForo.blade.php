@@ -86,13 +86,13 @@
         <tbody style="table-layout:fixed" >
         <tr>
           <td colspan="1"> Jefe de Oficina: </td>
-          <td colspan="2">  {{$foro->oficina}}</td>
+          <td colspan="2">  {{$name_jefe}}</td>
           </tr>
           @foreach ($forodoncente as $profe)
           @if ($profe->id_foro==$foro->id)
           <tr>
             <td colspan="1">Profesor de Taller: </td>
-            <td  colspan="2">{{$profe->n_profe}}</td>
+            <td  colspan="2">{{$profe->n_profe_taller}}</td>
             @endif
           </tr>
           @endforeach
@@ -100,7 +100,7 @@
           <div class="row">
             <form class="form-inline" method="post" action="/actulizar/{{Crypt::encrypt($foro->id)}}" >
               {{csrf_field()}}
-                <td>Limite de alumnos por proyecto: <strong>{{$foro->no_alumnos}}</strong> </td>
+                <td>Limite de alumnos por proyecto: <strong>{{$foro->lim_alumnos}}</strong> </td>
               <td><input class="form-inline" type="number" name="no_alumnos" inputmode="Numero de  foro" style='width:70px; height:25px' required/></td>
               <td><button type="submit" class="btn btn-primary"  class="form-inline" value="Registrar" name="lim" >Guardar</button>
               {!! $errors->first('no_alumnos','<span class="help-block alert alert-danger">:message</span>')!!}
@@ -156,7 +156,7 @@
 
     </table>
     <br>
-    @if ($foro->acceso==1 || $foro->accesosecundario==1)
+    @if ($foro->acceso==1)
     <!-- Formullario para agregar un docente como maestro de taller de investigación -->
 
     <form class="oculto" id="contenido1" method="post" action="/agregarProfeAforo/{{Crypt::encrypt($foro->id)}}" class="form-center">
@@ -167,7 +167,7 @@
           <select name="maestro" class="form-control">
             <option disabled selected class="dropdown-toggle">Profesores</option>
             @foreach($docente as $doc)
-            @if ($doc->acceso==0)
+            @if ($doc->acceso==1)
             <option value="{{$doc->id}}">{{$doc->prefijo}} {{$doc->nombre}} {{$doc->paterno}} {{$doc->materno}}</option>
             @endif
             @endforeach

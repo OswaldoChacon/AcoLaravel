@@ -45,7 +45,17 @@ class OficinaController extends Controller
     // aqui va los
     return view('oficina.tokenAlumno', compact('tokealumno','doc'));
   }
+  public function cleanScreen(){
+    $tokealumno = Tokenalumno::all();
+    foreach($tokealumno as $t){
 
+            $inactivo =Tokenalumno::find($t->id);
+            $inactivo->ver=0;
+            $inactivo->save();
+
+    }
+    return view('oficina.tokenAlumno', compact('tokealumno'));
+  }
   public function tokenProfe()
   {
     $tokendocente = Tokendocente::all();
@@ -253,11 +263,11 @@ class OficinaController extends Controller
         ]
       ]);
 
-      Session::flash('message1', "Linea de Investigacion Registrados");      
+      Session::flash('message1', "Linea de Investigacion Registrados");
     } else {
-      Session::flash('message', "Linea ya existentes");      
+      Session::flash('message', "Linea ya existentes");
     }
-    $lineadeinvestigacion = Lineadeinvestigacion::all();    
+    $lineadeinvestigacion = Lineadeinvestigacion::all();
     //return view('oficina.lineadeinvestigacion', compact('lineadeinvestigacion'));
     return redirect()->route('lineaDeInvetigacion');
   }
@@ -331,8 +341,10 @@ class OficinaController extends Controller
           'titulo' => $request->titulo,
           'periodo' => $request->periodo,
           'anoo' => $request->anoo,
-          'id_user' => $user->id,
-          'acceso' => 0,          
+          'lim_alumnos' => 0,
+          'duracion' => 0,   
+          'acceso' => 0,                           
+          'id_user' => $user->id,          
         ],
       ]);
       Session::flash('message', "Foro Creado");
@@ -349,15 +361,21 @@ class OficinaController extends Controller
     $foro = Foro::all();
     return view('oficina.foros', compact('foro'));
   }
-  public function configurarForo($id)
+  public function configurarForo($id_foro, $id_user)
   {
-    $id = Crypt::decrypt($id);
     $docente = Docente::all();
-    $foro = Foro::find($id);
-    $horarioForo = $foro->forohoras()->where('id_foro', $id)->get();
+
+    $id = Crypt::decrypt($id_user);
+    $user = User::find($id); // hay deos meo
+
+    $name_jefe = $user->prefijo . '  ' . $user->nombre . '  ' . $user->paterno . '  ' . $user->materno;
+ // me lleva...
+    $id_f = Crypt::decrypt($id_foro);
+    $foro = Foro::find($id_f);
+    $horarioForo = Horarioforo::all();
+
     $forodoncente = Forodoncente::all();
-    // $horarioForo =
-    return view('oficina.foros.configurarForo', compact('foro', 'docente', 'forodoncente', 'horarioForo'));
+    return view('oficina.foros.configurarForo', compact('foro', 'docente', 'forodoncente', 'horarioForo', 'name_jefe'));
   }
 
   public function agregarProfeAforo(Request $request, $id)
@@ -368,14 +386,14 @@ class OficinaController extends Controller
     DB::table('forodoncentes')->insert([
       [
         'id_foro' => $foro->id,
-        'id_profe' => $request->maestro,
-        'n_profe' => $docentes->nombre . ' ' . $docentes->paterno . ' ' . $docentes->materno,
+        'id_docente' => $request->maestro,
+        'n_profe_taller' => $docentes->nombre . ' ' . $docentes->paterno . ' ' . $docentes->materno,
       ]
     ]);
     $docentes->acceso = 1;
     $docentes->save();
     $id = Crypt::encrypt($id);
-    return redirect("configurarForo/$id");
+    return back();
   }
   public function activar($id)
   {
@@ -385,13 +403,26 @@ class OficinaController extends Controller
     // ->where(DB::raw('CONCAT(prefijo," ",nombre," ",paterno," ", materno) '),'=',$request->profe)
     // ->get();
     $id = Crypt::decrypt($id);
+
+    $a= DB::table('foros')->where('acceso','=',1)->get();
+
+    if(count($a) > 0)
+    {
+        foreach($a as $item){
+            $inactivo =Foro::find($item->id);
+            $inactivo->acceso=0;
+            $inactivo->save();
+        }
+    }
+
     $activar = Foro::find($id);
-    $activar->accesosecundario = 1;
+    $activar->acceso = 1;
     $activar->save();
     // $docentes->acceso = 1;
     // $docentes->save();
     $id = Crypt::encrypt($id);
     return redirect("configurarForo/$id");
+
   }
   public function desactivar($id)
   {
@@ -400,7 +431,6 @@ class OficinaController extends Controller
     $tama = count($doc, COUNT_RECURSIVE);
     $activar = Foro::find($id);
     $activar->acceso = 0;
-    $activar->accesosecundario = 0;
     $activar->save();
 
 
@@ -441,9 +471,10 @@ class OficinaController extends Controller
 
   public function actulizar(Request $r, $id)
   {
+
     $id = Crypt::decrypt($id);
     $activar = Foro::find($id);
-    $activar->no_alumnos = $r->no_alumnos;
+    $activar->lim_alumnos = $r->no_alumnos;
     // $activar->no_profesores = $r->no_profesores;
     $activar->save();
     $id = Crypt::encrypt($id);

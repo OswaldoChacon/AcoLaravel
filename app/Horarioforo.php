@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Horarioforo extends Model
 {
-    //    
+    //
     /**
      * The attributes that are mass assignable.
      *
@@ -14,7 +14,7 @@ class Horarioforo extends Model
      */
     public $timestamps = false;
     protected $fillable = [
-        'id_foro', 'dia', 'horario_inicio','horario_termino','fecha_foro', 'duracion','no_alumnos',
+        'id_foro', 'horario_inicio','horario_termino','fecha_foro','inicio_break','fin_break',
     ];
 
     /**
