@@ -7,17 +7,19 @@
 <div class="card">
   <h5 class="card-header">Foros</h5>
   <div class="card-body">
+
+    @foreach ($foro as $for)
+    @if ($for->acceso==1)    
     <div class="alert alert alert-warning">
-      @foreach ($foro as $for)
-      @if ($for->acceso==1)
       <tr>
         <td> Foro activado:
-            {{$for->noforo}}
+          {{$for->noforo}}
         </td>
       </tr>
-      @endif
-      @endforeach
-    </div>
+    </div>    
+    @endif
+    @endforeach
+
     <h5 class="panel-title">Foros: <span style="font-weight: bold">{{$foro->count()}}</span></h5>
     <div class="table-responsive">
       <table class="table table-striped table-hover">
@@ -31,7 +33,7 @@
             <td>{{$for->noforo}}</td>
             <td>{{$for->titulo}}</td>
             <td>
-              <button class="btn btn-success btn-xs bnt-block" onclick="location.href='configurarForo/{{Crypt::encrypt($for->id)}}/{{Crypt::encrypt($for->id_user)}}'">Configuración</button>
+              <button class="btn btn-success btn-xs bnt-block" onclick="location.href='configurarForo/{{Crypt::encrypt($for->id)}}'">Configuración</button>
               <button class="btn btn-info btn-xs bnt-block" onclick="location.href='proyecto/{{Crypt::encrypt($for->id)}}'">Proyectos</button>
             </td>
           </tr>

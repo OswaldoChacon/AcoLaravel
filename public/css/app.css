@@ -291,3 +291,18 @@ a.article, a.article:hover {
     padding: 2% 4%;
 }
 /* END ADDED CLASSES BY JENNIFER */
+
+
+
+/* Hidding arrow from input type="numer" */
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+}

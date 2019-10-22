@@ -253,7 +253,7 @@ class OficinaController extends Controller
     ]);
 
     $linea1 = Lineadeinvestigacion::where('clave', $request->clave)->first();
-    $linea2 = Lineadeinvestigacion::where('clave', $request->clave)->first();
+    $linea2 = Lineadeinvestigacion::where('linea', $request->clave)->first();
     if ($linea1 == null && $linea2 == null) {
 
       DB::table('lineadeinvestigacions')->insert([
@@ -262,13 +262,11 @@ class OficinaController extends Controller
           'linea' => $request->linea,
         ]
       ]);
-
-      Session::flash('message1', "Linea de Investigacion Registrados");
+      Session::flash('message1', "Linea de Investigacion Registrado");      
     } else {
-      Session::flash('message', "Linea ya existentes");
+      Session::flash('message', "Linea de investigación ya existente");
     }
-    $lineadeinvestigacion = Lineadeinvestigacion::all();
-    //return view('oficina.lineadeinvestigacion', compact('lineadeinvestigacion'));
+    // $lineadeinvestigacion = Lineadeinvestigacion::all();    
     return redirect()->route('lineaDeInvetigacion');
   }
 
@@ -352,7 +350,7 @@ class OficinaController extends Controller
       return view('oficina.foros', compact('foro'));
     } else {
       Session::flash('message', "Numero de foro ya existentes");
-      return view('oficina.foros.crearForo');
+      return redirect()->route('crearForo');
     }
   }
 
@@ -361,12 +359,10 @@ class OficinaController extends Controller
     $foro = Foro::all();
     return view('oficina.foros', compact('foro'));
   }
-  public function configurarForo($id_foro, $id_user)
+  public function configurarForo($id_foro)
   {
-    $docente = Docente::all();
-
-    $id = Crypt::decrypt($id_user);
-    $user = User::find($id); // hay deos meo
+    $docente = Docente::all();    
+    $user = User::find(Auth()->user()->id);    
 
     $name_jefe = $user->prefijo . '  ' . $user->nombre . '  ' . $user->paterno . '  ' . $user->materno;
  // me lleva...

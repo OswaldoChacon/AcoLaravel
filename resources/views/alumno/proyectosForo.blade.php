@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="card">
-  <h5 class="card-header">Total de Poryecto:</h5>
+  <h5 class="card-header">Total de Proyectos:</h5>
   <div class="card-body">
     <div class="table-responsive">
       <table class="table table-striped table-hover">

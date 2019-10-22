@@ -27,3 +27,8 @@ function capturar() {
       }
     }
   }
+
+  $(document).ready(function() {
+    var duration = 4000; // 4 seconds
+    setTimeout(function () { $('#alert-fade').hide("fade"); }, duration);
+  });
