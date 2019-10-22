@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Impreso extends Model
 {
     protected $fillable = ['criterio', 'ponderacion'];
-
+    public $timestamps = false;
     public function hojas()
     {
     	return $this->belongsToMany('App\Hoja')->withPivot('evaluacion');

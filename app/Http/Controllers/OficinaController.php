@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Horarioforo;
+use Auth;
 use App\Alumno;
 use App\Archivo;
 use App\Aredeconocimiento;
@@ -305,8 +306,10 @@ class OficinaController extends Controller
     ]);
     $doc = Docente::all();
     $tama = count($doc, COUNT_RECURSIVE);
-    $user = User::find(1);
-    $user1 = $user->prefijo . '  ' . $user->nombre . '  ' . $user->paterno . '  ' . $user->materno;
+    // $user = User::find(1);
+    $user = User::find(Auth()->user()->id);    
+    // $docente = Docente::where('id', Auth::guard('docentes')->user()->id)->first();
+    // $user1 = $user->prefijo . '  ' . $user->nombre . '  ' . $user->paterno . '  ' . $user->materno;
     $foro = Foro::where('noforo', $request->noforo)->first();
     if ($foro == null) {
       $acc = Foro::where('acceso', 1)->first();
@@ -328,10 +331,8 @@ class OficinaController extends Controller
           'titulo' => $request->titulo,
           'periodo' => $request->periodo,
           'anoo' => $request->anoo,
-          'oficina' => $user1,
-          'acceso' => 1,
-          'accesosecundario' => 1,
-
+          'id_user' => $user->id,
+          'acceso' => 0,          
         ],
       ]);
       Session::flash('message', "Foro Creado");

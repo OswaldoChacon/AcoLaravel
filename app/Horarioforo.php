@@ -12,6 +12,7 @@ class Horarioforo extends Model
      *
      * @var array
      */
+    public $timestamps = false;
     protected $fillable = [
         'id_foro', 'dia', 'horario_inicio','horario_termino','fecha_foro', 'duracion','no_alumnos',
     ];
