@@ -5,9 +5,7 @@
 <div class="alert alert alert-info">{{ Session::get('message') }}</div>
 @endif
 <div class="card">
-  <div class="card-header">
-    <h5>Foros</h5>
-  </div>
+  <h5 class="card-header">Foros</h5>
   <div class="card-body">
     <div class="alert alert alert-warning">
       @foreach ($foro as $for)

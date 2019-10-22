@@ -19,7 +19,7 @@
 					<label for="name">Usuario</label>
 					<input class="form-control" 
 					type="text" 
-					name="name" 
+					name="name_usuario" 
 					value="{{old('name')}}"
 					placeholder="Usuario">
 					{!! $errors->first('name','<span class="help-block">:message</span>')!!}
@@ -32,7 +32,7 @@
 					placeholder="Contraseña">
 					{!! $errors->first('password','<span class="help-block">:message</span>')!!}
 				</div>
-				<button class="btn-primary btn-block">Acceder</button>
+				<button type="submit" class="btn-primary btn-block">Acceder</button>
 			 </form>
 			</div>
 		</div>

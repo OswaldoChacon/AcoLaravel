@@ -8,22 +8,21 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class Tokendocente extends Authenticatable
 {
     use Notifiable;
-
+    public $timestamps = false;
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'token', 'uso', 'id_usuario',
-    ];
-
+        'token', 'uso', 'matricula',
+    ];    
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'id_user'
     ];
 }

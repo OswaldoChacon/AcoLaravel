@@ -9,15 +9,15 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Aredeconocimiento extends Authenticatable
 {
-       use Notifiable;
-
+    use Notifiable;
+    public $timestamps = false;
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-         'linea','areade',
+        'linea', 'areade',
     ];
 
     /**

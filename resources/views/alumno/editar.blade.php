@@ -2,9 +2,8 @@
 
 @section('content')
 <div class="card">
-	<div class="card-header">
-		<h5 class="card-title">Mis datos personales</h5>
-	</div>
+	<h5 class="card-header">Mis datos personales</h5>
+
 	<div class="card-body">
 		<form method="post" action="/guardar/alumno/{{Crypt::encrypt($alumno->id)}}" class="form-center">
 			{{csrf_field()}}

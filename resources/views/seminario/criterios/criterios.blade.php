@@ -2,9 +2,7 @@
 
 @section('content')
 <div class="card">
-	<div class="card-header">
-		<h5><strong>Asignación de Criterios</strong></h5>
-	</div>
+	<h5 class="card-header">Asignación de Criterios</h5>
 	<div class="card-body">
 		<table class="table">
 			<thead>

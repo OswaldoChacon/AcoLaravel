@@ -14,6 +14,7 @@ class Archivo extends Authenticatable
      *
      * @var array
      */
+    public $timestamps = false;
     protected $fillable = ['id_proyecto','archivo','archivo1','archivo2'];
 
      

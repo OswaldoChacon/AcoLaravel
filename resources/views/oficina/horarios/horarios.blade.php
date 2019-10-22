@@ -2,10 +2,7 @@
 
 @section('content')
 <div class="card">
-    <div class="card-header">
-        <h5 class="card-title">Seleccione proyectos participantes</h5>
-    </div>
-
+    <h5 class="card-header">Seleccione proyectos participantes</h5>
     <div class="card-body">
         <div class="table-responsive">
             {{csrf_field()}}
@@ -41,7 +38,7 @@
     /* Procedimiento para mostrar proyectos por foro */
     $(".btnBuscarForos").on('click', function() {
         var idForo = $('select[name="foros"]').val();
-        if(idForo == "seleccione"){
+        if (idForo == "seleccione") {
             // $(".messageContainer").addClass('active');
             // $(".messageContainer .message .icon").html('');
             // $(".messageContainer .message .icon").append('<i class="fas fa-exclamation-triangle"></i>');

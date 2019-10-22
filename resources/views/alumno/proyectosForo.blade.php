@@ -2,8 +2,8 @@
 
 @section('content')
 <div class="card">
+  <h5 class="card-header">Total de Poryecto:</h5>
   <div class="card-body">
-    <h3 class="card-title">Total de Poryecto:</h3>
     <div class="table-responsive">
       <table class="table table-striped table-hover">
         <thead>

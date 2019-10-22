@@ -25,9 +25,7 @@ class CreateDocentesTable extends Migration
             $table->string('acceso');
             $table->string('matricula');
             $table->string('proyecto_en_los_que_estan')->nullable();
-            $table->rememberToken();
-            $table->timestamps();
-            $table->softDeletes();
+            $table->rememberToken();            ;
         });
     }
 

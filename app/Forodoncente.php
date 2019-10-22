@@ -9,8 +9,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Forodoncente extends Authenticatable
 {
-       use Notifiable;
-
+    use Notifiable;
+    public $timestamps = false;
     /**
      * The attributes that are mass assignable.
      *

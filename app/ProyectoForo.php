@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProyectoForo extends Model
 {
-	protected $table = 'proyectos';
+    public $timestamps = false;
+    protected $table = 'proyectos';
 
     protected $fillable = ['id','id_foro','titulo','nombre_de_empresa','objetivo','lineadeinvestigacion_id','areadeconocimiento_id',
     'id_asesor','aceptado','calificacion_foro','calificacion_seminario','promedio','participa'];

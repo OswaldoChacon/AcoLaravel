@@ -40,7 +40,9 @@ class OficinaController extends Controller
   public function tokenAlumno()
   {
     $tokealumno = Tokenalumno::all();
-    return view('oficina.tokenAlumno', compact('tokealumno'));
+    $doc = Docente::all();
+    // aqui va los
+    return view('oficina.tokenAlumno', compact('tokealumno','doc'));
   }
   public function cleanScreen(){
     $tokealumno = Tokenalumno::all();
@@ -82,51 +84,8 @@ class OficinaController extends Controller
 
   public function profes()
   {
-
-    $profes = DB::table('docentes')->select('docentes.*')
-    ->selectRaw('group_concat(horariodocentes.fecha) as fechas,
-    group_concat(horariodocentes.hora_entrada) as hora_entrada,
-    group_concat(horariodocentes.hora_salida) as hora_salida,
-    count(horariodocentes.hora_salida) as numberFechas')
-    ->leftjoin('horariodocentes','docentes.id','=','horariodocentes.id_docente')
-    ->groupBy('docentes.id')
-    ->get();
-    // $foroactivo=DB::table('foros')->select('accesosecundario')
-    // ->where('accesosecundario','=', 1)->count();
-    // if ($foroactivo == 1) {
-    //     $insertarbool = true;
-    //     $countFechas = Horarioforo::where('fecha_foro')
-    //             ->where('id_foro', '=', 'id_foro')
-    //             ->count();
-    // } else {
-    //     $insertarbool = false;
-    // }
-    // dd($profes);
-    $fechasForoActivo = DB::table('horarioforos')
-    ->select('foros.id as idForo',
-             'horarioforos.id_foro as fIdHorarioForo',
-             'foros.accesosecundario as foroActivo',
-             'horarioforos.id as idHForo',
-             'horarioforos.horario_inicio as inicio',
-             'horarioforos.horario_termino as termino',
-             'horarioforos.fecha_foro as fechaForo')
-    ->join('foros','foros.id','=','horarioforos.id_foro')
-    ->where('foros.acceso',1)
-    ->get();
-    $horariosDocentes = DB::table('horariodocentes')
-    ->select('hora_entrada as inicio',
-             'hora_salida as termino',
-             'id as id',
-             'id_docente as idDocente')
-    ->get();
-    // codigo extra
-    foreach($profes as $profe)
-    {
-      $profe->fechas = explode(',',$profe->fechas);
-      $profe->hora_entrada = explode(',',$profe->hora_entrada);
-      $profe->hora_salida = explode(',',$profe->hora_salida);
-    }
-    return view('oficina.profesores', compact('profes', 'fechasForoActivo', 'horariosDocentes'));
+    $profes = Docente::all();
+    return view('oficina.profesores', compact('profes'));
   }
   public function profe(Request $request)
   {
@@ -135,10 +94,14 @@ class OficinaController extends Controller
     ]);
     $tokenN = $request->tokenN;
     if ($tokenN != 0) {
-      return view('oficina.dartokenProfe', compact('tokenN'));
+      return view('oficina.dartokenProfe',compact('tokenN'));
+      // return redirect()->route('dartokenProfe');
+      // return redirect()->route('profe');
     } else {
       $tokendocente = Tokendocente::all();
-      return view('oficina.tokenProfe', compact('tokendocente'));
+      //return redirect()->route('/profe',$tokendocente);
+      return redirect()->route('oficina');
+      //view('oficina.tokenProfe', compact('tokendocente'));
     }
   }
   public function enviaHorario(Request $request){
@@ -176,7 +139,7 @@ class OficinaController extends Controller
             [
               'numerocontrol' => $request->nocontrol[$i],
               'uso' => $uso,
-              'profe' => $idprofe[0]->id,
+              'id_profe_taller' => "",
               'grupo' => $request->grupo,
             ],
           ]);
@@ -200,28 +163,27 @@ class OficinaController extends Controller
 
   public function dartokenProfe(Request $request)
   {
-    $email = count($request->emails, COUNT_RECURSIVE);
+    $numerocontrol = count($request->nocontrol, COUNT_RECURSIVE);
+    // dd($email);
     $uso = 0;
     $con = 0;
-    for ($i = 0; $i < $email; $i++) {
-      $token = Tokendocente::where('id_usuario', $request->emails[$i])->first();
+    for ($i = 0; $i < $numerocontrol; $i++) {
+      $token = Tokendocente::where('matricula', $request->nocontrol[$i])->first();
       if ($token == null) {
-        if ($request->emails[$i] != null) {
+        if ($request->nocontrol[$i] != null) {
           DB::table('tokendocentes')->insert([
             [
               'token' => Str::random(),
               'uso' => $uso,
-              'id_usuario' => $request->emails[$i],
+              'matricula' => $request->nocontrol[$i],
+              'id_user'=>2
             ],
           ]);
-          $correo = $request->emails[$i];
+          $correo = $request->nocontrol[$i];
           $data = array(
             'name' => 'Registro de Docentes',
           );
-          Mail::send('oficina.enviar', $data, function ($message) use ($correo) {
-            $message->from('ricardonarvaez13@gmail.com', 'Registro de Docentes');
-            $message->to($correo)->subject('Pagina de registro');
-          });
+          // Correo smtp
         }
       } else {
         $con++;
@@ -230,7 +192,7 @@ class OficinaController extends Controller
       }
     }
     if ($con > 0) {
-      $tokenN = count($request->emails, COUNT_RECURSIVE) - $con;
+      $tokenN = count($request->nocontrol, COUNT_RECURSIVE) - $con;
       Session::flash('message', $errors);
       return view('oficina.dartokenProfe', compact('tokenN'));
     } else {
@@ -301,13 +263,12 @@ class OficinaController extends Controller
       ]);
 
       Session::flash('message1', "Linea de Investigacion Registrados");
-      $lineadeinvestigacion = Lineadeinvestigacion::all();
-      return view('oficina.lineadeinvestigacion', compact('lineadeinvestigacion'));
     } else {
       Session::flash('message', "Linea ya existentes");
-      $lineadeinvestigacion = Lineadeinvestigacion::all();
-      return view('oficina.lineadeinvestigacion', compact('lineadeinvestigacion'));
     }
+    $lineadeinvestigacion = Lineadeinvestigacion::all();
+    //return view('oficina.lineadeinvestigacion', compact('lineadeinvestigacion'));
+    return redirect()->route('lineaDeInvetigacion');
   }
 
 

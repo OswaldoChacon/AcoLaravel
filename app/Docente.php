@@ -8,14 +8,15 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Docente extends Authenticatable
 {
+    public $timestamps = false;
     // protected $table = 'docentes';
-    protected $fillable = [    
-        'id','name', 'email', 'nombre', 'paterno', 'materno', 'prefijo', 'password', 'acceso','matricula'];
-
+    protected $fillable = [
+        'id', 'name_usuario', 'email', 'nombre', 'paterno', 'materno', 'prefijo', 'password', 'acceso', 'matricula','id_tokendocentes'
+    ];    
     public function proyectosforos()
     {
         return $this->belongsToMany(ProyectoForo::class, 'jurados', 'docente_id', 'proyectoforo_id')->withPivot('hoja_id');
-    }  
+    }
 
     public function hojas()
     {
@@ -23,6 +24,6 @@ class Docente extends Authenticatable
     }
     public function docentehoras()
     {
-    	return $this->hasMany(Horariodocente::class,'id','id_docente');
-    } 
+        return $this->hasMany(Horariodocente::class, 'id', 'id_docente');
+    }
 }

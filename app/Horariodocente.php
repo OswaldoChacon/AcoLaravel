@@ -12,6 +12,7 @@ class Horariodocente extends Model
      *
      * @var array
      */
+    public $timestamps = false;
     protected $fillable = [
         'id','id_docente', 'dia', 'hora_inicio','hora_entrada','fecha'
     ];

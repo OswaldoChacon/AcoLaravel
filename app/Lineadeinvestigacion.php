@@ -7,15 +7,15 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Lineadeinvestigacion extends Authenticatable
 {
-     use Notifiable;
-
+    use Notifiable;
+    public $timestamps = false;
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'clave', 'linea', 
+        'clave', 'linea',
     ];
 
     /**

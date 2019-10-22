@@ -19,8 +19,7 @@ class CreateTokendocentesTable extends Migration
             $table->integer('uso');
             // $table->string('id_usuario');
             $table->unsignedInteger('id_usuario');
-            $table->foreign('id_usuario')->references('id')->on('users');
-            $table->timestamps();
+            $table->foreign('id_usuario')->references('id')->on('users');            
         });
     }
 

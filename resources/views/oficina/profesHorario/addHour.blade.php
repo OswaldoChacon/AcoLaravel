@@ -3,9 +3,7 @@
 @section('content')
 
 <div class="card">
-    <div class="card-header">
-        <h5 class="card-title">Horario del Jurado</h5>
-    </div>
+    <h5 class="card-header">Horario del Jurado</h5>
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-striped table-hover table-docentes">
@@ -27,13 +25,13 @@
                             {{$item->nombre}}
                         </td>
                         <td>
-                        
+
                         @foreach($horarios as $key => $itemB)
                         <ul class="list-unstyled components">
                             <li class="">
                                 <a href="#horas-{{$cont + 1}}" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Editar horarios de fecha {{$itemB->fecha}}</a>
                                 <ul class="collapse list-unstyled" id="horas-{{$cont + 1}}">
-                                
+
                                     @php
                                 for($i = 0; $i < count($intervalosContainer); $i++){
                                     if($key == $i){
@@ -47,7 +45,7 @@
                                 }
                                 }
                                     @endphp
-                               
+
                                 </ul>
                             </li>
                         </ul>

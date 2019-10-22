@@ -34,7 +34,8 @@ class DocenteController extends Controller
 	}
      public function index()
     {
-       $notificacione=Notificacione::where('id_alumno',Auth::guard('docentes')->user()->id)->where('envio',2)->count();
+       $notificacione=Notificacione::where('id_alumno_recibe',Auth::guard('docentes')->user()->id)->count();
+      //  ->where('envio',2)
     	return view('docentes.docente',compact('notificacione'));
     }
     public function registaralumno()
@@ -162,7 +163,7 @@ class DocenteController extends Controller
 
      public function proyectoDocentes()
     {
-      $ProyectoForo= ProyectoForo::all();
+      $Proyecto= Proyecto::where('id_asesor',2);
       $notificacione=Notificacione::where('id_alumno',Auth::guard('docentes')->user()->id)->where('envio',2)->get()->count();
         return view('docentes.proyectosForo',compact('notificacione','ProyectoForo'));
     }

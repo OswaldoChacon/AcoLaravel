@@ -2,8 +2,8 @@
 
 @section('content')
 <div class="card">
-  <div class="card-body">
-    <h3 class="card-title">Notificaciones:</h3>
+<h5 class="card-header">Notificaciones:</h5>
+  <div class="card-body">    
     <div class="table-responsive">
       <table class="table table-striped table-hover">
         <thead>
