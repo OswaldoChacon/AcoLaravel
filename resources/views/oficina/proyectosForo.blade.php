@@ -21,15 +21,15 @@
       <td>{{$proyecto->titulo}}</td>
       <td>{{$proyecto->nombre_de_empresa}}</td>
       <td>{{$doc->prefijo}} {{$doc->nombre}} {{$doc->paterno}} {{$doc->materno}}</td>
-      <td><button class="btn btn-info btn-xs bnt-block" onclick="location.href='/proyectoDescripcion/{{Crypt::encrypt($proyecto->id)}}'">Ver</button></td> 
-          <td><button class="btn btn-primary btn-xs bnt-block" onclick="location.href='/archivoForo/{{$proyecto->id}}'">protocolo de investigacion</button></td> 
-        <td><button class="btn btn-primary btn-xs bnt-block" onclick="location.href='/archivoForo1/{{$proyecto->id}}'">Diapositiva</button></td> 
-        <td><button class="btn btn-primary btn-xs bnt-block" onclick="location.href='/archivoForo2/{{$proyecto->id}}'">Documentacion</button></td> 
+      <td><button class="btn btn-info btn-xs bnt-block" onclick="location.href='/proyectoDescripcion/{{Crypt::encrypt($proyecto->id)}}'">Ver</button></td>
+          <td><button class="btn btn-primary btn-xs bnt-block" onclick="location.href='/archivoForo/{{$proyecto->id}}'">protocolo de investigacion</button></td>
+        <td><button class="btn btn-primary btn-xs bnt-block" onclick="location.href='/archivoForo1/{{$proyecto->id}}'">Diapositiva</button></td>
+        <td><button class="btn btn-primary btn-xs bnt-block" onclick="location.href='/archivoForo2/{{$proyecto->id}}'">Documentacion</button></td>
     </tr>
     </tr>
    @endif
-   @endforeach 
-  @endforeach 
+   @endforeach
+  @endforeach
       </tbody>
   </div>
 </div>

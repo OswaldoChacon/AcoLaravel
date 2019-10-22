@@ -11,9 +11,11 @@
   <div class="card-body">
     <div class="alert alert alert-warning">
       @foreach ($foro as $for)
-      @if ($for->accesosecundario==1)
+      @if ($for->acceso==1)
       <tr>
-        <td> Foro activado:{{$for->noforo}},</td>
+        <td> Foro activado:
+            {{$for->noforo}}
+        </td>
       </tr>
       @endif
       @endforeach
@@ -27,11 +29,11 @@
         </thead>
         <tbody>
           @foreach ($foro as $for)
-          <tr>
+          <tr style="background-color: {{$for->acceso == 1 ? '#00b963' : '#e8e8e8'}}">
             <td>{{$for->noforo}}</td>
             <td>{{$for->titulo}}</td>
             <td>
-              <button class="btn btn-success btn-xs bnt-block" onclick="location.href='configurarForo/{{Crypt::encrypt($for->id)}}'">Configuración</button>
+              <button class="btn btn-success btn-xs bnt-block" onclick="location.href='configurarForo/{{Crypt::encrypt($for->id)}}/{{Crypt::encrypt($for->id_user)}}'">Configuración</button>
               <button class="btn btn-info btn-xs bnt-block" onclick="location.href='proyecto/{{Crypt::encrypt($for->id)}}'">Proyectos</button>
             </td>
           </tr>

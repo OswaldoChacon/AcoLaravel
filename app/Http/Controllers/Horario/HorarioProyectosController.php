@@ -16,13 +16,13 @@ class HorarioProyectosController extends Controller
     public function editarParticipa(Request $request){
         $id = $request->get('id');
         $value = $request->get('value');
-        DB::table('proyecto_foros')
+        DB::table('proyectos')
             ->where('id', $id)
             ->update(['participa' => $value]);
     }
     public function getProyectosForo(Request $request){
         $idForo = $request->get('idForo');
-        $proyectos_aceptados = DB::table('proyecto_foros')
+        $proyectos_aceptados = DB::table('proyectos')
         ->where('aceptado',1)
         ->where('id_foro',$idForo)
         ->get();

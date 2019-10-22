@@ -6,14 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProyectoForo extends Model
 {
-	protected $table = 'proyecto_foros';
-	
-    protected $fillable = ['id_foro','id_foro_titulo','titulo','objetivo','linea','area','assesor','maestro','oficina','calificacion','nombre_de_empresa'];
+	protected $table = 'proyectos';
+
+    protected $fillable = ['id','id_foro','titulo','nombre_de_empresa','objetivo','lineadeinvestigacion_id','areadeconocimiento_id',
+    'id_asesor','aceptado','calificacion_foro','calificacion_seminario','promedio','participa'];
 
     public function seminario()
     {
         return $this->belongsTo(Seminario::class);
-    } 
+    }
 
     public function docentes()
     {

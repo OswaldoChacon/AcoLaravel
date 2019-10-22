@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Foro extends Model
 {
-     protected $fillable = ['noforo','titulo','periodo','anoo','oficina','acceso'];
+     protected $fillable = ['noforo','titulo','periodo','anoo','id_user','acceso'];
 
      public function seminario()
     {
