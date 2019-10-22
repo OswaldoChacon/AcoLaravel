@@ -25,7 +25,7 @@
             <input class="form-control" type="text" name="linea" placeholder='Lineas de Investigacion'>
             {!! $errors->first('linea','<span class="help-block alert alert-danger">:message</span>')!!}
           </div>
-          <button type="submit" class="btn btn-primary" value="Registrar" name="">Registarar</button>
+          <button type="submit" class="btn btn-primary" value="Registrar" name="">Registrar</button>
         </form>
       </div>
     </div>

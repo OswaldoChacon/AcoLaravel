@@ -11,12 +11,8 @@
       <table class="table table-striped table-hover table-docentes">
         <thead>
           <th>Matricula</th>
-          <!-- <th>Correo</th> -->
           <th>Nombre</th>
-          <th>Fecha de foro</th>
-          <th>Hora de entrada</th>
-          <th>Hora de salida</th>
-          <th>Acciones</th>
+          <th>Correo</th>
         </thead>
         <tbody>
 
@@ -24,55 +20,7 @@
           <tr>
             <td>{{$profe->matricula}}</td>
             <td>{{$profe->nombre}}</td>
-            <td class="fechaForoContainer">
-              @foreach($fechasForoActivo as $fechaForo)
-              <p>{{$fechaForo->fechaForo}}</p>
-              @endforeach
-            </td>
-
-            <td class="fechaInicioContainer">
-              @php
-              $horarioVacioInicio = true;
-              @endphp
-              @for($i = 0; $i < count($fechasForoActivo); $i++) @php $horarioVacioInicio=true; @endphp @foreach($horariosDocentes as $item) @if($item->idDocente == $profe->id)
-                <input type="time" value="{{$item->inicio}}" name="inicio" class="inputTime" disabled><br>
-                @php $i++; @endphp
-                @php
-                $horarioVacioInicio = false;
-                @endphp
-                @endif
-                @endforeach
-                @if($horarioVacioInicio)
-                <input type="time" value="" name="termino" class="inputTime" disabled><br>
-                @endif
-                @endfor
-
-            </td>
-
-
-            <td class="fechaTerminoContainer">
-              @php
-              $horarioVacioTermino = true;
-              @endphp
-              @for($i = 0; $i < count($fechasForoActivo); $i++) @php $horarioVacioTermino=true; @endphp @foreach($horariosDocentes as $item) @if($item->idDocente == $profe->id)
-                <input type="time" value="{{$item->termino}}" name="termino" class="inputTime" disabled><br>
-                @php $i++; @endphp
-                @php
-                $horarioVacioTermino = false;
-                @endphp
-                @endif
-                @endforeach
-                @if($horarioVacioTermino)
-                <input type="time" value="" name="termino" class="inputTime" disabled><br>
-                @endif
-                @endfor
-            </td>
-            <td>
-              {{csrf_field()}}
-              <a id-docente="{{$profe->id}}" disabled="true" class="btn btn-info btn-xs none btnAsignar">Asignar horas</a>
-              <a id-docente="{{$profe->id}}" class="btn btn-warning btn-xs btnEditar">Editar</a>
-              <a id-docente="{{$profe->id}}" disabled="true" class="btn btn-secondary btn-xs none btnCancelar">Cancelar</a>
-            </td>
+            <td>{{$profe->email}}</td>                      
           </tr>
           @endforeach
         </tbody>

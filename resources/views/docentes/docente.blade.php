@@ -40,7 +40,7 @@
 					<a href="{{route('notificacionesdocentes')}}">Notificaciones <span class="badge">{{$notificacione}}</span></a>
 				</li>
 				<li>
-					<a href="{{route('proyectosAsessorados')}}">Proyectos assesor</a>
+					<a href="{{route('proyectosAsessorados')}}">Proyectos como asesor</a>
 				</li>
 				<li>
 					<!-- <a href="{{route('notificaciones')}}">Notificaciones</a> -->

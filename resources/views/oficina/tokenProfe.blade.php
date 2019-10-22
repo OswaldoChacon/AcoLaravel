@@ -4,17 +4,26 @@
 <div class="card">
   <h5 class="card-header">Token a crear para Docentes</h5>
   <div class="card-body">
-    <form method="post" action="/profe" class="form-center">
+    <div class="form-group ">
+      <input class="form-control" type="number" name="tokenN" id="cantidadToken" placeholder="Cuantos Token desea">
+    </div>
+    <!-- <button type="submit" class="btn btn-primary" value="Registrar" name="">Acceder</button> -->
+    {!! $errors->first('password','<span class="help-block">:message</span>')!!}
+    <button type="submit" class="btn btn-primary" value="Registrar" onclick="capturar()">Generar</button>
+    <button type="button" class="btn btn-warning" value="Registrar" onclick="limpiar()">Cancelar</button>
+
+    <br>
+    <br>
+    <form method="post" action="{{ route('dartokenProfe') }}" class="form-center">
       {{csrf_field()}}
-      <div class="form-group ">
-        <input class="form-control" type="number" name="tokenN" placeholder="Cuantos Token desea">
+      <div id="main">
       </div>
-      <button type="submit" class="btn btn-primary" value="Registrar" name="">Acceder</button>
-      {!! $errors->first('password','<span class="help-block">:message</span>')!!}
+      <div id="guardar" style="display:none">
+        <button type="submit" class="btn btn-primary" value="Registrar">Guardar</button>
+      </div>
     </form>
   </div>
 </div>
-
 
 
 <div class="card">
@@ -42,5 +51,9 @@
         </tbody>
     </div>
   </div>
+</div>
 
-  @endsection
+
+
+<script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
+@endsection

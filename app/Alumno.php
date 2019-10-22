@@ -9,7 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class Alumno extends Authenticatable
 {
     use Notifiable;
-
+    public $timestamps = false;
     /**
      * The attributes that are mass assignable.
      *

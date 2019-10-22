@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\AuthDocente;
+
 use Auth;
 use App\Http\Controllers\Controller;
 
@@ -8,28 +9,24 @@ use App\Http\Controllers\Controller;
 class LoginController extends Controller
 {
 
-	 public function showLoginFrom()
+    public function showLoginFrom()
     {
         return view('docentes.login');
     }
 
     public function login()
     {
-       $credentials= $this->validate(request(),[
+        $credentials = $this->validate(request(), [
 
             $this->username() => 'required|string',
             'password' => 'required|string'
-        ]);
-
-        if(Auth::guard('docentes')->attempt($credentials))
-        {
-             return redirect()->route('docenteLogin');
-        } else
-        {
+        ]);        
+        if (Auth::guard('docentes')->attempt($credentials)) {
+            return redirect()->route('docenteLogin');
+        } else {
             return back()
-        ->withErrors([$this->username() =>trans('auth.failed')])
-        ->withInput(request([$this->username()]));
-
+                ->withErrors([$this->username() => trans('auth.failed')])
+                ->withInput(request([$this->username()]));
         }
     }
 
@@ -41,11 +38,6 @@ class LoginController extends Controller
 
     public function username()
     {
-        return 'name';
+        return 'name_usuario';
     }
-
-
-
-
 }
-

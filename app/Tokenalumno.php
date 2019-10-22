@@ -8,14 +8,14 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class Tokenalumno extends Authenticatable
 {
     use Notifiable;
-
+    public $timestamps = false;
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'numerocontrol', 'uso', 
+        'numerocontrol', 'uso',
     ];
 
     /**

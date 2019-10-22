@@ -6,14 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Foro extends Model
 {
-     protected $fillable = ['noforo','titulo','periodo','anoo','oficina','acceso'];
+    public $timestamps = false;
+    protected $fillable = ['noforo', 'titulo', 'periodo', 'anoo', 'oficina', 'acceso'];
 
-     public function seminario()
+    public function seminario()
     {
         return $this->hasOne(Seminario::class);
     }
     public function forohoras()
     {
-    	return $this->belongsTo(Horarioforo::class,'id','id_foro');
+        return $this->belongsTo(Horarioforo::class, 'id', 'id_foro');
     }
 }

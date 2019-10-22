@@ -9,15 +9,15 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Forodoncente extends Authenticatable
 {
-       use Notifiable;
-
+    use Notifiable;
+    public $timestamps = false;
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-         'id_foro','id_profe','n_profe'
+        'id_foro', 'id_profe', 'n_profe'
     ];
 
     /**

@@ -6,21 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class Hoja extends Model
 {
+    public $timestamps = false;
     protected $fillable = ['calificacion', 'observaciones'];
 
     public function impresos()
     {
-    	return $this->belongsToMany('App\Impreso')->withPivot('evaluacion');
+        return $this->belongsToMany('App\Impreso')->withPivot('evaluacion');
     }
 
     public function diapositivas()
     {
-    	return $this->belongsToMany(Diapositiva::class)->withPivot('evaluacion');
+        return $this->belongsToMany(Diapositiva::class)->withPivot('evaluacion');
     }
 
     public function resumes()
     {
-    	return $this->belongsToMany(Resume::class)->withPivot('evaluacion');
+        return $this->belongsToMany(Resume::class)->withPivot('evaluacion');
     }
 
     public function proyectosforos()

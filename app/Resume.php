@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Resume extends Model
 {
-	protected $fillable = ['criterio', 'ponderacion'];
-	
+    public $timestamps = false;
+    protected $fillable = ['criterio', 'ponderacion'];
+
     public function hojas()
     {
-    	return $this->belongsToMany(Hoja::class)->withPivot('evaluacion');
+        return $this->belongsToMany(Hoja::class)->withPivot('evaluacion');
     }
 }

@@ -9,7 +9,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class ProyectoForoAlumno extends Authenticatable
 {
-       use Notifiable;
+    public $timestamps = false;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -17,7 +18,7 @@ class ProyectoForoAlumno extends Authenticatable
      * @var array
      */
     protected $fillable = [
-         'id_foro','id_proyecto','id_alumno','titulo','foro','objetivo'
+        'id_foro', 'id_proyecto', 'id_alumno', 'titulo', 'foro', 'objetivo'
     ];
 
     /**
