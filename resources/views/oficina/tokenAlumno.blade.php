@@ -33,10 +33,8 @@
       <div id="guardar" style="display:none">
         <select name="profe">
           <option disabled selected class="dropdown-toggle">Profesor</option>
-          @foreach($doc as $docente)
-          @if ($docente->acceso==1)
-          <option value="{{$docente->prefijo}} {{$docente->nombre}} {{$docente->paterno}} {{$docente->materno}}">{{$docente->prefijo}} {{$docente->nombre}} {{$docente->paterno}} {{$docente->materno}}</option>
-          @endif
+          @foreach($doc as $docente)          
+          <option value="{{$docente->id}}">{{$docente->prefijo}} {{$docente->nombre}} {{$docente->paterno}} {{$docente->materno}}</option>        
           @endforeach
         </select>
 
