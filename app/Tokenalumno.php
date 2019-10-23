@@ -15,7 +15,7 @@ class Tokenalumno extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'numerocontrol', 'uso', 'ver'
+        'numerocontrol', 'uso', 'ver','tokenalumnos_id'
     ];
 
     /**

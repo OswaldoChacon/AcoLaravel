@@ -31,7 +31,7 @@ class AlumnoController extends Controller
   }
   public function index()
   {
-    $notificacione = Notificacione::where('id_alumno', Auth::guard('alumnos')->user()->id)->where('envio', 1)->count();
+    $notificacione =0;// Notificacione::where('id_alumno', Auth::guard('alumnos')->user()->id)->where('envio', 1)->count();
     return view('alumno.alumno', compact('notificacione'));
   }
 
@@ -70,7 +70,7 @@ class AlumnoController extends Controller
 
   public function registraProyecto()
   {
-    $notificacione = Notificacione::where('id_alumno', Auth::guard('alumnos')->user()->id)->where('envio', 1)->count();
+    $notificacione = 0;//Notificacione::where('id_alumno', Auth::guard('alumnos')->user()->id)->where('envio', 1)->count();
     $forodoncente = Forodoncente::all();
     $docente = Docente::all();
     $alumno = Alumno::all();
@@ -204,8 +204,8 @@ class AlumnoController extends Controller
   public function notificaciones()
   {
     $alumno = Alumno::all();
-    $notificacione = Notificacione::where('id_alumno', Auth::guard('alumnos')->user()->id)->where('envio', 1)->get()->count();
-    $noticia = Notificacione::where('id_alumno', Auth::guard('alumnos')->user()->id)->where('envio', 1)->get();
+    $notificacione = 0;//Notificacione::where('id_alumno', Auth::guard('alumnos')->user()->id)->where('envio', 1)->get()->count();
+    $noticia = 0;//Notificacione::where('id_alumno', Auth::guard('alumnos')->user()->id)->where('envio', 1)->get();
     return view('alumno.notificacion', compact('notificacione', 'noticia', 'alumno'));
   }
 

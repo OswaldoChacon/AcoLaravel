@@ -29,9 +29,9 @@
 					<label for="name">Usuario</label>
 					<input class="form-control" 
 					type="text" 
-					name="name" 
+					name="name_usuario" 
 					placeholder = 'Usuario' >
-					{!! $errors->first('name','<span class="help-block alert alert-danger">:message</span>')!!}
+					{!! $errors->first('name_usuario','<span class="help-block alert alert-danger">:message</span>')!!}
 
 					<label for="email">Correo</label>
 					<input class="form-control" 

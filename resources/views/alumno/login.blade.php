@@ -21,7 +21,7 @@
 					<label for="name">Usuario</label>
 					<input class="form-control" 
 					type="text" 
-					name="name" 
+					name="name_usuario" 
 					value="{{old('name')}}"
 					placeholder="Usuario">
 					{!! $errors->first('name','<span class="help-block">:message</span>')!!}

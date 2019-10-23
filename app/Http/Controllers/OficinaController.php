@@ -158,6 +158,7 @@ class OficinaController extends Controller
               'uso' => $uso,
               'id_profe_taller' => $idprofe[0]->id_docente,
               'grupo' => $request->grupo,
+              'ver'=>1
             ],
           ]);
         }

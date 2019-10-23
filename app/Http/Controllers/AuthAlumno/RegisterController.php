@@ -35,7 +35,7 @@ class RegisterController extends Controller
     {
 
       $validator = $this->validate(request(),[
-        'name' => 'required',
+        'name_usuario' => 'required',
         'email' => 'email|required',
         'nombre' => 'required',
         'paterno' => 'required',
@@ -43,27 +43,30 @@ class RegisterController extends Controller
         'nocontro' => 'required',
         'password' => 'required',
       ]);
+      // dd($request);
     $token=Tokenalumno::where('numerocontrol',$request->nocontro)->first();
-    $name=Alumno::where('name',$request->name)->first();
+    // dd($token->id);
+    $name=Alumno::where('name_usuario',$request->name_usuario)->first();
     $email=Alumno::where('email',$request->email)->first();
   if($token!=null && $name== null&& $email== null)
     {
       if($token->uso==0)
       {
       $docente=Alumno::create([
-            'name' => $request->name,
+            'name_usuario' => $request->name_usuario,
             'email' => $request->email,
             'nombre' => $request->nombre,
             'paterno' => $request->paterno,
             'materno' => $request->materno,
-            'id_profe'=>$token->profe,
+            // 'id_profe'=>$token->profe,
+            'tokenalumnos_id'=> $token->id,
             'nocontro' => $request->nocontro,
             'grupo'=>$token->grupo,
-            'acceso'=>0,
-            'password' => Hash::make($request->password),         
+            'acceso'=>0,        
+            'password' => Hash::make($request->password),            
                    ]);
         $token->uso=1;
-        $token->id_usuario=$request->email;
+        // $token->id_usuario=$request->email;
         $token->save();
         return redirect("loginAlumno");
       }else
