@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="card">
-  <h5 class="card-header">Proyectos del foro: {{$id}}</h5>
+  <h5 class="card-header">Proyectos del foro: {{$noforo}}º</h5>
   <div class="card-body">
   <h6 class="card-title">Total de de proyectos: </h6>
     <div class="table-responsive">

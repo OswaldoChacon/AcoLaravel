@@ -52,9 +52,7 @@ class OficinaController extends Controller
             $inactivo =Tokenalumno::find($t->id);
             $inactivo->ver=0;
             $inactivo->save();
-
     }
-    return view('oficina.tokenAlumno', compact('tokealumno'));
   }
   public function tokenProfe()
   {
@@ -177,7 +175,7 @@ class OficinaController extends Controller
               'token' => Str::random(),
               'uso' => $uso,
               'matricula' => $request->nocontrol[$i],
-              'id_user'=>2
+              'id_user'=> 1
             ],
           ]);
           $correo = $request->nocontrol[$i];
@@ -262,11 +260,11 @@ class OficinaController extends Controller
           'linea' => $request->linea,
         ]
       ]);
-      Session::flash('message1', "Linea de Investigacion Registrado");      
+      Session::flash('message1', "Linea de Investigacion Registrado");
     } else {
       Session::flash('message', "Linea de investigación ya existente");
     }
-    // $lineadeinvestigacion = Lineadeinvestigacion::all();    
+    // $lineadeinvestigacion = Lineadeinvestigacion::all();
     return redirect()->route('lineaDeInvetigacion');
   }
 
@@ -315,7 +313,7 @@ class OficinaController extends Controller
     $doc = Docente::all();
     $tama = count($doc, COUNT_RECURSIVE);
     // $user = User::find(1);
-    $user = User::find(Auth()->user()->id);    
+    $user = User::find(Auth()->user()->id);
     // $docente = Docente::where('id', Auth::guard('docentes')->user()->id)->first();
     // $user1 = $user->prefijo . '  ' . $user->nombre . '  ' . $user->paterno . '  ' . $user->materno;
     $foro = Foro::where('noforo', $request->noforo)->first();
@@ -340,9 +338,9 @@ class OficinaController extends Controller
           'periodo' => $request->periodo,
           'anoo' => $request->anoo,
           'lim_alumnos' => 0,
-          'duracion' => 0,   
-          'acceso' => 0,                           
-          'id_user' => $user->id,          
+          'duracion' => 0,
+          'acceso' => 0,
+          'id_user' => $user->id,
         ],
       ]);
       Session::flash('message', "Foro Creado");
@@ -361,8 +359,8 @@ class OficinaController extends Controller
   }
   public function configurarForo($id_foro)
   {
-    $docente = Docente::all();    
-    $user = User::find(Auth()->user()->id);    
+    $docente = Docente::all();
+    $user = User::find(Auth()->user()->id);
 
     $name_jefe = $user->prefijo . '  ' . $user->nombre . '  ' . $user->paterno . '  ' . $user->materno;
  // me lleva...
@@ -444,8 +442,12 @@ class OficinaController extends Controller
 
     $id = Crypt::decrypt($id);
     $proyectoForo = ProyectoForo::all();
+    $p= DB::table('proyectos')->select('titulo as titulo','	nombre_de_empresa as empresa','id_asesor as asesor');
+
+    $numforo= DB::table('foros')->select('noforo')->where('id',$id)->get();
+    $noforo= $numforo[0]->noforo;
     $docentes = Docente::all();
-    return view('oficina.proyectosForo', compact('proyectoForo', 'id', 'docentes'));
+    return view('oficina.proyectosForo', compact('proyectoForo', 'noforo','id', 'docentes'));
   }
 
   public function proyectoDescripcion($id)

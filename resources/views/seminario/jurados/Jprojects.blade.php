@@ -11,7 +11,7 @@
 			<div class="form-group">
 				<div class="dropdown">
 					<button class="btn btn-xs btn-default dropdown-toggle" type="button" data-toggle="dropdown">
-						<span>Seleccione el foro</span>
+						<span>Seleccione foro</span>
 					</button>
 					<ul class="dropdown-menu">
 						@foreach($foros as $foro)

@@ -34,7 +34,7 @@
         <thead>
           <th>Token</th>
           <th>Uso</th>
-          <th>Correo</th>
+          <th>Matricula</th>
         </thead>
         <tbody>
           @foreach ($tokendocente as $token)
@@ -45,7 +45,7 @@
             @else
             <td><img src="{{asset('img/palomita.png')}}" style="height:20px;left:5%; top:30px;"></td>
             @endif
-            <td>{{$token->id_usuario}}</td>
+            <td>{{$token->matricula}}</td>
           </tr>
           @endforeach
         </tbody>

@@ -12,8 +12,6 @@ class HorarioJuradoController extends Controller
         $min= DB::table('foros')->select('duracion as minutos')->where('acceso','=',1)->get();
         $minutos = $min[0]->minutos;
 
-        // dd($minutos);
-
         $jurado = DB::table('docentes')
             ->select(
                 'docentes.id as id_docente',
@@ -30,17 +28,9 @@ class HorarioJuradoController extends Controller
             ->join('foros', 'horarioforos.id_foro', '=', 'foros.id')
             ->where('foros.acceso', 1)
             ->get();
-        // $date= date('H:i:s');
 
         $longitud = count($horarios);
-        // dd($longitud);
-        // for($i= 0; $i < $longitud; $i++){
-
-        // dd($i);
-        // $inicio = date('H:i:s', strtotime($horarios[0]->inicio));
-        // $inicio2 = date('H:i:s', strtotime($horarios[0]->inicio));
-        // $termino = date('H:i:s', strtotime($horarios[0]->termino));
-
+        $temp = " ";
         $intervalosContainer =array();
 
         foreach($horarios as $item){
@@ -54,34 +44,27 @@ class HorarioJuradoController extends Controller
             }
             array_push($intervalosContainer, $intervalo);
         }
-
-        // dd(count($intervalosContainer[0]));
-        // array_push($hours,$horarios);
-        // dd($hours);
-        // dd($horarios);
-        // dd($inicio);
-        $horas = array();
         $dividido = array();
-
-        $temp = " ";
         $temp2 = " ";
 
-        // while ($inicio2 < $termino) {
-        //     $newHour = strtotime('+0 hour', strtotime($inicio2));
-        //     $newHour = strtotime('+'.$minutos.'minute', $newHour);
-        //     $newHour = date('H:i:s', $newHour);
-        //     $temp2 = $inicio2 . " - " . $newHour;
-        //     $inicio2 = $newHour;
+        foreach($horarios as $item2){
+            $horas = array();
+            while ($item2->inicio != $item2->termino) {
+                    $newHour = strtotime('+0 hour', strtotime($item2->inicio));
+                    $newHour = strtotime('+'.$minutos.'minute', $newHour);
+                    $newHour = date('H:i:s', $newHour);
+                    $temp2 = $item2->inicio . " - " . $newHour;
+                    $item2->inicio = $newHour;
+                    if($newHour > $item2->termino){
 
-        //     if($newHour > $termino){
-
-        //      }
-        //     else{
-        //         array_push($dividido, $temp2);
-        //      }
-        // }
-        //dd($dividido);
-    // }
+                     }
+                    else{
+                        array_push($horas, $temp2);
+                     }
+                }
+               array_push($dividido,$horas);
+        }
+       // dd($dividido);
     // dd($horas);
         return view('oficina.profesHorario.addHour', compact('jurado', 'horarios', 'horas','intervalosContainer'));
     }
