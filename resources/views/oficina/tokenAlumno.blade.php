@@ -14,8 +14,8 @@
     <div class="form-group ">
       <input class="form-control" type="number" name="tokenN" id="cantidadToken" placeholder="Cuantos Token desea">
     </div>
-    <button type="submit" class="btn btn-primary" value="Registrar" onclick="capturar()">Generar</button>
-    <button type="button" class="btn btn-warning" value="Registrar" onclick="limpiar()">Cancelar</button>
+    <button type="button" class="btn btn-primary" value="Registrar" onclick="capturar()">Generar</button>
+    <button type="button" class="btn btn-warning" onclick="limpiar()">Cancelar</button>
     <!-- {!! $errors->first('password','<span class="help-block">:message</span>')!!} -->
     <!-- </div>    -->
     <!-- </thead>

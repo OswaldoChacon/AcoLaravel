@@ -31,7 +31,9 @@ class HorarioController extends Controller
         //Get the day of the week using PHP's date function.
         //dd($dayOfWeek);
         $data = array();
+        $id = Crypt::decrypt($id);
         $fecha = count($request->fecha, COUNT_RECURSIVE);
+        // dd($request);
         $insertarbool = true;
         $rules = [
             'h_inicio.*' => 'required',
