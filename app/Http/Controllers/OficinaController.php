@@ -41,7 +41,12 @@ class OficinaController extends Controller
   public function tokenAlumno()
   {
     $tokealumno = Tokenalumno::all();
-    $doc = Docente::all();
+    $doc = Forodoncente::select('docentes.id','docentes.prefijo','docentes.nombre','docentes.paterno','docentes.materno')
+    ->join('foros','forodoncentes.id_foro','=','foros.id')
+    ->join('docentes','forodoncentes.id_docente','=','docentes.id')
+    ->where('foros.acceso',1)->get();
+    
+    //  dd($doc[0]->nombre);    
     // aqui va los
     return view('oficina.tokenAlumno', compact('tokealumno','doc'));
   }
@@ -54,7 +59,8 @@ class OficinaController extends Controller
             $inactivo->save();
 
     }
-    return view('oficina.tokenAlumno', compact('tokealumno'));
+    // return view('oficina.tokenAlumno', compact('tokealumno'));
+    return redirect()->route('tokenAlumno');
   }
   public function tokenProfe()
   {
@@ -127,10 +133,22 @@ class OficinaController extends Controller
     $nocontrol = count($request->nocontrol, COUNT_RECURSIVE);
     $uso = 0;
     $con = 0;
-    $idprofe =  DB::table('docentes')->select('id')
-    ->where(DB::raw('CONCAT(prefijo," ",nombre," ",paterno," ", materno) '),'=',$request->profe)
-    ->get();
-    //dd($idprofe[0]->id);
+    // $idprofe =  DB::table('docentes')->select('id')
+    // ->where(DB::raw('CONCAT(prefijo," ",nombre," ",paterno," ", materno) '),'=',$request->profe)
+    // ->get();
+
+    $idprofe = Forodoncente::select('forodoncentes.id_docente')
+    ->join('foros','forodoncentes.id_foro','=','foros.id')
+    ->join('docentes','forodoncentes.id_docente','=','docentes.id')
+    ->where('foros.acceso',1)
+    ->where('forodoncentes.id_docente',$request->profe)->get();
+    // dd($doc);
+    // $doc = Forodoncente::select('forodoncentes.id','docentes.prefijo','docentes.nombre','docentes.paterno','docentes.materno')
+    // ->join('foros','forodoncentes.id_foro','=','foros.id')
+    // ->join('docentes','forodoncentes.id_docente','=','docentes.id')
+    // ->where('foros.acceso',1)->get();
+    // dd($idprofe[0]->id_docente);
+    //dd($idprofe);
     for ($i = 0; $i < $nocontrol; $i++) {
       $token = Tokenalumno::where('numerocontrol', $request->nocontrol[$i])->first();
 
@@ -140,7 +158,7 @@ class OficinaController extends Controller
             [
               'numerocontrol' => $request->nocontrol[$i],
               'uso' => $uso,
-              'id_profe_taller' => "",
+              'id_profe_taller' => $idprofe[0]->id_docente,
               'grupo' => $request->grupo,
             ],
           ]);
