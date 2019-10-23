@@ -460,9 +460,7 @@ class OficinaController extends Controller
   {
 
     $id = Crypt::decrypt($id);
-    $proyectoForo = ProyectoForo::all();
-    $p= DB::table('proyectos')->select('titulo as titulo','	nombre_de_empresa as empresa','id_asesor as asesor');
-
+    $proyectoForo = ProyectoForo::all()-> where('id_foro',$id);
     $numforo= DB::table('foros')->select('noforo')->where('id',$id)->get();
     $noforo= $numforo[0]->noforo;
     $docentes = Docente::all();
@@ -480,11 +478,19 @@ class OficinaController extends Controller
     $alumno = alumno::all();
     $docente = Docente::all();
     $Forodoncente = Forodoncente::all();
-    $foro = Foro::find($ProyectoForoAlumno->id_foro);
+    // $foro = Foro::find($ProyectoForoAlumno->id_foro);
     $proyectoForo = ProyectoForo::find($pro->id);
     //return view('oficina.proyectoDescripcion',compact('foro','proyectoForo','ProyectoForoAlumno','notificacione','alumnoenproyecto','alumno','docente','Forodoncente'));
     return view('oficina.proyectoDescripcion', compact('foro', 'proyectoForo', 'ProyectoForoAlumno', 'alumnoenproyecto', 'alumno', 'docente', 'Forodoncente'));
   }
+  public function getProyectosForo(Request $request){
+    $idForo = $request->get('idForo');
+    $proyectos_aceptados = DB::table('proyectos')
+    ->where('participa',1)
+    ->where('id_foro',$idForo)
+    ->get();
+    return $proyectos_aceptados;
+}
 
   public function actulizar(Request $r, $id)
   {

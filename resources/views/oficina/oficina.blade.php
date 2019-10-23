@@ -189,6 +189,7 @@
 	</script>
     @stack('srcProfesores')
     @stack('participaControl')
+    @stack('proyectos')
 </body>
 
 </html>

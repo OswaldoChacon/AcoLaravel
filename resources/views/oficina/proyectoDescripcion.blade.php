@@ -3,7 +3,7 @@
 @section('content')
 
 
-<div class="panel-heading "style="text-align: center; "> <String>{{$foro->noforo}}º  {{$foro->titulo}}</String> 
+<div class="panel-heading "style="text-align: center; "> <String>{{$foro->noforo}}º  {{$foro->titulo}}</String>
               <br>
               <String>{{$foro->periodo}}  {{$foro->anoo}}  </String>
         </div>
@@ -39,14 +39,17 @@
         <table class="table table-bordered" style="width: 750px;height: 50px;">
           <p>Asesor</p>
         <thead>
-            <tr>
-                <th>Nombre </th>
+            <tr> @foreach($docente as $doc)
+                 @if ($proyectoForo->id_asesor==$doc->id)
+                <th>Nombre: {{$doc->prefijo}} {{$doc->nombre}} {{$doc->paterno}} {{$doc->materno}} </th>
+                @endif
+                @endforeach
             </tr>
         </thead>
          <tbody>
             <tr>
                  @foreach($docente as $doc)
-                 @if ($proyectoForo->assesor==$doc->id)
+                 @if ($proyectoForo->id_asesor==$doc->id)
                 <td >{{$doc->prefijo}} {{$doc->nombre}} {{$doc->paterno}} {{$doc->materno}}</td>
                  @endif
                 @endforeach
@@ -97,7 +100,7 @@
         </tbody>
          @endif
        @endforeach
-      
+
     </div>
 
     <div class="col-md-6">
@@ -113,5 +116,5 @@
                 <td>{{$foro->oficina}}</td>
             </tr>
         </tbody>
-    </div>  
+    </div>
 @endsection

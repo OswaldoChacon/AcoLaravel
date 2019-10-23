@@ -17,8 +17,10 @@ class ProyectoForoAlumno extends Authenticatable
      *
      * @var array
      */
+    protected $table = 'alumnos';
     protected $fillable = [
-        'id_foro', 'id_proyecto', 'id_alumno', 'titulo', 'foro', 'objetivo'
+
+        'id_proyecto','id','nocontro', 'nombre','paterno','materno','grupo'
     ];
 
     /**
