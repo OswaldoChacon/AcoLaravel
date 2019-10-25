@@ -28,7 +28,6 @@
                     <th>Acciones</th>
                 </thead>
                 <tbody style="table-layout:fixed">
-
                 </tbody>
         </div>
     </div>
@@ -71,6 +70,12 @@
                     </td>
                     <td>
                         ${this.titulo}
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+                        <button class="btn btn-primary btn-sm">Asignar jurado</button>
                     </td>
                     </tr>
                     `);
