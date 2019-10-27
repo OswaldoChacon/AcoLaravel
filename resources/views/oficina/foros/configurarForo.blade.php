@@ -83,11 +83,13 @@
       <div id="addHour" class="oculto">
         <div class="row">
           <div class="form-group col-md-6">
-            <input class="form-control" type="number" name="cantidadDias" id="cantidadDias" placeholder="Cuantos Token desea">
+            <input class="form-control" type="number" name="cantidadDias" id="cantidadDias" placeholder="Días para desarrollar el foro">
           </div>
           <div class="form-group col-md-6">
-            <button type="button" class="btn btn-primary" value="Registrar" onclick="capturar()">Generar</button>
-            <button type="button" class="btn btn-warning" onclick="limpiar()">Cancelar</button>
+            <div class="btn-group btn-group-sm" role="group">
+              <button type="button" class="btn btn-primary btn-sm" value="Registrar" onclick="capturar()">Generar</button>
+              <button type="button" class="btn btn-warning btn-sm" onclick="limpiar()">Cancelar</button>
+            </div>
           </div>
         </div>
         <div class="form-group">
@@ -109,20 +111,21 @@
           <h6> <strong>{{$foro->noforo}}º {{$foro->titulo}}</strong></h6>
           <h6><strong>{{$foro->periodo}} {{$foro->anoo}}</strong></h6>
         </th>
-
-        <th colspan="2" <ul class="list-inline">
-          <a method="POTS" href="/activar/{{Crypt::encrypt($foro->id)}} ">
-            <button class="btn btn-success btn-xs bnt-block">Activar</button>
-          </a>
-          <a method="POTS" href="/desactivar/{{Crypt::encrypt($foro->id)}}">
-            <!-- {{Crypt::encrypt($foro->id)}} -->
-            <button class="btn btn-danger btn-xs bnt-block">Desactivar</button>
-          </a>
-          <a method="POTS" href="/cerrar/{{$foro->id}}">
-            <button class="btn btn-danger btn-xs bnt-block">Cerrar Registro</button>
-          </a>
-          </ul>
-        </th>
+        <div class="btn-group btn-group-sm" role="group">
+          <th colspan="2" <ul class="list-inline">
+            <a method="POTS" href="/activar/{{Crypt::encrypt($foro->id)}} ">
+              <button class="btn btn-success btn-sm bnt-block">Activar</button>
+            </a>
+            <a method="POTS" href="/desactivar/{{Crypt::encrypt($foro->id)}}">
+              <!-- {{Crypt::encrypt($foro->id)}} -->
+              <button class="btn btn-danger btn-sm bnt-block">Desactivar</button>
+            </a>
+            <a method="POTS" href="/cerrar/{{$foro->id}}">
+              <button class="btn btn-danger btn-sm bnt-block">Cerrar Registro</button>
+            </a>
+            </ul>
+          </th>
+        </div>
       </thead>
       <tbody style="table-layout:fixed">
         <tr>
