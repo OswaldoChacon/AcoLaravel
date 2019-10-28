@@ -6,28 +6,31 @@
 body {
     font-family: 'Poppins', sans-serif;
     background: #fafafa;
-
 }
+
 /* universal classes */
-.none{
+
+.none {
     display: none;
 }
-.input-invalid{
+
+.input-invalid {
     border: 1px solid #e44e44;
     box-shadow: 0px 1px 5px 0px #e44e;
     transition: ease all 0.3s;
 }
+
 /* end universal classes */
 
 /* Loader */
-.loaderContainer,
-.messageContainer{
+
+.loaderContainer, .messageContainer {
     position: fixed;
     width: 100%;
     height: 100%;
     left: 0;
     top: 0;
-    background-color: rgba(255,255,255,.7);
+    background-color: rgba(255, 255, 255, .7);
     visibility: hidden;
     opacity: 0;
     transition: ease all .3s;
@@ -36,12 +39,13 @@ body {
     align-items: center;
     z-index: 1;
 }
-.loaderContainer.active,
-.messageContainer.active{
+
+.loaderContainer.active, .messageContainer.active {
     visibility: visible;
     opacity: 1;
 }
-.loaderContainer .loader{
+
+.loaderContainer .loader {
     width: 55px;
     height: 55px;
     border-radius: 50%;
@@ -50,48 +54,57 @@ body {
     border-bottom: 0px solid transparent;
     border-right: 0px solid transparent;
 }
-.loaderContainer.active .loader{
+
+.loaderContainer.active .loader {
     animation: gira 1s infinite linear;
 }
-@keyframes gira{
-    0%{
+
+@keyframes gira {
+    0% {
         transform: rotate(0deg);
     }
-    100%{
+    100% {
         transform: rotate(360deg);
     }
 }
+
 /* End loader */
 
 /* Alert Message */
 
-.messageContainer{
+.messageContainer {
     background-color: transparent;
 }
-.messageContainer .message{
+
+.messageContainer .message {
     width: 300px;
     height: 250px;
     background-color: #fff;
     box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.3);
 }
-.messageContainer .message .icon{
+
+.messageContainer .message .icon {
     text-align: center;
     font-size: 3em;
     color: #0D47A1;
 }
-.messageContainer .message .title{
+
+.messageContainer .message .title {
     text-align: center;
     font-size: 1.3em;
     font-weight: bold;
     color: #555;
 }
-.messageContainer .message .description{
+
+.messageContainer .message .description {
     text-align: center;
     font-size: 1em;
     font-weight: bold;
     color: #999;
 }
+
 /* End alert message */
+
 p {
     font-family: 'Poppins', sans-serif;
     font-size: 1.1em;
@@ -135,12 +148,27 @@ a, a:hover, a:focus {
 .wrapper {
     display: flex;
     width: 100%;
-    align-items: stretch;
+    /* sidebar static */
+    /* align-items: stretch; */
 }
 
 #sidebar {
-    min-width: 250px;
+    /*  */
+    /* position: fixed; */
+    /*  */
+    /* min-width: 250px;
     max-width: 250px;
+    background: #fff;
+    color: #000;
+    transition: all 0.3s; */
+
+    /* sidebar static */
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 999;
     background: #fff;
     color: #000;
     transition: all 0.3s;
@@ -148,6 +176,11 @@ a, a:hover, a:focus {
 
 #sidebar.active {
     margin-left: -250px;
+}
+/* new to sidebar static */
+#sidebar.active + #content{
+    /* width: 100%;         */
+    padding-left:20px;            
 }
 
 #sidebar .sidebar-header {
@@ -158,7 +191,7 @@ a, a:hover, a:focus {
 #sidebar ul.components {
     padding: 20px 0;
     /* border-bottom: 1px solid #47748b; */
-    margin-top:20px;
+    margin-top: 20px;
 }
 
 #sidebar ul p {
@@ -168,7 +201,7 @@ a, a:hover, a:focus {
 
 #sidebar ul li a {
     padding: 10px;
-    margin-top:5px;
+    margin-top: 5px;
     /* font-size: 1.1em; */
     font-size: 13px;
     display: block;
@@ -185,7 +218,7 @@ a, a:hover, a:focus {
 }
 
 a[data-toggle="collapse"] {
-    position: relative;
+    position: relative;    
 }
 
 .dropdown-toggle::after {
@@ -197,7 +230,8 @@ a[data-toggle="collapse"] {
 }
 
 /* ul ul a { */
-ul ul  {
+
+ul ul {
     font-size: 0.9em !important;
     padding-left: 40px !important;
     background: #E6E6E6;
@@ -232,9 +266,27 @@ a.article, a.article:hover {
 #content {
     width: 100%;
     padding: 20px;
+    padding-left: 270px;    
     min-height: 100vh;
     transition: all 0.3s;
+    position: relative;
+
+    
+    /*  */
+    /* position: relative;    
+    padding-left: 260px; */
+    /* padding-right: 2px; */
+    /*  */
+    /*     
+    margin-left: 200px;
+    height: 500px;
+    width: auto;
+    position: relative;
+    background: #f00;
+    overflow: auto;
+    z-index: 1; */
 }
+
 
 /* ---------------------------------------------------
     MEDIAQUERIES
@@ -247,42 +299,50 @@ a.article, a.article:hover {
     #sidebar.active {
         margin-left: 0;
     }
+    /* content full width sidebar static */
+    #content{
+        /* width: 100%;         */
+        padding-left:20px;            
+    }
     #sidebarCollapse span {
         display: none;
     }
 }
 
-.card{
+.card {
     /* margin-right:10px; */
     /* margin-left:10px; */
-    margin:0 auto;
-    margin-top:10px;
-    margin-bottom:10px;
+    margin: 0 auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
-.content-layout{
+
+.content-layout {
     /* min-height: 51.5rem; */
     padding-top: 65px;
 }
 
-
-
 /* ADDED CLASSES BY JENNIFER 1/OCTOBER/2019 */
 
-.table-docentes tr td:last-child a{
+.table-docentes tr td:last-child a {
     width: 100%;
     margin-bottom: 15px;
     color: #333;
 }
-.table-docentes tr td .dropdown-toggle::after{
+
+.table-docentes tr td .dropdown-toggle::after {
     right: -10%;
 }
-.table-docentes tr td{
+
+.table-docentes tr td {
     vertical-align: middle;
 }
-.table-docentes p{
+
+.table-docentes p {
     color: #333;
 }
-.table-docentes input{
+
+.table-docentes input {
     margin-bottom: 15px;
     background-color: transparent;
     width: 100%;
@@ -290,19 +350,19 @@ a.article, a.article:hover {
     border-radius: 5px;
     padding: 2% 4%;
 }
+
 /* END ADDED CLASSES BY JENNIFER */
-
-
 
 /* Hidding arrow from input type="numer" */
 
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     /* display: none; <- Crashes Chrome on hover */
     -webkit-appearance: none;
-    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+    margin: 0;
+    /* <-- Apparently some margin are still there even though it's hidden */
 }
 
 input[type=number] {
-    -moz-appearance:textfield; /* Firefox */
+    -moz-appearance: textfield;
+    /* Firefox */
 }

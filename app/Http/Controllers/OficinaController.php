@@ -186,6 +186,7 @@ class OficinaController extends Controller
     // dd($email);
     $uso = 0;
     $con = 0;
+    $user = User::find(Auth()->user()->id);
     for ($i = 0; $i < $numerocontrol; $i++) {
       $token = Tokendocente::where('matricula', $request->nocontrol[$i])->first();
       if ($token == null) {
@@ -195,7 +196,7 @@ class OficinaController extends Controller
               'token' => Str::random(),
               'uso' => $uso,
               'matricula' => $request->nocontrol[$i],
-              'id_user'=> 1
+              'id_user'=> $user->id
             ],
           ]);
           $correo = $request->nocontrol[$i];

@@ -82,6 +82,12 @@ Route::get('/archivoForo2/{id}', 'OficinaController@archivoForo2')->name('archiv
 Route::get('/jurado/{id}', 'OficinaController@jurado')->name('jurado');
 Route::get('/cerrar/{id}', 'OficinaController@cerrar')->name('cerrar');
 
+Route::get('/generarHorario', function () {
+    return view('oficina.horarios.generarHorario');
+});
+
+
+// Route::get('Jprojects/get-proyectos-foro', 'OficinaController@getProyectosForo');
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////						DOCENTE CONTROLLER					/////////////////////////////////////////
@@ -204,17 +210,22 @@ Route::delete('sheets/{id}', 'EvidenciasController@destroy')->name('sheets.destr
 
 /////////////////////////////////						POST				/////////////////////////////////////////
 
-Route::get('Jprojects/get-proyectos-foro','OficinaController@getProyectosForo');
+
 
 Route::post('horarios/edit-participa', 'Horario\HorarioProyectosController@editarParticipa');
 Route::post('addHourForo/{id}', 'Horario\HorarioController@addHourForo')->name('addHourForo');
 Route::post('addHourDocente/{id}', 'Horario\addHourController@addHourDocente')->name('addHourForo');
+
+Route::post('/generarHorario','Horario\HorarioController@generarHorario');
 
 /////////////////////////////////						GET				/////////////////////////////////////////
 Route::get('horarios', 'Horario\HorarioProyectosController@index');
 Route::get('horarios/get-proyectos-foro-horario', 'Horario\HorarioProyectosController@getProyectosForo');
 Route::get('addHour', 'Horario\HorarioJuradoController@index');
 Route::get('profes/horarios/{id?}', 'Horario\addHourController@agregarHorarios')->name('horariomaestro');
+Route::get('Jprojects/get-proyectos-foro', 'OficinaController@getProyectosForo');
+
+
 
 
 
@@ -227,3 +238,5 @@ Route::get('profes/horarios/{id?}', 'Horario\addHourController@agregarHorarios')
 // });
 
 // Route::post('agregarProfeAforo/{id}','OficinaController@agregarProfeAforo')->name('agregarProfeAforo');
+
+

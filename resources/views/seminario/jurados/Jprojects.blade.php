@@ -28,7 +28,6 @@
                     <th>Acciones</th>
                 </thead>
                 <tbody style="table-layout:fixed">
-
                 </tbody>
         </div>
     </div>
