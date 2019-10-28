@@ -17,7 +17,7 @@ class Forodoncente extends Authenticatable
      * @var array
      */
     protected $fillable = [
-         'id_foro','id_profe','n_profe_taller'
+         'id_foro','id_docente',
     ];
 
     /**

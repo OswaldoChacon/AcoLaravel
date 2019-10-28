@@ -72,6 +72,12 @@
                     <td>
                         ${this.titulo}
                     </td>
+                    <td>
+
+                    </td>
+                    <td>
+                    <a class="btn btn-info btn-xs" href="/jurados/edit/${this.id}">Asignar Jurado</a>
+                    </td>
                     </tr>
                     `);
                 });

@@ -16,7 +16,7 @@ class Alumno extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name_usuario', 'email', 'nombre', 'paterno', 'materno', 'password', 'acceso','nocontro','grupo','id_profe','tokenalumnos_id'
+        'name_usuario', 'email', 'nombre', 'paterno', 'materno', 'password', 'acceso','nocontro','grupo','id_profe','tokenalumnos_id','id_proyecto'
     ];
 
     /**

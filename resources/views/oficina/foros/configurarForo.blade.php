@@ -129,11 +129,11 @@
           <td colspan="1"> Jefe de Oficina: </td>
           <td colspan="2"> {{$name_jefe}}</td>
         </tr>
-        @foreach ($forodoncente as $profe)
+        @foreach ($docente as $profe)
         @if ($profe->id_foro==$foro->id)
         <tr>
           <td colspan="1">Profesor de Taller: </td>
-          <td colspan="2">{{$profe->n_profe_taller}}</td>
+          <td colspan="2">{{$profe->prefijo}} {{$profe->nombre}} {{$profe->paterno}} {{$profe->materno}}</td>
           @endif
         </tr>
         @endforeach
@@ -158,6 +158,18 @@
               <td><input class="form-inline" type="number" name="duracion" class="form-control" min="10" max="59" pattern="[0-9]" style='width:70px; height:25px' required /></td>
               <td> <button class="btn btn-primary form-inline btn-sm" value="Registrar" name="btnGuardar">Guardar</button></td>
               {!! $errors->first('duracion','<span class="help-block alert alert-danger">:message</span>')!!}
+              </td>
+            </form>
+          </div>
+        </tr>
+        <tr>
+          <div class="row">
+            <form class="form-inline" method="post" action="/numAulas/{{Crypt::encrypt($foro->id)}} ">
+              {{csrf_field()}}
+              <td>Número de aulas a utilizar en el evento: <strong> {{$foro->num_aulas}} </strong></td>
+              <td><input class="form-inline" type="number" name="numAulas" class="form-control" min="1" max="5" pattern="[0-9]" style='width:70px; height:25px' required /></td>
+              <td> <button class="btn btn-primary form-inline btn-sm" value="Registrar" name="numeroAulas">Guardar</button></td>
+              {!! $errors->first('num_aulas','<span class="help-block alert alert-danger">:message</span>')!!}
               </td>
             </form>
           </div>

@@ -2,7 +2,6 @@
 
 @section('content')
 
-
 <div class="panel-heading "style="text-align: center; "> <String>{{$foro->noforo}}º  {{$foro->titulo}}</String>
               <br>
               <String>{{$foro->periodo}}  {{$foro->anoo}}  </String>
@@ -12,25 +11,29 @@
         <thead>
             <tr>
                 <th>Título del Proyecto</th>
-                <th>{{$proyectoForo->titulo}}</th>
+                <th>{{$infoProyecto[0]->ProyectoTitulo}}</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td>Objetivo general</td>
-                <td>{{$proyectoForo->objetivo}}</td>
+                <td>{{$infoProyecto[0]->Objetivo}}</td>
             </tr>
             <tr>
-                <td>Línea de Investigación</td>
-                <td>{{$proyectoForo->linea}}</td>
+                <td>Clave de Investigación</td>
+                <td>{{$infoProyecto[0]->ClaveLineaInvestigacion}} </td>
+            </tr>
+            <tr>
+                <td>Línea de investigación</td>
+                <td>{{$infoProyecto[0]->LineaInvestigacion}}</td>
             </tr>
              <tr>
                 <td>Tipo de Titulación</td>
-                <td>{{$proyectoForo->area}}</td>
+                <td>{{$infoProyecto[0]->AreaConocimiento}}</td>
             </tr>
             <tr>
                 <td>Nombre de la empresa o Institución</td>
-                <td>{{$proyectoForo->nombre_de_empresa}}</td>
+                <td>{{$infoProyecto[0]->Empresa}}</td>
             </tr>
         </tbody>
     </div>
@@ -39,32 +42,17 @@
         <table class="table table-bordered" style="width: 750px;height: 50px;">
           <p>Asesor</p>
         <thead>
-            <tr> @foreach($docente as $doc)
-                 @if ($proyectoForo->id_asesor==$doc->id)
-                <th>Nombre: {{$doc->prefijo}} {{$doc->nombre}} {{$doc->paterno}} {{$doc->materno}} </th>
-                @endif
-                @endforeach
+            <tr>
+                <th>Nombre: {{$infoProyecto[0]->PrefijoDocente}} {{$infoProyecto[0]->NombreDocente}} {{$infoProyecto[0]->PaternoDocente}} {{$infoProyecto[0]->MaternoDocente}} </th>
+
             </tr>
         </thead>
-         <tbody>
-            <tr>
-                 @foreach($docente as $doc)
-                 @if ($proyectoForo->id_asesor==$doc->id)
-                <td >{{$doc->prefijo}} {{$doc->nombre}} {{$doc->paterno}} {{$doc->materno}}</td>
-                 @endif
-                @endforeach
-            </tr>
-        </tbody>
     </div>
 
 <div class="col-md-6">
         <table class="table table-bordered" style="width: 750px;height: 50px;">
           <p>Alumnos</p>
-     @foreach($alumnoenproyecto as $fd)
-        @foreach($alumno as $alm)
-          @if ($fd->titulo==$proyectoForo->titulo)
-           @if ($fd->id_alumno==$alm->id)
-
+     @foreach($infoProyecto as $alumno)
         <thead>
             <tr>
                 <th>Nombre</th>
@@ -72,12 +60,9 @@
         </thead>
          <tbody>
             <tr>
-                <td>{{$alm->nombre}} {{$alm->paterno}} {{$alm->materno}}</td>
+                <td>{{$alumno->NombreAlumno}} {{$alumno->PaternoAlumno}} {{$alumno->MaternoAlumno}}</td>
             </tr>
         </tbody>
-         @endif
-         @endif
-         @endforeach
     @endforeach
     </div>
 
@@ -86,8 +71,7 @@
   <div class="col-md-6">
         <table class="table table-bordered" style="width: 750px;height: 50px;">
           <p>Maestro de Taller</p>
-           @foreach($Forodoncente as $fd)
-           @if ($foro->noforo==$fd->id_foro)
+           @foreach($docentesDeTaller as $pt)
         <thead>
             <tr>
                 <th>Nombre</th>
@@ -95,10 +79,10 @@
         </thead>
          <tbody>
             <tr>
-                <td>{{$fd->n_profe}}</td>
+                <td>{{$pt[0]->PrefijoDocente}} {{$pt[0]->NombreDocente}} {{$pt[0]->PaternoDocente}} {{$pt[0]->MaternoDocente}}</td>
             </tr>
         </tbody>
-         @endif
+
        @endforeach
 
     </div>
@@ -113,7 +97,7 @@
         </thead>
          <tbody>
             <tr>
-                <td>{{$foro->oficina}}</td>
+                <td>{{$jefeDepartamento->Prefijo}} {{$jefeDepartamento->Nombre}} {{$jefeDepartamento->Paterno}} {{$jefeDepartamento->Materno}}</td>
             </tr>
         </tbody>
     </div>
