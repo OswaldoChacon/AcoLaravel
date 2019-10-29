@@ -62,10 +62,10 @@
       <div class="form-group col-12">
         <select name="maestro" class="form-control">
           <option disabled selected class="dropdown-toggle">Profesores</option>
-          @foreach($docente as $doc)
-          @if ($doc->acceso==1)
-          <option value="{{$doc->id}}">{{$doc->prefijo}} {{$doc->nombre}} {{$doc->paterno}} {{$doc->materno}}</option>
-          @endif
+          @foreach($docente as $docs)
+
+          <option value="{{$docs->id}}">{{$docs->prefijo}} {{$docs->nombre}} {{$docs->paterno}} {{$docs->materno}}</option>
+
           @endforeach
         </select>
       </div>
@@ -132,12 +132,10 @@
           <td colspan="1"> Jefe de Oficina: </td>
           <td colspan="2"> {{$name_jefe}}</td>
         </tr>
-        @foreach ($docente as $profe)
-        @if ($profe->id_foro==$foro->id)
+        @foreach ($doc as $p)
         <tr>
           <td colspan="1">Profesor de Taller: </td>
-          <td colspan="2">{{$profe->prefijo}} {{$profe->nombre}} {{$profe->paterno}} {{$profe->materno}}</td>
-          @endif
+          <td colspan="2">{{$p->prefijo}} {{$p->nombre}} {{$p->paterno}} {{$p->materno}}</td>
         </tr>
         @endforeach
         <tr>

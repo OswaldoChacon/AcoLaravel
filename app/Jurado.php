@@ -15,7 +15,7 @@ class Jurado extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id_proyecto', 'id_docente'
+       'id', 'id_docente', 'id_proyecto'
     ];
 
     /**

@@ -189,7 +189,8 @@
 	</script>
 	@stack('srcProfesores')
 	@stack('participaControl')
-	@stack('proyectos')
+    @stack('proyectos')
+    @stack('asignarHorarioJurado');
 </body>
 
 </html>

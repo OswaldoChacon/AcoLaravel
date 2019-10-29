@@ -36,36 +36,28 @@ class HorarioJuradoController extends Controller
         foreach($horarios as $item){
             $intervalo = array();
             while ($item->inicio != $item->termino) {
-                $newDate = strtotime('+1 hour', strtotime($item->inicio));
+                $newDate = strtotime('+0 hour', strtotime($item->inicio));
+                $newDate=strtotime('+'.$minutos.'minute',$newDate);
                 $newDate = date('H:i:s', $newDate);
                 $temp = $item->inicio . " - " . $newDate;
                 $item->inicio = $newDate;
-                array_push($intervalo, $temp);
+
+                if($newDate> $item->termino){
+
+                }
+                else{
+                    array_push($intervalo, $temp);
+                }
+
             }
             array_push($intervalosContainer, $intervalo);
         }
-        $dividido = array();
-        $temp2 = " ";
 
-        foreach($horarios as $item2){
-            $horas = array();
-            while ($item2->inicio != $item2->termino) {
-                    $newHour = strtotime('+0 hour', strtotime($item2->inicio));
-                    $newHour = strtotime('+'.$minutos.'minute', $newHour);
-                    $newHour = date('H:i:s', $newHour);
-                    $temp2 = $item2->inicio . " - " . $newHour;
-                    $item2->inicio = $newHour;
-                    if($newHour > $item2->termino){
-
-                     }
-                    else{
-                        array_push($horas, $temp2);
-                     }
-                }
-               array_push($dividido,$horas);
-        }
-       // dd($dividido);
-    // dd($horas);
-        return view('oficina.profesHorario.addHour', compact('jurado', 'horarios', 'horas','intervalosContainer'));
+        // dd($intervalosContainer);
+        return view('oficina.profesHorario.addHour', compact('jurado', 'horarios','intervalosContainer'));
     }
+        public function setHorarioJurado(Request $request){
+            $idDocente = $request->get('idDoc');
+        }
+
 }

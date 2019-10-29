@@ -180,7 +180,7 @@ a, a:hover, a:focus {
 /* new to sidebar static */
 #sidebar.active + #content{
     /* width: 100%;         */
-    padding-left:20px;            
+    padding-left:20px;
 }
 
 #sidebar .sidebar-header {
@@ -218,7 +218,7 @@ a, a:hover, a:focus {
 }
 
 a[data-toggle="collapse"] {
-    position: relative;    
+    position: relative;
 }
 
 .dropdown-toggle::after {
@@ -266,18 +266,18 @@ a.article, a.article:hover {
 #content {
     width: 100%;
     padding: 20px;
-    padding-left: 270px;    
+    padding-left: 270px;
     min-height: 100vh;
     transition: all 0.3s;
     position: relative;
 
-    
+
     /*  */
-    /* position: relative;    
+    /* position: relative;
     padding-left: 260px; */
     /* padding-right: 2px; */
     /*  */
-    /*     
+    /*
     margin-left: 200px;
     height: 500px;
     width: auto;
@@ -302,7 +302,7 @@ a.article, a.article:hover {
     /* content full width sidebar static */
     #content{
         /* width: 100%;         */
-        padding-left:20px;            
+        padding-left:20px;
     }
     #sidebarCollapse span {
         display: none;
@@ -366,3 +366,20 @@ input[type=number] {
     -moz-appearance: textfield;
     /* Firefox */
 }
+
+/* Cambios 29/10/2019 */
+.inputContainer{
+    margin-bottom: 14px;
+}
+.inputContainer > * {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0px 7px;
+}
+.inputContainer input{
+    width: 15px;
+    height: 15px;
+    margin-bottom: 0;
+}
+
+/* End cambios 29/10/2019 */

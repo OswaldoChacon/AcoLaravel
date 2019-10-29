@@ -25,7 +25,7 @@
                             {{$item->nombre}}
                         </td>
                         <td>
-
+                        {{csrf_field()}}
                         @foreach($horarios as $key => $itemB)
                         <ul class="list-unstyled components">
                             <li class="">
@@ -38,7 +38,10 @@
                                     for($j = 0; $j < count($intervalosContainer[$i]) ; $j++  ){
                                     @endphp
                                 <li>
-                                    <input id-proyecto-foro="" style="width: 25px; height: 25px" type="checkbox" name="status" value="participa" > {{$intervalosContainer[$i][$j]}}
+                                    <div class="inputContainer">
+                                        <input class="checkHorarioJurado" id-docente="{{$item->id_docente}}" id-horario-foros="{{$itemB->id}}" style="width: 25px; height: 25px" type="checkbox" name="status" value="participa" >
+                                        <small>{{$intervalosContainer[$i][$j]}}</small>
+                                    </div>
                                 </li>
                                     @php
                                     }
@@ -63,3 +66,6 @@
     </div>
 </div>
 @endsection
+@push('asignarHorarioJurado')
+<script src="{{asset('js/setHJurado.js')}}"></script>
+@endpush

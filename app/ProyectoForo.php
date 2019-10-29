@@ -19,11 +19,11 @@ class ProyectoForo extends Model
 
     public function docentes()
     {
-        return $this->belongsToMany(Docente::class, 'jurados', 'proyectoforo_id', 'docente_id')->withPivot('hoja_id');
+        return $this->belongsToMany(Docente::class, 'jurados', 'id_docente', 'id_proyecto')->withPivot('hoja_id');
     }
 
     public function hojas()
     {
-        return $this->belongsToMany(Hoja::class, 'jurados', 'proyectoforo_id', 'hoja_id')->withPivot('docente_id');
+        return $this->belongsToMany(Hoja::class, 'jurados', 'id_proyecto', 'hoja_id')->withPivot('id_docente');
     }
 }

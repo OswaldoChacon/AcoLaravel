@@ -7,6 +7,7 @@ use App\Foro;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Notificacione;
 use App\ProyectoForo;
+use DB;
 use Illuminate\Http\Request;
 
 class JuradosController extends Controller
@@ -63,8 +64,12 @@ class JuradosController extends Controller
     {
         $proyecto = ProyectoForo::findOrFail($id);
 
-        $docentes = Docente::pluck('nombre', 'id');
-        dd($proyecto);
+        $docente =DB::table('docentes')->select('docentes.id as id','docentes.prefijo as prefijo','docentes.nombre as  nombre','docentes.paterno as paterno','docentes.materno as materno')->get();
+
+
+        $docentes = Docente:: select(DB::raw("CONCAT(prefijo,' ',nombre, ' ', paterno,' ', materno) AS name"), 'id')
+        ->pluck('name','id');
+
         return view('seminario.jurados.edit', compact('proyecto', 'docentes'));
     }
 
@@ -77,9 +82,10 @@ class JuradosController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         $proyecto = ProyectoForo::findOrFail($id);
 
-        $proyecto->update($request->all());
+        // $proyecto->update($request->all());
 
         $proyecto->docentes()->sync($request->docentes);
 

@@ -108,25 +108,25 @@
             },
             success: function() {
                 $(".loaderContainer").removeClass('active');
-                // $(".messageContainer").addClass('active');
-                // $(".messageContainer .message .icon").html('');
-                // $(".messageContainer .message .icon").append('<i class="fas fa-envelope"></i>');
-                // $(".messageContainer .message .title p").text('¡Registro Actualizado!');
-                // $(".messageContainer .message .description p").text('Su registro ha sido actualizado correctamente');
-                // setTimeout(() => {
-                //     $(".messageContainer").removeClass('active');
-                // }, 1000);
+                $(".messageContainer").addClass('active');
+                $(".messageContainer .message .icon").html('');
+                $(".messageContainer .message .icon").append('<i class="fas fa-envelope"></i>');
+                $(".messageContainer .message .title p").text('¡Registro Actualizado!');
+                $(".messageContainer .message .description p").text('Su registro ha sido actualizado correctamente');
+                setTimeout(() => {
+                    $(".messageContainer").removeClass('active');
+                }, 1000);
             },
             error: function() {
                 $(".loaderContainer").removeClass('active');
-                // $(".messageContainer").addClass('active');
-                // $(".messageContainer .message .icon").html('');
-                // $(".messageContainer .message .icon").append('<i class="fas fa-envelope"></i>');
-                // $(".messageContainer .message .title p").text('¡Error!');
-                // $(".messageContainer .message .description p").text('Ocurrió un error al intentar conectar al servidor. Inténtelo más tarde.');
-                // setTimeout(() => {
-                //     $(".messageContainer").removeClass('active');
-                // }, 3000);
+                $(".messageContainer").addClass('active');
+                $(".messageContainer .message .icon").html('');
+                $(".messageContainer .message .icon").append('<i class="fas fa-envelope"></i>');
+                $(".messageContainer .message .title p").text('¡Error!');
+                $(".messageContainer .message .description p").text('Ocurrió un error al intentar conectar al servidor. Inténtelo más tarde.');
+                setTimeout(() => {
+                    $(".messageContainer").removeClass('active');
+                }, 3000);
             }
         });
     });
