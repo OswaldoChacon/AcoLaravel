@@ -4,6 +4,7 @@ namespace App\GenerarHorario;
 
 use App\GenerarHorario\Maestros;
 use App\GenerarHorario\Eventos;
+use Illuminate\Support\Facades\Session;
 
 class Problema
 {
@@ -35,6 +36,10 @@ class Problema
             // unset($aux_timeslot_common);
             $evento->setPosibleEspaciosT($this->getEspaciosEnComun($evento));
             $evento->setSizeComun(sizeof($evento->espaciosComun));
+        }
+
+        if(!$this->validarExisteEspaciosEnComun()){
+            Session::flash('message', "Algun proyecto no tiene espacios en comun para poder asignado en donde todos los maestros conincidan");            
         }
     }
     public function getListMaestros()
@@ -70,6 +75,7 @@ class Problema
         foreach($this->eventos as $evento){
             if($evento->sizeComun <1){
                 return false;
+                return $evento;
             }
             return true;
         }

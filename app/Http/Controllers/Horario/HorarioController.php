@@ -126,21 +126,14 @@ class HorarioController extends Controller
         ];
         // $this->validate($request, $rules,$messages);
         // Proyectos participantes
-        $proyectos = ProyectoForo::where('participa',1)->get();
-        // $maestros = Docente::select('proyectos.titulo','docentes.nombre')
-        // ->join('jurados','jurados.id_docente','=','docentes.id')
-        // ->join('proyectos','jurados.id_docente','=','proyectos.id')
-        // ->get();
+        $proyectos = ProyectoForo::where('participa',1)->get();     
 
         //proyectos ya con los maestros asociados verificar
-        $proyectos_maestros = DB::table('jurados')->select('proyectos.id','proyectos.titulo',DB::raw('group_concat( Distinct docentes.nombre) as maestros'))
-        // DB::raw('group_concat(horariodocentes.hora) as horas'))
+        $proyectos_maestros = DB::table('jurados')->select('proyectos.id','proyectos.titulo',DB::raw('group_concat( Distinct docentes.nombre) as maestros'))        
         ->join('docentes','jurados.id_docente','=','docentes.id')
-        ->join('proyectos','jurados.id_proyecto','=','proyectos.id')   
-        // ->leftJoin('horariodocentes','jurados.id_docente','=','horariodocentes.id_docente')
+        ->join('proyectos','jurados.id_proyecto','=','proyectos.id')           
         ->where('proyectos.participa',1)
-        ->groupBy('proyectos.titulo')        
-        // ->distinct('maestros')
+        ->groupBy('proyectos.titulo')                
         ->get()->each(function($query){
             $query->maestros = explode(",", $query->maestros);
         });        
@@ -162,14 +155,12 @@ class HorarioController extends Controller
             $query->horas = array_filter(explode(",", $query->horas));
         });
               
+        //espacios de tiempo
+        $espacios_de_tiempo = "";
 
-        // dd($maestro_et);
-        $foros = Foro::all();        
+        // dd($maestro_et);        
         $ants = new Problema($proyectos_maestros,$maestro_et);
-        dd($ants->getListMaestros());
-        // $ants->setHorario(array(1,2,3,));        
-        
-        // dd($ants);
+        // dd($ants->getListMaestros());                        
         return redirect('/generarHorario');        
     }    
 }

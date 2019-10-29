@@ -5,10 +5,13 @@
     <div class="card-body">
         <form action="/generarHorario" method="POST">
             {{ csrf_field() }}
+            @if (Session::has('message'))
+            <div class="alert alert alert-danger" id="alert-fade">({{ Session::get('message') }})</div>
+            @endif
             <div class="row">
                 <div class="form-group col-md-4 col-xl-2 ">
                     <label for="alpha">Alfa</label>
-                    <input type="number"  step="any"  name="alpha" class="form-control" >
+                    <input type="number" step="any" name="alpha" class="form-control">
                     @if ($errors->has('alpha'))
                     <span class="text-danger">{{ $errors->first('alpha') }}</span>
                     @endif
@@ -75,6 +78,7 @@
         </form>
     </div>
 </div>
+<script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
 
 <script>
     // $("#generarHorario").on('click', function() {        
@@ -96,6 +100,6 @@
     //             $(".loaderContainer").removeClass('active');               
     //         }
     //     });
-    });
+    //});
 </script>
 @endsection

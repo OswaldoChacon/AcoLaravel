@@ -2,12 +2,12 @@
 namespace App\GenerarHorario;
 class Eventos {
 
-protected $id;
-protected $name;
+public $id;
+public $name;
 //protected Maestros maestro;
 public $maestroList = []; //List<Maestros> maestroList = new ArrayList<>();
 public $espaciosComun = [];//List<Integer> espaciosComun = new ArrayList<>();
-protected $sizeComun;//int sizeComun;
+public $sizeComun;//int sizeComun;
 //protected int espaciosComun[];
 
 public function __construct($id, $name, $maestroList )
