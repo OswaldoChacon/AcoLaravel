@@ -3,15 +3,18 @@ namespace App\GenerarHorario;
 use App\GenerarHorario\Problema; 
 
 Class Ant{
+    public $timeSlots; //creo que no funciona para naada
+
+
     protected $id; //id
     protected $recorrido; // 1/violaciones
     protected $violaciones; //violaciones suaves entero
     protected $intViolacionesDuras; //violaciones duras entero
-    protected $problema; //clase problema
-    public $timeSlots; //creo que no funciona para naada
-    protected $Ai; // //las asignaciones
-    protected $Vi; //violaciones por Ai
-    protected $cListAlready; //asignacioones booleanas
+    protected $problema; //clase problema    
+    protected $Ai = []; // //las asignaciones
+    protected $Vi = []; //violaciones por Ai
+    protected $ViolacionesDuras = [];
+    protected $cListAlready = []; //asignacioones booleanas
 
     public function __construct($id, $problema)
     {
@@ -36,10 +39,10 @@ Class Ant{
         $this->recorrido = $recorrido;
     }
     public function getAi() {
-        return $Ai;
+        return $this->Ai;
     }
 
     public function getVi() {
-        return $Vi;
+        return $this->Vi;
     }    
 }

@@ -4,13 +4,20 @@ namespace App\Http\Controllers;
 
 namespace App\Http\Controllers\Horario;
 
+use App\Docente;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Horarioforo;
 use DB;
 use Illuminate\Support\Facades\Crypt;
-use App\GenerarHorario\Maestros;
 use App\Foro;
+use App\ProyectoForo;
+
+
+use App\GenerarHorario\Maestros;
+use App\GenerarHorario\Problema;
+
+
 class HorarioController extends Controller
 {
     //
@@ -118,9 +125,49 @@ class HorarioController extends Controller
             
         ];
         // $this->validate($request, $rules,$messages);
+        // Proyectos participantes
+        $proyectos = ProyectoForo::where('participa',1)->get();
+        // $maestros = Docente::select('proyectos.titulo','docentes.nombre')
+        // ->join('jurados','jurados.id_docente','=','docentes.id')
+        // ->join('proyectos','jurados.id_docente','=','proyectos.id')
+        // ->get();
+
+        //proyectos ya con los maestros asociados verificar
+        $proyectos_maestros = DB::table('jurados')->select('proyectos.id','proyectos.titulo',DB::raw('group_concat( Distinct docentes.nombre) as maestros'))
+        // DB::raw('group_concat(horariodocentes.hora) as horas'))
+        ->join('docentes','jurados.id_docente','=','docentes.id')
+        ->join('proyectos','jurados.id_proyecto','=','proyectos.id')   
+        // ->leftJoin('horariodocentes','jurados.id_docente','=','horariodocentes.id_docente')
+        ->where('proyectos.participa',1)
+        ->groupBy('proyectos.titulo')        
+        // ->distinct('maestros')
+        ->get()->each(function($query){
+            $query->maestros = explode(",", $query->maestros);
+        });        
+
+        //solo maestros participantes a un proectos 
+        // $maestros_participantes = DB::table('jurados')->select('jurados.id','docentes.id as iddocente','docentes.nombre')
+        // ->join('docentes','jurados.id_docente','=','docentes.id')
+        // ->join('proyectos','jurados.id_proyecto','=','proyectos.id')
+        // ->where('proyectos.participa',1)
+        // ->groupBy('jurados.id_docente')
+        // ->orderBy('jurados.id','asc')
+        // ->get();
+
+        // maestros con sus espacios de tiempo
+        $maestro_et = DB::table('horariodocentes')->select('docentes.nombre',DB::raw('group_concat(horariodocentes.hora) as horas'))
+        ->rightJoin('docentes','horariodocentes.id_docente','=','docentes.id')
+        ->groupBy('docentes.nombre')
+        ->get()->each(function($query){
+            $query->horas = array_filter(explode(",", $query->horas));
+        });
+              
+
+        // dd($maestro_et);
         $foros = Foro::all();        
-        $ants = new Maestros('Maestro 1');
-        $ants->setHorario(array(1,2,3,));        
+        $ants = new Problema($proyectos_maestros,$maestro_et);
+        dd($ants->getListMaestros());
+        // $ants->setHorario(array(1,2,3,));        
         
         // dd($ants);
         return redirect('/generarHorario');        

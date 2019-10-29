@@ -5,15 +5,16 @@ class Eventos {
 protected $id;
 protected $name;
 //protected Maestros maestro;
-protected $maestroList; //List<Maestros> maestroList = new ArrayList<>();
-protected $espaciosComun;//List<Integer> espaciosComun = new ArrayList<>();
+public $maestroList = []; //List<Maestros> maestroList = new ArrayList<>();
+public $espaciosComun = [];//List<Integer> espaciosComun = new ArrayList<>();
 protected $sizeComun;//int sizeComun;
 //protected int espaciosComun[];
 
-public function __construct($id, $name)
+public function __construct($id, $name, $maestroList )
 {
-    $this->id = id;
-    $this->name = name;
+    $this->id = $id;
+    $this->name = $name;
+    $this->maestroList = $maestroList;
 }    
 
 public function setMaestros($maestro) {

@@ -2,10 +2,11 @@
 namespace App\GenerarHorario;
 class Maestros {
 
-    protected $name; //nombre del maestro
-    protected $horario;   //horario del maestro
-    public function __construct($name) {
-        $this->name = $name;        
+    public $nombre; //nombre del maestro
+    public $horario = [];   //horario del maestro
+    public function __construct($nombre, $horario) {
+        $this->nombre = $nombre;        
+        $this->horario = $horario;
     }
     
     public function setHorario($horario) {        
@@ -13,6 +14,6 @@ class Maestros {
     }
     
     public function getName() {
-        return $this->name;
+        return $this->nombre;
     }        
 }
