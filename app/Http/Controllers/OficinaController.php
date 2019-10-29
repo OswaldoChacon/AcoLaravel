@@ -47,6 +47,7 @@ class OficinaController extends Controller
     ->join('docentes','forodoncentes.id_docente','=','docentes.id')
     ->where('foros.acceso',1)->get();
 
+
     //  dd($doc[0]->nombre);
     // aqui va los
     return view('oficina.tokenAlumno', compact('tokealumno','doc'));
@@ -381,27 +382,30 @@ class OficinaController extends Controller
   public function configurarForo($id_foro)
   {
     $docente = Docente::all();
-    // $docent = Docente::find($id);
-    $user = User::find(Auth()->user()->id);
-
-    $name_jefe = $user->prefijo . '  ' . $user->nombre . '  ' . $user->paterno . '  ' . $user->materno;
     $id_foro = Crypt::decrypt($id_foro);
     $foro = Foro::find($id_foro);
     $horarioForo = Horarioforo::all();
-
-    //$f = Forodoncente::find($docent)->where('id_foro',$id_foro);
-
-
-
-    // $docente = Forodoncente::select('docentes.id','docentes.prefijo','docentes.nombre','docentes.paterno','docentes.materno')
-    // ->join('foros','forodoncentes.id_foro','=','foros.id')
-    // ->join('docentes','forodoncentes.id_docente','=','docentes.id')
-    // ->where('foros.acceso',1)->get();
-
-    //dd($doc);
-    //$forodoncente = DB::table('docentes')->select('id as id','prefijo as prefijo','nombre as nombre','paterno as paterno','materno as materno')->get();
-
-    return view('oficina.foros.configurarForo', compact('foro', 'docente', 'horarioForo', 'name_jefe'));
+    $user = DB::table('users')
+    ->select(
+        'users.prefijo as Prefijo',
+        'users.paterno as Paterno',
+        'users.materno as Materno',
+        'users.nombre as Nombre'
+    )
+    ->join('foros','foros.id_user','=','users.id')
+    ->where('foros.id',$id_foro)
+    ->first();
+    $name_jefe = $user->Prefijo . '  ' . $user->Nombre . '  ' . $user->Paterno . '  ' . $user->Materno;
+    $doc = DB::table('forodoncentes')
+    ->select('docentes.prefijo as prefijo',
+    'docentes.nombre as nombre',
+    'docentes.paterno as paterno',
+    'docentes.materno as materno')
+    ->join('foros','forodoncentes.id_foro','=','foros.id')
+    ->join('docentes','forodoncentes.id_docente','=','docentes.id')
+    ->where('forodoncentes.id_foro',$id_foro)
+    ->get();
+    return view('oficina.foros.configurarForo', compact('foro', 'docente', 'doc','horarioForo', 'name_jefe'));
   }
 
   public function agregarProfeAforo(Request $request, $id)
@@ -646,8 +650,6 @@ class OficinaController extends Controller
       return redirect("/");
     }
   }
-
-
 
   public function jurado($id)
   {

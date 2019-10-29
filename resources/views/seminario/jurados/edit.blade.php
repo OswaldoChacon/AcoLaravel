@@ -13,8 +13,9 @@
 		@foreach($docentes as $id => $name)
 		<div class="checkbox">
 			<label>
-				<input type="checkbox" value="{{ $id }}" {{ $proyecto->docentes->pluck('id')->contains($id) ? 'checked' : '' }} name="docentes[]">
-				{{ $name }}
+                <input type="checkbox" value="{{ $id }}" name="docentes[]">
+                {{ $name }}
+
 			</label>
 		</div>
 		@endforeach
@@ -30,12 +31,11 @@
 		</thead>
 		<tbody>
 			<tr>
-				<td>{{ $proyecto->docentes->pluck('name')->implode(', ') }}</td>
+
 			</tr>
 		</tbody>
 	</table>
 
-	<a class="btn btn-success" href="{{ route('juradosprojects', $proyecto->id_foro) }}">Regresar</a>
-</div>
+    <a class="btn btn-success" href="/jurados/projects">Regresar</a>
 <br>
 @endsection

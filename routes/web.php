@@ -151,7 +151,7 @@ Route::get('mostrarEvaluacion/{id}', 'AlumnoController@mostrarEvaluacion')->name
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Route::resource('jurados', 'JuradosController')->only(['edit', 'update', 'index']);
-
+Route::post('jurados/update/{id}', 'JuradosController@update')->name('update');
 /////////////////////////////////						POST				/////////////////////////////////////////
 /////////////////////////////////						GET				/////////////////////////////////////////
 
@@ -217,7 +217,7 @@ Route::post('addHourForo/{id}', 'Horario\HorarioController@addHourForo')->name('
 Route::post('addHourDocente/{id}', 'Horario\addHourController@addHourDocente')->name('addHourForo');
 
 Route::post('/generarHorario','Horario\HorarioController@generarHorario');
-
+Route::post('addHour/setHorarioJurado','Horario\HorarioJuradoController@setHorarioJurado');
 /////////////////////////////////						GET				/////////////////////////////////////////
 Route::get('horarios', 'Horario\HorarioProyectosController@index');
 Route::get('horarios/get-proyectos-foro-horario', 'Horario\HorarioProyectosController@getProyectosForo');

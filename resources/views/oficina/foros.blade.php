@@ -9,14 +9,14 @@
   <div class="card-body">
 
     @foreach ($foro as $for)
-    @if ($for->acceso==1)    
+    @if ($for->acceso==1)
     <div class="alert alert alert-warning">
       <tr>
         <td> Foro activado:
           {{$for->noforo}}
         </td>
       </tr>
-    </div>    
+    </div>
     @endif
     @endforeach
 
@@ -37,7 +37,6 @@
               <button class="btn btn-info btn-xs bnt-block" onclick="location.href='proyecto/{{Crypt::encrypt($for->id)}}'">Proyectos</button>
             </td>
           </tr>
-
           @endforeach
         </tbody>
     </div>
