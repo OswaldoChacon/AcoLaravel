@@ -26,7 +26,7 @@
         <option value="{{$doc->id}}">{{$doc->prefijo}} {{$doc->nombre}} {{$doc->paterno}} {{$doc->materno}}</option>
         @endforeach
     </select>
-    <button type="submit" class="btn btn-primary" value="Registrar" name="">Registarar</button>
+    <button type="submit" class="btn btn-primary" value="Registrar" name="">Registrar</button>
 </form>
 
 @endsection

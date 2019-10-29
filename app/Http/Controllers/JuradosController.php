@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Docente;
 use App\Foro;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Notificacione;
 use App\ProyectoForo;
 use Illuminate\Http\Request;
@@ -63,7 +64,7 @@ class JuradosController extends Controller
         $proyecto = ProyectoForo::findOrFail($id);
 
         $docentes = Docente::pluck('nombre', 'id');
-
+        dd($proyecto);
         return view('seminario.jurados.edit', compact('proyecto', 'docentes'));
     }
 
@@ -98,13 +99,13 @@ class JuradosController extends Controller
 
     public function projects()
     {
-        $foros = Foro::all();
 
-        // $proyectos = ProyectoForo::findOrFail($id)->where([
-                            // ['id_foro', '=', $id]
-                        // ])
-                        // ->get();
+        // $proyectos = ProyectoForo::find($id)->where([
+        //                     ['id_foro', '=', $id]
+        //                 ])
+        //                 ->get();
+        $foros=Foro::all();
 
-        return view('seminario.jurados.Jprojects', compact('foros'));
+        return view('seminario.jurados.Jprojects',compact('foros'));
     }
 }

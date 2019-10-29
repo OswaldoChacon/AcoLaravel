@@ -28,6 +28,7 @@ use Illuminate\Support\Str;
 use Mail;
 use SebastianBergmann\Environment\Console;
 
+
 class OficinaController extends Controller
 {
   public function __construct()
@@ -380,16 +381,27 @@ class OficinaController extends Controller
   public function configurarForo($id_foro)
   {
     $docente = Docente::all();
+    // $docent = Docente::find($id);
     $user = User::find(Auth()->user()->id);
 
     $name_jefe = $user->prefijo . '  ' . $user->nombre . '  ' . $user->paterno . '  ' . $user->materno;
- // me lleva...
-    $id_f = Crypt::decrypt($id_foro);
-    $foro = Foro::find($id_f);
+    $id_foro = Crypt::decrypt($id_foro);
+    $foro = Foro::find($id_foro);
     $horarioForo = Horarioforo::all();
 
-    $forodoncente = Forodoncente::all();
-    return view('oficina.foros.configurarForo', compact('foro', 'docente', 'forodoncente', 'horarioForo', 'name_jefe'));
+    //$f = Forodoncente::find($docent)->where('id_foro',$id_foro);
+
+
+
+    // $docente = Forodoncente::select('docentes.id','docentes.prefijo','docentes.nombre','docentes.paterno','docentes.materno')
+    // ->join('foros','forodoncentes.id_foro','=','foros.id')
+    // ->join('docentes','forodoncentes.id_docente','=','docentes.id')
+    // ->where('foros.acceso',1)->get();
+
+    //dd($doc);
+    //$forodoncente = DB::table('docentes')->select('id as id','prefijo as prefijo','nombre as nombre','paterno as paterno','materno as materno')->get();
+
+    return view('oficina.foros.configurarForo', compact('foro', 'docente', 'horarioForo', 'name_jefe'));
   }
 
   public function agregarProfeAforo(Request $request, $id)
@@ -400,8 +412,7 @@ class OficinaController extends Controller
     DB::table('forodoncentes')->insert([
       [
         'id_foro' => $foro->id,
-        'id_docente' => $request->maestro,
-        'n_profe_taller' => $docentes->nombre . ' ' . $docentes->paterno . ' ' . $docentes->materno,
+        'id_docente' => $request->maestro
       ]
     ]);
     $docentes->acceso = 1;
@@ -420,6 +431,10 @@ class OficinaController extends Controller
 
     $a= DB::table('foros')->where('acceso','=',1)->get();
 
+    $doc = Docente::all();
+    $id = Crypt::encrypt($id);
+    return redirect("configurarForo/$id");
+
     if(count($a) > 0)
     {
         foreach($a as $item){
@@ -432,8 +447,13 @@ class OficinaController extends Controller
     $activar = Foro::find($id);
     $activar->acceso = 1;
     $activar->save();
-    // $docentes->acceso = 1;
-    // $docentes->save();
+
+    $docenteacceso = Docente::where('acceso', 0)->first();
+    if ($docenteacceso != null) {
+      $docenteacceso->acceso = 1;
+      $docenteacceso->save();
+    }
+
     $id = Crypt::encrypt($id);
     return redirect("configurarForo/$id");
 
@@ -473,16 +493,71 @@ class OficinaController extends Controller
     $id = Crypt::decrypt($id);
     $pro = ProyectoForo::where('id', $id)->first();
     $proyectoForo = ProyectoForo::find($id);
+    $infoProyecto = DB::table('proyectos')
+    ->select(
+        'proyectos.id as IdProyecto',
+        'proyectos.id_foro as IdForo',
+        'proyectos.titulo as ProyectoTitulo',
+        'proyectos.nombre_de_empresa as Empresa',
+        'proyectos.objetivo as Objetivo',
+        'lineadeinvestigacions.clave as ClaveLineaInvestigacion',
+        'lineadeinvestigacions.linea as LineaInvestigacion',
+        'aredeconocimientos.clave as ClaveAreaConocimiento',
+        'aredeconocimientos.areade as AreaConocimiento',
+        'docentes.prefijo as PrefijoDocente',
+        'docentes.paterno as PaternoDocente',
+        'docentes.materno as MaternoDocente',
+        'docentes.nombre as NombreDocente',
+        'alumnos.id as IdAlumno',
+        'alumnos.paterno as PaternoAlumno',
+        'alumnos.materno as MaternoAlumno',
+        'alumnos.nombre as NombreAlumno'
+    )
+    ->join('lineadeinvestigacions','proyectos.lineadeinvestigacion_id','=','lineadeinvestigacions.id')
+    ->join('aredeconocimientos','proyectos.aredeconocimiento_id','=','aredeconocimientos.id')
+    ->join('docentes','proyectos.id_asesor','=','docentes.id')
+    ->join('alumnos','proyectos.id','=','alumnos.id_proyecto')
+    ->where('proyectos.id',$id)
+    ->get();
+
+    $docentesDeTaller = [];
+    foreach($infoProyecto as $item){
+        $docenteTaller = DB::table('docentes')
+        ->select(
+            'docentes.id as IdDocente',
+            'docentes.prefijo as PrefijoDocente',
+            'docentes.paterno as PaternoDocente',
+            'docentes.materno as MaternoDocente',
+            'docentes.nombre as NombreDocente'
+        )
+        ->join('tokenalumnos','tokenalumnos.id_profe_taller','=','docentes.id')
+        ->join('alumnos','alumnos.tokenalumnos_id','=','tokenalumnos.id')
+        ->where('alumnos.id',$item->IdAlumno)
+        ->get();
+        array_push($docentesDeTaller, $docenteTaller);
+    }
+
+    $jefeDepartamento = DB::table('users')
+    ->select(
+        'users.prefijo as Prefijo',
+        'users.paterno as Paterno',
+        'users.materno as Materno',
+        'users.nombre as Nombre'
+    )
+    ->join('foros','foros.id_user','=','users.id')
+    ->where('foros.id',$infoProyecto[0]->IdForo)
+    ->first();
+    // dd($docentesDeTaller);
     $foro = Foro::find($proyectoForo->id_foro);
-    $ProyectoForoAlumno = ProyectoForoAlumno::find($id);
-    $alumnoenproyecto = ProyectoForoAlumno::all();
-    $alumno = alumno::all();
-    $docente = Docente::all();
-    $Forodoncente = Forodoncente::all();
-    // $foro = Foro::find($ProyectoForoAlumno->id_foro);
-    $proyectoForo = ProyectoForo::find($pro->id);
+    // $ProyectoForoAlumno = ProyectoForoAlumno::find($id);
+    // $alumnoenproyecto = ProyectoForoAlumno::all();
+    // $alumno = alumno::all();
+    // $docente = Docente::all();
+    // $Forodoncente = Forodoncente::all();
+    // // $foro = Foro::find($ProyectoForoAlumno->id_foro);
+    // $proyectoForo = ProyectoForo::find($pro->id);
     //return view('oficina.proyectoDescripcion',compact('foro','proyectoForo','ProyectoForoAlumno','notificacione','alumnoenproyecto','alumno','docente','Forodoncente'));
-    return view('oficina.proyectoDescripcion', compact('foro', 'proyectoForo', 'ProyectoForoAlumno', 'alumnoenproyecto', 'alumno', 'docente', 'Forodoncente'));
+    return view('oficina.proyectoDescripcion', compact('id','pro','proyectoForo','infoProyecto','docentesDeTaller','jefeDepartamento','foro'));
   }
   public function getProyectosForo(Request $request){
     $idForo = $request->get('idForo');
@@ -514,6 +589,16 @@ class OficinaController extends Controller
     $id = Crypt::encrypt($id);
     return redirect("configurarForo/$id");
   }
+  public function numAulas(Request $requ, $id)
+  {
+    $id = Crypt::decrypt($id);
+    $numerodeaulas = Foro::find($id);
+    $numerodeaulas->num_aulas=$requ->numAulas;
+    $numerodeaulas->save();
+    $id = Crypt::encrypt($id);
+    return redirect("configurarForo/$id");
+  }
+
 
   public function archivoForo($id)
   {

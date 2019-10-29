@@ -53,6 +53,7 @@ Route::post('guardarForo', 'OficinaController@guardarForo')->name('guardarForo')
 Route::post('agregarProfeAforo/{id}', 'OficinaController@agregarProfeAforo')->name('agregarProfeAforo');
 Route::post('agregarProfeAforoJurado/{id}', 'OficinaController@agregarProfeAforoJurado')->name('agregarProfeAforoJurado');
 Route::post('actualizarDuracion/{id}', 'OficinaController@actualizarDuracion')->name('actualizarDuracion');
+Route::post('numAulas/{id}', 'OficinaController@numAulas')->name('numAulas');
 
 /////////////////////////////////						GET					/////////////////////////////////////////
 
@@ -155,6 +156,7 @@ Route::resource('jurados', 'JuradosController')->only(['edit', 'update', 'index'
 /////////////////////////////////						GET				/////////////////////////////////////////
 
 Route::get('jurados/projects', 'JuradosController@projects')->name('juradosprojects');
+Route::get('jurados/edit/{id}', 'JuradosController@edit');
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////						HOJAS CONTROLLER				/////////////////////////////////////////
