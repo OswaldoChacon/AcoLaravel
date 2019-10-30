@@ -24,6 +24,8 @@ class HorarioJuradoController extends Controller
             ->join('foros', 'proyectos.id_foro', '=', 'foros.id')
             ->where('foros.acceso', 1)
             ->where('proyectos.participa', 1)
+            ->groupBy('nombre')
+            ->orderBy('id_docente')
             ->get();
         $horarios = DB::table('horarioforos')
             ->select('horario_inicio as inicio', 'horario_termino as termino', 'fecha_foro as fecha', 'horarioforos.id as id')
@@ -37,9 +39,9 @@ class HorarioJuradoController extends Controller
 
         $longitud = count($horarios);
         $temp = " ";
-        $intervalosContainer = array();
-
-        foreach ($horarios as $item) {
+        $intervalosContainer =array();
+        // dd($horarios);
+        foreach($horarios as $item){
             $intervalo = array();
             while ($item->inicio <= $item->termino) {
                 $newDate = strtotime('+0 hour', strtotime($item->inicio));
@@ -53,9 +55,9 @@ class HorarioJuradoController extends Controller
                 }
             }
             array_push($intervalosContainer, $intervalo);
-        }
-
+        }        
         // dd($intervalosContainer);
+        // dd($jurado);
         return view('oficina.profesHorario.addHour', compact('jurado', 'horarios', 'intervalosContainer','horariosdocentes'));
     }
     public function setHorarioJurado(Request $request)

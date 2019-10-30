@@ -6,20 +6,23 @@ Class Ant{
     public $timeSlots; //creo que no funciona para naada
 
 
-    protected $id; //id
-    protected $recorrido; // 1/violaciones
-    protected $violaciones; //violaciones suaves entero
-    protected $intViolacionesDuras; //violaciones duras entero
-    protected $problema; //clase problema    
-    protected $Ai = []; // //las asignaciones
-    protected $Vi = []; //violaciones por Ai
-    protected $ViolacionesDuras = [];
-    protected $cListAlready = []; //asignacioones booleanas
+    public $id; //id
+    public $recorrido; // 1/violaciones
+    public $violaciones; //violaciones suaves entero
+    public $intViolacionesDuras; //violaciones duras entero
+    public $problema; //clase problema    
+    public $Ai = []; // //las asignaciones
+    public $Vi = []; //violaciones por Ai
+    public $ViolacionesDuras = [];
+    public $cListAlready = []; //asignacioones booleanas
 
     public function __construct($id, $problema)
     {
         $this->id =$id;
         $this->problema =$problema;   
+        $this->recorrido = 0.0;
+        $this->intViolacionesDuras = 0;
+        $this->violaciones = 0;
     }
 
     public function seTcantidadDeViolaciones($countVi){

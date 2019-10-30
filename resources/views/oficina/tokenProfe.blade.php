@@ -27,8 +27,8 @@
 
 
 <div class="card">
+  <h5 class="card-header">Total de docentes encontradas por seccion: <span style="font-weight: bold">{{$tokendocente->count()}}</span></h5>
   <div class="card-body">
-    <h5 class="panel-title">Total de docentes encontradas por seccion: <span style="font-weight: bold">{{$tokendocente->count()}}</span></h5>
     <div class="table-responsive">
       <table class="table table-striped table-hover">
         <thead>

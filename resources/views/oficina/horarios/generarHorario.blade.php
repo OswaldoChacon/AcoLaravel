@@ -65,6 +65,13 @@
                     <span class="text-danger">{{ $errors->first('t_max') }}</span>
                     @endif
                 </div>
+                <div class="form-group  col-md-4 col-xl-3">
+                    <label for="t_minDenominador">t_minDenominador</label>
+                    <input type="number" name="t_minDenominador" class="form-control">
+                    @if ($errors->has('t_minDenominador'))
+                    <span class="text-danger">{{ $errors->first('t_minDenominador') }}</span>
+                    @endif
+                </div>
             </div>
             <!-- <div class="row">
             <div class="form-group col-md-6 col-xl- 3">
