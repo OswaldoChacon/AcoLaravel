@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Mail;
 use SebastianBergmann\Environment\Console;
+use lIluminate\Database\Query\save;
 
 
 class OficinaController extends Controller
@@ -384,7 +385,10 @@ class OficinaController extends Controller
     $docente = Docente::all();
     $id_foro = Crypt::decrypt($id_foro);
     $foro = Foro::find($id_foro);
-    $horarioForo = Horarioforo::all();
+    $hForo = Horarioforo::all();
+    $horarioForo =DB::table('horarioforos')->where('id_foro',$id_foro)->get();
+
+
     $user = DB::table('users')
     ->select(
         'users.prefijo as Prefijo',
@@ -412,7 +416,11 @@ class OficinaController extends Controller
   {
     $id = Crypt::decrypt($id);
     $docentes = Docente::find($request->maestro);
+    $docente = Docente::find($request->id);
+
+    $id_doc = DB::table('forodoncentes')->select('id_docente as id_docente','id_foro as id_foro')->get();
     $foro = Foro::find($id);
+
     DB::table('forodoncentes')->insert([
       [
         'id_foro' => $foro->id,
@@ -436,8 +444,6 @@ class OficinaController extends Controller
     $a= DB::table('foros')->where('acceso','=',1)->get();
 
     $doc = Docente::all();
-    $id = Crypt::encrypt($id);
-    return redirect("configurarForo/$id");
 
     if(count($a) > 0)
     {
@@ -445,6 +451,8 @@ class OficinaController extends Controller
             $inactivo =Foro::find($item->id);
             $inactivo->acceso=0;
             $inactivo->save();
+            $id = Crypt::encrypt($id);
+            return redirect("configurarForo/$id");
         }
     }
 
@@ -452,6 +460,12 @@ class OficinaController extends Controller
     $activar->acceso = 1;
     $activar->save();
 
+    // $docenteacceso = DB::table('forodoncentes')->select('forodoncentes.id_docente as id_docente',
+    //     'docentes.id as id_d',
+    //     'docentes.acceso as acceso')
+    //     ->join('docentes','forodoncentes.id_docente','=','docentes.id')
+    //     ->where('acceso',0)->first();
+    //     dd($docenteacceso);
     $docenteacceso = Docente::where('acceso', 0)->first();
     if ($docenteacceso != null) {
       $docenteacceso->acceso = 1;

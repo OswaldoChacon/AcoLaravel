@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers\Horario;
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
@@ -9,7 +11,7 @@ class HorarioJuradoController extends Controller
 {
     public function index(Request $request)
     {
-        $min= DB::table('foros')->select('duracion as minutos')->where('acceso','=',1)->get();
+        $min = DB::table('foros')->select('duracion as minutos')->where('acceso', '=', 1)->get();
         $minutos = $min[0]->minutos;
 
         $jurado = DB::table('docentes')
@@ -29,35 +31,61 @@ class HorarioJuradoController extends Controller
             ->where('foros.acceso', 1)
             ->get();
 
+        $horariosdocentes= DB::table('horariodocente')->where('disponible',1)->get();
+
+
+
         $longitud = count($horarios);
         $temp = " ";
-        $intervalosContainer =array();
+        $intervalosContainer = array();
 
-        foreach($horarios as $item){
+        foreach ($horarios as $item) {
             $intervalo = array();
-            while ($item->inicio != $item->termino) {
+            while ($item->inicio <= $item->termino) {
                 $newDate = strtotime('+0 hour', strtotime($item->inicio));
-                $newDate=strtotime('+'.$minutos.'minute',$newDate);
+                $newDate = strtotime('+' . $minutos . 'minute', $newDate);
                 $newDate = date('H:i:s', $newDate);
                 $temp = $item->inicio . " - " . $newDate;
                 $item->inicio = $newDate;
 
-                if($newDate> $item->termino){
-
-                }
-                else{
+                if ($newDate > $item->termino) { } else {
                     array_push($intervalo, $temp);
                 }
-
             }
             array_push($intervalosContainer, $intervalo);
         }
 
         // dd($intervalosContainer);
-        return view('oficina.profesHorario.addHour', compact('jurado', 'horarios','intervalosContainer'));
+        return view('oficina.profesHorario.addHour', compact('jurado', 'horarios', 'intervalosContainer','horariosdocentes'));
     }
-        public function setHorarioJurado(Request $request){
-            $idDocente = $request->get('idDoc');
-        }
+    public function setHorarioJurado(Request $request)
+    {
+        $idDocente = $request->get('idDocente');
+        $idHorarioForo = $request->get('idHorarioForo');
+        $hora = $request->get('hora');
+        $disponible = $request->get('disponible');
+        $posicion = $request->get('posicion');
 
+        $horariodocente = DB::table('horariodocente')
+            ->where('id_docente', $idDocente)
+            ->where('id_horarioforos', $idHorarioForo)
+            ->where('hora',$hora)->get();
+
+        if (count($horariodocente) > 0) {
+            DB::table('horariodocente')
+                ->where('id', $horariodocente[0]->id)
+                ->update(['hora' => $hora, 'disponible' => $disponible, 'posicion' => $posicion]);
+        } else {
+            DB::table('horariodocente')->insert([
+                [
+                    'id_docente' => $idDocente,
+                    'id_horarioforos' => $idHorarioForo,
+                    'hora' => $hora,
+                    'disponible' => $disponible,
+                    'posicion' => $posicion
+
+                ],
+            ]);
+        }
+    }
 }

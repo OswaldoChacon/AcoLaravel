@@ -16,7 +16,11 @@
                     @php
                     $cont = 0;
                     @endphp
+                    {{csrf_field()}}
                     @foreach($jurado as $item)
+                    @php
+                    $posicion = 0;
+                    @endphp
                     <tr>
                         <td>
                             {{$item->id_docente}}
@@ -25,7 +29,7 @@
                             {{$item->nombre}}
                         </td>
                         <td>
-                        {{csrf_field()}}
+
                         @foreach($horarios as $key => $itemB)
                         <ul class="list-unstyled components">
                             <li class="">
@@ -36,16 +40,27 @@
                                 for($i = 0; $i < count($intervalosContainer); $i++){
                                     if($key == $i){
                                     for($j = 0; $j < count($intervalosContainer[$i]) ; $j++  ){
+                                    $horaExistente = false;
                                     @endphp
+                                    @foreach($horariosdocentes as $itemC)
+
+                                    @php
+                                    if($itemC->hora == $intervalosContainer[$i][$j] && $itemB->id == $itemC->id_horarioforos){
+                                        $horaExistente = true;
+                                    }
+                                    @endphp
+
+                                    @endforeach
                                 <li>
                                     <div class="inputContainer">
-                                        <input class="checkHorarioJurado" id-docente="{{$item->id_docente}}" id-horario-foros="{{$itemB->id}}" style="width: 25px; height: 25px" type="checkbox" name="status" value="participa" >
+                                        <input {{$horaExistente == false ? '' : 'checked'}} posicion="{{$posicion}}" class="checkHorarioJurado" id-docente="{{$item->id_docente}}" id-horario-foros="{{$itemB->id}}" style="width: 25px; height: 25px" type="checkbox" name="status" value="participa" >
                                         <small>{{$intervalosContainer[$i][$j]}}</small>
                                     </div>
                                 </li>
                                     @php
+                                    $posicion++;
+                                        }
                                     }
-                                }
                                 }
                                     @endphp
 
