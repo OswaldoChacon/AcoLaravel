@@ -155,7 +155,10 @@ class HorarioController extends Controller
             ->rightJoin('docentes', 'horariodocentes.id_docente', '=', 'docentes.id')
             ->groupBy('docentes.nombre')
             ->get()->each(function ($query) {
-                $query->horas = array_filter(explode(",", $query->horas));
+                // quite arrayfilter para solucionar que no agarra el 0
+                // $integerIDs = array_map('intval', explode(',', $string));
+                $query->horas = explode(",", $query->horas);
+                // $query->horas = array_map("intval",explode(",", $query->horas));
             });
 
         //espacios de tiempo
@@ -196,7 +199,7 @@ class HorarioController extends Controller
                 $intervalosUnion[]=$itemIntervaloTotal;
             }                
         }
-        // dd($intervaloUnion);
+        // dd($maestro_et);
         // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // 
         //Salones
         $salones = Foro::where('acceso', 1)->get()->first();

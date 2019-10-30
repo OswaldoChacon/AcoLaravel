@@ -24,6 +24,8 @@ class HorarioJuradoController extends Controller
             ->join('foros', 'proyectos.id_foro', '=', 'foros.id')
             ->where('foros.acceso', 1)
             ->where('proyectos.participa', 1)
+            ->groupBy('nombre')
+            ->orderBy('id_docente')
             ->get();
         $horarios = DB::table('horarioforos')
             ->select('horario_inicio as inicio', 'horario_termino as termino', 'fecha_foro as fecha', 'horarioforos.id as id')
@@ -31,7 +33,7 @@ class HorarioJuradoController extends Controller
             ->where('foros.acceso', 1)
             ->get();
 
-        $horariosdocentes= DB::table('horariodocente')->where('disponible',1)->get();
+        $horariosdocentes= DB::table('horariodocentes')->where('disponible',1)->get();
 
 
 
@@ -55,6 +57,7 @@ class HorarioJuradoController extends Controller
             array_push($intervalosContainer, $intervalo);
         }        
         // dd($intervalosContainer);
+        // dd($jurado);
         return view('oficina.profesHorario.addHour', compact('jurado', 'horarios', 'intervalosContainer','horariosdocentes'));
     }
     public function setHorarioJurado(Request $request)
@@ -65,17 +68,17 @@ class HorarioJuradoController extends Controller
         $disponible = $request->get('disponible');
         $posicion = $request->get('posicion');
 
-        $horariodocente = DB::table('horariodocente')
+        $horariodocente = DB::table('horariodocentes')
             ->where('id_docente', $idDocente)
             ->where('id_horarioforos', $idHorarioForo)
             ->where('hora',$hora)->get();
 
         if (count($horariodocente) > 0) {
-            DB::table('horariodocente')
+            DB::table('horariodocentes')
                 ->where('id', $horariodocente[0]->id)
                 ->update(['hora' => $hora, 'disponible' => $disponible, 'posicion' => $posicion]);
         } else {
-            DB::table('horariodocente')->insert([
+            DB::table('horariodocentes')->insert([
                 [
                     'id_docente' => $idDocente,
                     'id_horarioforos' => $idHorarioForo,

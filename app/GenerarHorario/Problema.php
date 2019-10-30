@@ -19,6 +19,7 @@ class Problema
     // protected $aux_timeslot_common = [];
     public function __construct($eventosConMaestros, $maestros_et, $espaciosDeTiempo)
     {
+        // dd($maestros_et);
         // for($i = 0; $i<count($maestrosParticipantes);$i++){
         foreach ($maestros_et as $jurado) {
             $this->maestros[] = new Maestros($jurado->nombre, $jurado->horas);
@@ -48,7 +49,7 @@ class Problema
             Session::flash('message', "Algun proyecto no tiene espacios en comun para poder asignado en donde todos los maestros conincidan");
         }
         $this->ordenarEventos();
-        // dd($this->eventos);
+        dd($this->eventos);
     }
     public function getListMaestros()
     {
