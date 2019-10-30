@@ -32,10 +32,10 @@ class HorarioJuradoController extends Controller
         $longitud = count($horarios);
         $temp = " ";
         $intervalosContainer =array();
-
+        // dd($horarios);
         foreach($horarios as $item){
             $intervalo = array();
-            while ($item->inicio != $item->termino) {
+            while ($item->inicio <= $item->termino) {
                 $newDate = strtotime('+0 hour', strtotime($item->inicio));
                 $newDate=strtotime('+'.$minutos.'minute',$newDate);
                 $newDate = date('H:i:s', $newDate);
@@ -51,8 +51,7 @@ class HorarioJuradoController extends Controller
 
             }
             array_push($intervalosContainer, $intervalo);
-        }
-
+        }        
         // dd($intervalosContainer);
         return view('oficina.profesHorario.addHour', compact('jurado', 'horarios','intervalosContainer'));
     }
