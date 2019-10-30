@@ -55,7 +55,7 @@ class HorarioJuradoController extends Controller
                 }
             }
             array_push($intervalosContainer, $intervalo);
-        }        
+        }
         // dd($intervalosContainer);
         // dd($jurado);
         return view('oficina.profesHorario.addHour', compact('jurado', 'horarios', 'intervalosContainer','horariosdocentes'));
@@ -74,10 +74,15 @@ class HorarioJuradoController extends Controller
             ->where('hora',$hora)->get();
 
         if (count($horariodocente) > 0) {
-            DB::table('horariodocentes')
-                ->where('id', $horariodocente[0]->id)
-                ->update(['hora' => $hora, 'disponible' => $disponible, 'posicion' => $posicion]);
-        } else {
+            $deletes = DB::table('horariodocentes')
+            ->where('id', $horariodocente[0]->id)
+            ->delete();
+
+            // DB::table('horariodocentes')
+            //     ->where('id', $horariodocente[0]->id)
+            //     ->update(['hora' => $hora, 'disponible' => $disponible, 'posicion' => $posicion]);
+        }
+        else {
             DB::table('horariodocentes')->insert([
                 [
                     'id_docente' => $idDocente,
