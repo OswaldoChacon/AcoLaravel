@@ -45,7 +45,7 @@
                                     @foreach($horariosdocentes as $itemC)
 
                                     @php
-                                    if($itemC->hora == $intervalosContainer[$i][$j] && $itemB->id == $itemC->id_horarioforos){
+                                    if($itemC->hora == $intervalosContainer[$i][$j] && $itemB->id == $itemC->id_horarioforos && $item->id_docente == $itemC->id_docente){
                                         $horaExistente = true;
                                     }
                                     @endphp
