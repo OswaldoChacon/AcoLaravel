@@ -216,7 +216,7 @@ Route::post('horarios/edit-participa', 'Horario\HorarioProyectosController@edita
 Route::post('addHourForo/{id}', 'Horario\HorarioController@addHourForo')->name('addHourForo');
 Route::post('addHourDocente/{id}', 'Horario\addHourController@addHourDocente')->name('addHourForo');
 
-Route::post('/generarHorario','Horario\HorarioController@generarHorario');
+Route::post('/generarHorarioAnt','Horario\HorarioController@generarHorario');
 Route::post('addHour/setHorarioJurado','Horario\HorarioJuradoController@setHorarioJurado');
 /////////////////////////////////						GET				/////////////////////////////////////////
 Route::get('horarios', 'Horario\HorarioProyectosController@index');
@@ -224,6 +224,10 @@ Route::get('horarios/get-proyectos-foro-horario', 'Horario\HorarioProyectosContr
 Route::get('addHour', 'Horario\HorarioJuradoController@index');
 Route::get('profes/horarios/{id?}', 'Horario\addHourController@agregarHorarios')->name('horariomaestro');
 Route::get('Jprojects/get-proyectos-foro', 'OficinaController@getProyectosForo');
+
+Route::get('horarioGenerado',function(){
+    return view('oficina.horarios.horarioGenerado');
+});
 
 
 

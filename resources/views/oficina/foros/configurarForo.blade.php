@@ -213,7 +213,7 @@
 <script type="text/javascript">
   function capturar() {
     limpiar();
-    var cantidad = document.getElementById("cantidadDias").value;
+    var cantidad = document.getElementById("cantidadDias").value;    
     var botonGuardar = document.getElementById("guardar");
     var div = document.getElementById("main");
     if (cantidad > 0) {
@@ -254,5 +254,5 @@
     }, duration);
   });
 </script>
-<script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
+<!-- <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script> -->
 @endsection
