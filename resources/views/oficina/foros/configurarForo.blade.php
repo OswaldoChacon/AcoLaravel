@@ -185,27 +185,71 @@
       </thead>
       <tbody>
         <tr>
-          <th>Fecha</th>
-          <th>Horario</th>
-          <th>Horario de Break</th>
-          <th> </th>
+            <th>Fecha</th>
+            <th>Horario</th>
+            <th colspan="2" align="center">Horio Break</th>
+            <th>Acciones</th>
         </tr>
-        @foreach ($horarioForo as $object)
+        @php
+        $cont = 0;
+        @endphp
+
+        @foreach ($horariosForos as $key => $object)
+
+        @php
+        $posicion = 0;
+
+        @endphp
         <tr>
-          <td>{{$object->fecha_foro}} </td>
+          <td>{{$object->fecha}} </td>
           <td>{{$object->horario_inicio}} - {{$object->horario_termino}}</td>
-          <td>{{$object->inicio_break}} - {{$object->fin_break}} </td>
-          <td> <button class="btn btn-primary btn-sm btnEditar">Editar</button></td>
+          @foreach($horariobreak as $hb)
+            <td>{{$hb->horario_break}}</td>
+          @endforeach
+         <td>
+            <button class="btn btn-warning">Editar horario</button>
+
+            <ul class="list-unstyled components">
+                <li class="">
+                    <a href="#horas-{{$cont + 1}}" data-toggle="collapse" aria-expanded="false" class="btn btn-primary btn-sm">Agregar horario break de fecha {{$object->fecha}}</a>
+                    <ul class="collapse list-unstyled" id="horas-{{$cont + 1}}">
+
+                        @php
+                        for($i = 0; $i < count($intervalosContainer); $i++){ if($key==$i){ for($j=0; $j < count($intervalosContainer[$i]) ; $j++ ){ $horaExistente=false; @endphp
+                        @foreach($horariobreak as $itemC)
+                        @php if($itemC->horario_break == $intervalosContainer[$i][$j] && $object->id == $itemC->id_horarioforo){
+                        $horaExistente = true;
+                        }
+                        @endphp
+                        @endforeach
+                        <li>
+                            <div class="inputContainer">
+                                <input {{$horaExistente == false ? '' : 'checked'}} posicion="{{$posicion}}" class="checkHorarioBreak" id-horario-foros="{{$object->id}}" style="width: 25px; height: 25px" type="checkbox" name="status" value="participa">
+                                <small>{{$intervalosContainer[$i][$j]}}</small>
+                            </div>
+                        </li>
+                        @php
+                        $posicion++;
+                        }
+                        }
+                        }
+                        @endphp
+
+                    </ul>
+                </li>
+            </ul>
+            @php
+            $cont++;
+            @endphp
+
+         </td>
+          <!-- <td><a href="/horarioBreak/horarioBreak"class="btn btn-primary btn-sm btnbreak">Agregar horario del break</a></td> -->
         </tr>
         @endforeach
       </tbody>
     </table>
   </div>
   <br>
-
-
-
-
   <!-- </div> -->
 </div>
 </div>
@@ -228,8 +272,6 @@
                                                                                                                           echo $hoy; ?>"/></div>' +
         '<div class="form-group col-xl-3"><label>Hora de inicio</label><input type="time" name="h_inicio[]" class="form-control" min="07:00" max="18:00" /></div>' +
         '<div class="form-group col-xl-3"><label>Hora de finalización</label><input type="time" name="h_end[]" class="form-control"  min="07:00" max="18:00" /></div>' +
-        '<div class="form-group col-xl-3"><label>Hora de inicio de Break</label><input type="time" name="b_inicio[]" class="form-control" min="07:00" max="18:00" /></div>' +
-        '<div class="form-group col-xl-3"><label>Hora de fin de Break</label><input type="time" name="b_end[]" class="form-control" min="07:00" max="18:00" /></div>' +
         '</div>';
       div.appendChild(contenedor);
     }
@@ -254,5 +296,8 @@
     }, duration);
   });
 </script>
-<script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
+<!-- <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script> -->
 @endsection
+@push('asignarHorarioBreak')
+<script src="{{asset('js/horabreak.js')}}"></script>
+@endpush

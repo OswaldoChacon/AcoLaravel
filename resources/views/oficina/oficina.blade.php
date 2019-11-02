@@ -191,6 +191,7 @@
 	@stack('participaControl')
     @stack('proyectos')
     @stack('asignarHorarioJurado');
+    @stack('asignarHorarioBreak');
 </body>
 
 </html>

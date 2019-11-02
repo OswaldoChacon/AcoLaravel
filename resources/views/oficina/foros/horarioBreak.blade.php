@@ -3,13 +3,12 @@
 @section('content')
 
 <div class="card">
-    <h5 class="card-header">Horario del Jurado</h5>
+    <!-- <h5 class="card-header">Asignar horario del Break al foro: {{$foro->noforo}}º</h5>
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-striped table-hover table-docentes">
                 <thead>
-                    <th>ID</th>
-                    <th>Nombre</th>
+                    <th>Fecha</th>
                     <th>Horas disponibles</th>
                 </thead>
                 <tbody>
@@ -41,27 +40,15 @@
                                     <ul class="collapse list-unstyled" id="horas-{{$cont + 1}}">
 
                                         @php
-                                        for($i = 0; $i < count($intervalosContainer); $i++){ if($key==$i){ for($j=0; $j < count($intervalosContainer[$i]) ; $j++ ){
-                                            $horaExistente=false;
-                                            $horaB = false;
-                                            @endphp
-
-                                            @foreach($horariosdocentes as $itemC)
-                                            @php if($itemC->hora == $intervalosContainer[$i][$j] && $itemB->id == $itemC->id_horarioforos && $item->id_docente == $itemC->id_docente){
+                                        for($i = 0; $i < count($intervalosContainer); $i++){ if($key==$i){ for($j=0; $j < count($intervalosContainer[$i]) ; $j++ ){ $horaExistente=false; @endphp @foreach($horariosdocentes as $itemC) @php if($itemC->hora == $intervalosContainer[$i][$j] && $itemB->id == $itemC->id_horarioforos && $item->id_docente == $itemC->id_docente){
                                             $horaExistente = true;
                                             }
                                             @endphp
 
                                             @endforeach
-                                            @foreach($posicionbreak as $itemD)
-                                            @php if($itemD->horariobreal == $intervalosContainer[$i][$j] && $itemB->id == $itemD->id_horarioforo){
-                                            $horaB = true;
-                                            }
-                                            @endphp
-                                            @endforeach
                                             <li>
                                                 <div class="inputContainer">
-                                                    <input {{$horaExistente == false ? '' : 'checked'}} {{$horaB == false ? '' : 'disabled'}} posicion="{{$posicion}}" class="checkHorarioJurado" id-docente="{{$item->id_docente}}" id-horario-foros="{{$itemB->id}}" style="width: 25px; height: 25px" type="checkbox" name="status" value="participa">
+                                                    <input {{$horaExistente == false ? '' : 'checked'}} posicion="{{$posicion}}" class="checkHorarioJurado" id-docente="{{$item->id_docente}}" id-horario-foros="{{$itemB->id}}" style="width: 25px; height: 25px" type="checkbox" name="status" value="participa">
                                                     <small>{{$intervalosContainer[$i][$j]}}</small>
                                                 </div>
                                             </li>
@@ -85,9 +72,9 @@
                 </tbody>
             </table>
         </div>
-    </div>
+    </div> -->
 </div>
-@endsection
-@push('asignarHorarioJurado')
-<script src="{{asset('js/setHJurado.js')}}"></script>
-@endpush
+<@endsection
+<!-- @push('asignarHorarioBreak')
+<script src="{{asset('js/horabreak.js')}}"></script>
+@endpush -->

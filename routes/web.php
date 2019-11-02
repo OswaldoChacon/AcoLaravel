@@ -210,8 +210,6 @@ Route::delete('sheets/{id}', 'EvidenciasController@destroy')->name('sheets.destr
 
 /////////////////////////////////						POST				/////////////////////////////////////////
 
-
-
 Route::post('horarios/edit-participa', 'Horario\HorarioProyectosController@editarParticipa');
 Route::post('addHourForo/{id}', 'Horario\HorarioController@addHourForo')->name('addHourForo');
 Route::post('addHourDocente/{id}', 'Horario\addHourController@addHourDocente')->name('addHourForo');
@@ -225,10 +223,8 @@ Route::get('addHour', 'Horario\HorarioJuradoController@index');
 Route::get('profes/horarios/{id?}', 'Horario\addHourController@agregarHorarios')->name('horariomaestro');
 Route::get('Jprojects/get-proyectos-foro', 'OficinaController@getProyectosForo');
 
-
-
-
-
+Route::get('foros/horarioBreak/{id}','OficinaController@horarioBreak');
+Route::post('foros/horarioBreak','OficinaController@setHorarioBreak')->name('setHorarioBreak');
 // Route::get('horarios','Horario\HorarioController@index')->name('horarios');
 
 // Acceso a la vista de horarios donde se creara todo lo de las hormigas

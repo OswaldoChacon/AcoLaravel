@@ -56,10 +56,10 @@ class HorarioController extends Controller
             'h_end.*.required' => 'Coloca una hora adecuada',
             'fecha.*.required' => 'El evento no puede terminar antes que la hora de inicio',
             'h_end.*.after' => 'La hora fin debe ser superior a inicio',
-            'b_inicio.*.required' => 'Campo necesario',
-            'b_end.*.required' => 'Coloca una hora adecuada',
-            'h_end.*.after' => 'La hora fin debe ser superior a inicio',
-            'duracion.*' => 'Debe de llenar este campo'
+            // 'b_inicio.*.required' => 'Campo necesario',
+            // 'b_end.*.required' => 'Coloca una hora adecuada',
+            // 'h_end.*.after' => 'La hora fin debe ser superior a inicio',
+            // 'duracion.*' => 'Debe de llenar este campo'
         ];
         $this->validate($request, $rules, $messages);
 
@@ -74,8 +74,8 @@ class HorarioController extends Controller
                     "fecha" => $request->fecha[$i],
                     "h_in" => $request->h_inicio[$i],
                     "h_end" => $request->h_end[$i],
-                    'inicio_break' => $request->b_inicio[$i],
-                    'fin_break' => $request->b_end[$i],
+                    // 'inicio_break' => $request->b_inicio[$i],
+                    // 'fin_break' => $request->b_end[$i],
 
                 ];
                 //return back()->with('mensaje1', 'Horario NO registrado la fecha es repetida o es fin de semana');
@@ -87,8 +87,8 @@ class HorarioController extends Controller
                         'horario_inicio' => $request->h_inicio[$i],
                         'horario_termino' => $request->h_end[$i],
                         'fecha_foro' => $request->fecha[$i],
-                        'inicio_break' => $request->b_inicio[$i],
-                        'fin_break' => $request->b_end[$i],
+                        // 'inicio_break' => $request->b_inicio[$i],
+                        // 'fin_break' => $request->b_end[$i],
 
                     ],
                 ]);
@@ -141,7 +141,7 @@ class HorarioController extends Controller
                 $query->maestros = explode(",", $query->maestros);
             });
 
-        //solo maestros participantes a un proectos 
+        //solo maestros participantes a un proectos
         // $maestros_participantes = DB::table('jurados')->select('jurados.id','docentes.id as iddocente','docentes.nombre')
         // ->join('docentes','jurados.id_docente','=','docentes.id')
         // ->join('proyectos','jurados.id_proyecto','=','proyectos.id')
@@ -168,7 +168,7 @@ class HorarioController extends Controller
             ->where('foros.acceso', 1)
             ->get();
 
-        // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // 
+        // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // //
         $min = DB::table('foros')->select('duracion as minutos')->where('acceso', '=', 1)->get();
         // dd($min);
         $minutos = $min[0]->minutos;
@@ -197,17 +197,17 @@ class HorarioController extends Controller
         foreach ($intervalosContainer as $intervaloTotal) {
             foreach ($intervaloTotal as $itemIntervaloTotal){
                 $intervalosUnion[]=$itemIntervaloTotal;
-            }                
+            }
         }
         // dd($maestro_et);
-        // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // 
+        // // // // // // // // // // // // // // // // // // // // // // // // // // // // // //
         //Salones
         $salones = Foro::where('acceso', 1)->get()->first();
         // dd($intervalosContainer);
-        // dd($maestro_et);        
+        // dd($maestro_et);
         $main = new Main($proyectos_maestros, $maestro_et, $intervalosUnion, $request->alpha, $request->beta, $request->q, $request->evaporation, $request->iterations, $request->ants, $request->estancado, $request->t_max, $request->t_minDenominador, $salones->num_aulas);
         $main->start();
-        // dd($ants->getListMaestros());                        
+        // dd($ants->getListMaestros());
         return redirect('/generarHorario');
     }
 }
