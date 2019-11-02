@@ -244,8 +244,11 @@ class HorarioController extends Controller
                 // dd($resul);                                               
 
         }
+        $maestrosTable =sizeof($proyectos_maestros[0]->maestros);
         // dd($resultado,$matrizSolucion);AS DBN
-        return view('oficina.horarios.horarioGenerado', compact('resultado', 'matrizSolucion', 'main'));
+        $salonesTable = $salones->num_aulas;
+        // dd($salonesTable);
+        return view('oficina.horarios.horarioGenerado', compact('resultado', 'maestrosTable','salonesTable'));
         // return view('greetings', ['name' => 'Victoria']);
         // return redirect('horarioGenerado')->with(['horasString'=>$horasString]);
         // return redirect('horarios');

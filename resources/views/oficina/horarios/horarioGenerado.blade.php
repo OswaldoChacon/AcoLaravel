@@ -3,25 +3,34 @@
 @section('content')
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.1/xlsx.full.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/file-saver@2.0.2/dist/FileSaver.min.js"></script>
+<style>
+ table{
+     text-align: justify;
+ }
+</style>
 <div class="card">
     <div class="card-body">
-        <!-- <table class="table">
-            <?php foreach ($matrizSolucion as $key => $value) {
-                echo ('<tr>');
-                echo ('<td>' . $key . '</td>');
-                foreach ($value as $cell) {
-                    echo ('<td>' . $cell . '</td>');
-                }
-                echo ('</tr>');
-            } ?>
-        </table>
-        <br><br><br> -->
+
 
 
         <div class="table-responvive">
             <button type="button" class="btn-sm btn-primary" id="button-a">Descargar horario</button>
 
             <table class="table" id="mytable">
+                <thead>
+                    <tr>
+                        <?php
+                        echo ('<th>Fecha</th>');
+                        for ($z = 0; $z < $salonesTable; $z++) {
+                            echo ('<th>Clave</th>');
+                            for ($y = 0; $y < $maestrosTable; $y++) {
+                                echo ('<th>Maestro</th>');
+                            }
+                            echo ('<th></th>');
+                        }
+                        ?>
+                    </tr>
+                </thead>
                 <?php foreach ($resultado as $key => $event) {
                     echo ('<tr>');
                     echo ('<td>' . $key . '</td>');
@@ -29,6 +38,7 @@
                         foreach ($titles as $item) {
                             echo ('<td>' . $item . '</td>');
                         }
+                        echo ('<td></td>');
                     }
                     // foreach ($value as $cell) {
                     //     echo ('<td>' . $cell . '</td>');
@@ -87,19 +97,26 @@
     //     // ignoreColumns: '.ignore',
     //     // ignoreRows: '.ignore'
     // });
-    var wb = XLSX.utils.table_to_book(document.getElementById('mytable'), {sheet:"horarios"});
-        var wbout = XLSX.write(wb, {bookType:'xlsx', bookSST:true, type: 'binary'});
-        function s2ab(s) {
-                        var buf = new ArrayBuffer(s.length);
-                        var view = new Uint8Array(buf);
-                        for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
-                        return buf;
-        }
-        $("#button-a").click(function(){
-        saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), 'horarios.xlsx');
-        });
+    var wb = XLSX.utils.table_to_book(document.getElementById('mytable'), {
+        sheet: "horarios"
+    });
+    var wbout = XLSX.write(wb, {
+        bookType: 'xlsx',
+        bookSST: true,
+        type: 'binary'
+    });
 
-
+    function s2ab(s) {
+        var buf = new ArrayBuffer(s.length);
+        var view = new Uint8Array(buf);
+        for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+        return buf;
+    }
+    $("#button-a").click(function() {
+        saveAs(new Blob([s2ab(wbout)], {
+            type: "application/octet-stream"
+        }), 'horarios.xlsx');
+    });
 </script>
 
 @endsection
