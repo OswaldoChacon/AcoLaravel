@@ -12,6 +12,8 @@ use DB;
 use Illuminate\Support\Facades\Crypt;
 use App\Foro;
 use App\ProyectoForo;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Redirect;
 
 
 use App\GenerarHorario\Maestros;
@@ -104,12 +106,12 @@ class HorarioController extends Controller
         $rules = [
             'alpha' => 'required|numeric|max:1|not_in:0',
             'beta' => 'required|numeric|not_in:0',
-            'q' => 'required',
+            'Q' => 'required',
             'evaporation' => 'required',
             'iterations' => 'required',
             'ants' => 'required|numeric|not_in:0',
             'estancado' => 'required|numeric|not_in:0',
-            't_max' => 'required|numeric|not_in:0',
+            // 't_max' => 'required|numeric|not_in:0',
             't_minDenominador' => 'required|numeric|not_in:0'
         ];
         $messages = [
@@ -117,22 +119,23 @@ class HorarioController extends Controller
             'alpha.not_in' => 'Alfa no debe ser 0',
             'alpha.required' => 'El campo alfa es requerido',
             'beta.required' => 'El campo beta es requerido',
-            'q.required' => 'El campo Q es requerido',
+            'Q.required' => 'El campo Q es requerido',
             'evaporation.required' => 'El campo Evaporación es requerido',
             'iterations.required' => 'El campo número de iteraciones es requerido',
             'ants.required' => 'El campo cantidad de hormigas es requerido',
             'estancado.required' => 'El campo estacando es requerido',
-            't_max.required' => 'El campo de T_max es requerido',
-            't_max.not_in' => 'El campo de T_max no debe ser 0',
-            't_minDenominador.not_in' => 'El campo de t_minDenominador no debe ser 0',
-
+            // 't_max.required' => 'El campo de T_max es requerido',
+            // 't_max.not_in' => 'El campo de T_max no debe ser 0',
+            't_minDenominador.not_in' => 'El campo de t_minDenominador no debe ser 0'
         ];
+        $this->validate($request, $rules, $messages);
+
         // $this->validate($request, $rules,$messages);
         // Proyectos participantes
         $proyectos = ProyectoForo::where('participa', 1)->get();
 
         //proyectos ya con los maestros asociados verificar
-        $proyectos_maestros = DB::table('jurados')->select('proyectos.id', 'proyectos.titulo', DB::raw('group_concat( Distinct docentes.nombre) as maestros'))
+        $proyectos_maestros = DB::table('jurados')->select('proyectos.id', 'proyectos.titulo', DB::raw('group_concat( Distinct docentes.prefijo," ",docentes.nombre," ",docentes.paterno," ",docentes.materno) as maestros'))
             ->join('docentes', 'jurados.id_docente', '=', 'docentes.id')
             ->join('proyectos', 'jurados.id_proyecto', '=', 'proyectos.id')
             ->where('proyectos.participa', 1)
@@ -151,16 +154,20 @@ class HorarioController extends Controller
         // ->get();
 
         // maestros con sus espacios de tiempo
-        $maestro_et = DB::table('horariodocentes')->select('docentes.nombre', DB::raw('group_concat(horariodocentes.hora) as horas'))
+        $maestro_et = DB::table('horariodocentes')->select(DB::raw('group_concat(distinct docentes.prefijo," ",docentes.nombre," ",docentes.paterno," ",docentes.materno) as nombre'), DB::raw('group_concat(horariodocentes.posicion) as horas'))
             ->rightJoin('docentes', 'horariodocentes.id_docente', '=', 'docentes.id')
-            ->groupBy('docentes.nombre')
+            ->groupBy('nombre')
             ->get()->each(function ($query) {
+                // dd($query);
                 // quite arrayfilter para solucionar que no agarra el 0
                 // $integerIDs = array_map('intval', explode(',', $string));
-                $query->horas = explode(",", $query->horas);
+                // $query->horas = array_filter(array_map('intval',explode(",", $query->horas)),function($value) {
+                $query->horas = array_filter(explode(",", $query->horas), function ($value) {
+                    return ($value !== null && $value !== false && $value !== '');
+                });
                 // $query->horas = array_map("intval",explode(",", $query->horas));
             });
-
+        // dd($proyectos_maestros);
         //espacios de tiempo
         $horarios = DB::table('horarioforos')
             ->select('horario_inicio as inicio', 'horario_termino as termino', 'fecha_foro as fecha', 'horarioforos.id as id')
@@ -180,11 +187,12 @@ class HorarioController extends Controller
             $intervalo = array();
             while ($item->inicio <= $item->termino) {
                 $newDate = strtotime('+0 hour', strtotime($item->inicio));
+                // dd($item->fecha);
                 $newDate = strtotime('+' . $minutos . 'minute', $newDate);
                 $newDate = date('H:i:s', $newDate);
-                $temp = $item->inicio . " - " . $newDate;
+                $temp = $item->fecha . " " . $item->inicio . " - " . $newDate;
+                // $temp.=", ".$item->fecha;
                 $item->inicio = $newDate;
-
                 if ($newDate > $item->termino) { } else {
                     array_push($intervalo, $temp);
                     // $intervalo[]=$temp;
@@ -193,21 +201,58 @@ class HorarioController extends Controller
             array_push($intervalosContainer, $intervalo);
             // $intervalosContainer[]=$intervalo;
         }
-        $intervalosUnion=array();
+        // dd($intervalosContainer);
+        $intervalosUnion = array();
         foreach ($intervalosContainer as $intervaloTotal) {
-            foreach ($intervaloTotal as $itemIntervaloTotal){
-                $intervalosUnion[]=$itemIntervaloTotal;
+            foreach ($intervaloTotal as $itemIntervaloTotal) {
+                $intervalosUnion[] = $itemIntervaloTotal;
             }
         }
-        // dd($maestro_et);
+        // dd($intervalosUnion);
         // // // // // // // // // // // // // // // // // // // // // // // // // // // // // //
         //Salones
         $salones = Foro::where('acceso', 1)->get()->first();
         // dd($intervalosContainer);
         // dd($maestro_et);
-        $main = new Main($proyectos_maestros, $maestro_et, $intervalosUnion, $request->alpha, $request->beta, $request->q, $request->evaporation, $request->iterations, $request->ants, $request->estancado, $request->t_max, $request->t_minDenominador, $salones->num_aulas);
+        // dd($request);
+        $main = new Main($proyectos_maestros, $maestro_et, $intervalosUnion, $request->alpha, $request->beta, $request->Q, $request->evaporation, $request->iterations, $request->ants, $request->estancado,  $request->t_minDenominador, $salones->num_aulas);
         $main->start();
+        $matrizSolucion = $main->matrizSolucion;
+        $horasString = $main->problema->timeslotsHoras;
+
+        $resultado = array();
+        $resul = array();
         // dd($ants->getListMaestros());
-        return redirect('/generarHorario');
+        // foreach($matrizSolucion as $items){
+        // for($z=0;$z<$main->timeslot;$z++){
+        foreach ($matrizSolucion as $key => $items) {
+            // for ($y = 0; $y < sizeof($items); $y++) {
+                // dd($items,$items[1]);
+                foreach($items as $item){
+                    unset($aux);
+                    $aux = array_filter(explode(",",$item));
+                    // function ($value) {
+                    //     return ($value !== null && $value !== false && $value !== '');
+                    // }
+                    // dd($matrizSolucion[$items][$item]);
+                    $resul[] =$aux; //array_push($resul,$item);
+                }
+                // dd($resul);
+                // dd($resul);
+                $resultado[$key] =$resul;
+                unset($resul);
+                // dd($resul);
+
+        }
+        $maestrosTable =sizeof($proyectos_maestros[0]->maestros);
+        // dd($resultado,$matrizSolucion);AS DBN
+        $salonesTable = $salones->num_aulas;
+        // dd($salonesTable);
+        return view('oficina.horarios.horarioGenerado', compact('resultado', 'maestrosTable','salonesTable'));
+        // return view('greetings', ['name' => 'Victoria']);
+        // return redirect('horarioGenerado')->with(['horasString'=>$horasString]);
+        // return redirect('horarios');
+        // ->with(['horasString' => $horasString]);
+
     }
 }

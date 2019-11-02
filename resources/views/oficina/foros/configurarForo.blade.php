@@ -257,7 +257,7 @@
 <script type="text/javascript">
   function capturar() {
     limpiar();
-    var cantidad = document.getElementById("cantidadDias").value;
+    var cantidad = document.getElementById("cantidadDias").value;    
     var botonGuardar = document.getElementById("guardar");
     var div = document.getElementById("main");
     if (cantidad > 0) {
