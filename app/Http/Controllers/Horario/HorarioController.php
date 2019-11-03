@@ -14,7 +14,7 @@ use App\Foro;
 use App\ProyectoForo;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
-
+use Illuminate\Support\Facades\View;
 
 use App\GenerarHorario\Maestros;
 use App\GenerarHorario\Problema;
@@ -24,6 +24,7 @@ use App\GenerarHorario\Main;
 class HorarioController extends Controller
 {
     //
+
     public function index()
     {
         return view('oficina.horarios.horarios');
@@ -128,7 +129,8 @@ class HorarioController extends Controller
             // 't_max.not_in' => 'El campo de T_max no debe ser 0',
             't_minDenominador.not_in' => 'El campo de t_minDenominador no debe ser 0'
         ];
-        $this->validate($request, $rules, $messages);
+        // $this->validate($request, $rules, $messages);
+        // dd("pp");
 
         // $this->validate($request, $rules,$messages);
         // Proyectos participantes
@@ -227,32 +229,45 @@ class HorarioController extends Controller
         // for($z=0;$z<$main->timeslot;$z++){
         foreach ($matrizSolucion as $key => $items) {
             // for ($y = 0; $y < sizeof($items); $y++) {
-                // dd($items,$items[1]);
-                foreach($items as $item){
-                    unset($aux);
-                    $aux = array_filter(explode(",",$item));
-                    // function ($value) {
-                    //     return ($value !== null && $value !== false && $value !== '');
-                    // }
-                    // dd($matrizSolucion[$items][$item]);
-                    $resul[] =$aux; //array_push($resul,$item);
-                }
-                // dd($resul);
-                // dd($resul);
-                $resultado[$key] =$resul;
-                unset($resul);
-                // dd($resul);
+            // dd($items,$items[1]);
+            foreach ($items as $item) {
+                unset($aux);
+                $aux = array_filter(explode(",", $item));
+                // function ($value) {
+                //     return ($value !== null && $value !== false && $value !== '');
+                // }
+                // dd($matrizSolucion[$items][$item]);
+                $resul[] = $aux; //array_push($resul,$item);
+            }
+            // dd($resul);
+            // dd($resul);
+            $resultado[$key] = $resul;
+            unset($resul);
+            // dd($resul);
 
         }
-        $maestrosTable =sizeof($proyectos_maestros[0]->maestros);
+        $maestrosTable = sizeof($proyectos_maestros[0]->maestros);
         // dd($resultado,$matrizSolucion);AS DBN
         $salonesTable = $salones->num_aulas;
-        // dd($salonesTable);
-        return view('oficina.horarios.horarioGenerado', compact('resultado', 'maestrosTable','salonesTable'));
-        // return view('greetings', ['name' => 'Victoria']);
-        // return redirect('horarioGenerado')->with(['horasString'=>$horasString]);
-        // return redirect('horarios');
-        // ->with(['horasString' => $horasString]);
-
+        // dd($resultado);
+        // echo json_encode($resultado);        
+        return $resultado;
+        // die;
+    }
+    public function generarHorarioView()
+    {
+        $salones = Foro::select('num_aulas')->where('acceso', 1)->get()->first();
+        $salones = $salones->num_aulas;
+        $proyectos_maestros = DB::table('jurados')->select('proyectos.id', 'proyectos.titulo', DB::raw('group_concat( Distinct docentes.prefijo," ",docentes.nombre," ",docentes.paterno," ",docentes.materno) as maestros'))
+        ->join('docentes', 'jurados.id_docente', '=', 'docentes.id')
+        ->join('proyectos', 'jurados.id_proyecto', '=', 'proyectos.id')
+        ->where('proyectos.participa', 1)
+        ->groupBy('proyectos.titulo')
+        ->get()->each(function ($query) {
+            $query->maestros = explode(",", $query->maestros);
+        });
+        $maestrosTable = sizeof($proyectos_maestros[0]->maestros);
+        // dd($salones)    ;
+        return view('oficina.horarios.generarHorario', compact('maestrosTable','salones'));
     }
 }

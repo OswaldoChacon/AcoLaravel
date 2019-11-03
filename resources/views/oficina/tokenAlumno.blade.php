@@ -33,8 +33,8 @@
       <div id="guardar" style="display:none">
         <select name="profe">
           <option disabled selected class="dropdown-toggle">Profesor</option>
-          @foreach($doc as $docente)          
-          <option value="{{$docente->id}}">{{$docente->prefijo}} {{$docente->nombre}} {{$docente->paterno}} {{$docente->materno}}</option>        
+          @foreach($doc as $docente)
+          <option value="{{$docente->id}}">{{$docente->prefijo}} {{$docente->nombre}} {{$docente->paterno}} {{$docente->materno}}</option>
           @endforeach
         </select>
 
@@ -56,12 +56,12 @@
 <div class="card">
   <div class="card-body">
     <h5 class="card-title">
-      Tokens generados: <span style="font-weight: bold">{{$tokealumno->count()}}</span>
+      <span>Tokens generados: </span><span style="font-weight: bold">{{$tokealumno->count()}}</span>
       <ul class="nav justify-content-end">
-      <li class="nav-item">
-      <a href="/tokenAlumno/clean-screen" class="btn btn-primary btn-xs bnt-block btnLimpiar">Limpiar Pantalla</a>
-      </li>
-    </ul>
+        <li class="nav-item">
+          <a href="/tokenAlumno/clean-screen" class="btn btn-primary btn-sm bnt-block btnLimpiar">Limpiar Pantalla</a>
+        </li>
+      </ul>
 
     </h5>
     <div class="table-responsive">
@@ -71,7 +71,7 @@
           <th>Uso</th>
         </thead>
         <tbody>
-          @foreach ($tokealumno as $token)
+          @foreach ($tokealumno as $token)          
           @if($token->ver == 1)
           <tr>
             <td>{{$token->numerocontrol}}</td>
@@ -81,7 +81,7 @@
             <td><img src="{{asset('img/palomita.png')}}" style="height:20px;left:5%; top:30px;"></td>
             @endif
           </tr>
-        @endif
+          @endif
           @endforeach
         </tbody>
 

@@ -143,6 +143,7 @@ class Main
             $this->mejorHormigaGlobal();
             $this->updathePheromoneTrails();
             $this->reiniciarTmaxAndTmin();
+            
         }
         $this->contarViolacionesSuaves($this->currentGlobalBest);
         $this->penalizarEmpalmeMaestro($this->currentGlobalBest);

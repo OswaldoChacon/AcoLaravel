@@ -82,9 +82,12 @@ Route::get('/archivoForo2/{id}', 'OficinaController@archivoForo2')->name('archiv
 Route::get('/jurado/{id}', 'OficinaController@jurado')->name('jurado');
 Route::get('/cerrar/{id}', 'OficinaController@cerrar')->name('cerrar');
 
-Route::get('/generarHorario', function () {
-    return view('oficina.horarios.generarHorario');
-});
+Route::get('/generarHorario', 'Horario\HorarioController@generarHorarioView');
+// function () {
+//     $salones = Foro::select('num_aulas')->where('acceso', 1)->get()->first();
+//     // dd($salones);
+//     return view('oficina.horarios.generarHorario');
+// });
 
 
 // Route::get('Jprojects/get-proyectos-foro', 'OficinaController@getProyectosForo');
@@ -225,9 +228,11 @@ Route::get('Jprojects/get-proyectos-foro', 'OficinaController@getProyectosForo')
 
 Route::get('foros/horarioBreak/{id}','OficinaController@horarioBreak');
 Route::post('foros/horarioBreak','OficinaController@setHorarioBreak')->name('setHorarioBreak');
+// Route::get('horarioGenerado/{maestros}/{salones}/{resultado}','Horario\HorarioController@horarioGenerado');
 Route::get('horarioGenerado',function(){
     return view('oficina.horarios.horarioGenerado');
 });
+    // 
 
 
 
