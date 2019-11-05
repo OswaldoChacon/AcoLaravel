@@ -400,7 +400,7 @@ class OficinaController extends Controller
         }
 
         $horariosForos = DB::table('horarioforos')
-            ->select('horarioforos.horario_inicio', 'horarioforos.horario_termino', 'horarioforos.fecha_foro as fecha', 'horarioforos.id as id', 'horarioforos.horario_break as break')
+            ->select('horarioforos.horario_inicio', 'horarioforos.horario_termino', 'horarioforos.fecha_foro as fecha', 'horarioforos.id as id')
             ->join('foros', 'horarioforos.id_foro', '=', 'foros.id')
             ->where('foros.acceso', 1)
             ->where('horarioforos.id_foro', $id_foro)
@@ -774,13 +774,13 @@ class OficinaController extends Controller
             ->get();
 
             if (count($horariobreak) > 0) {
-                // $deletes = DB::table('horariodocentes')
-                // ->where('id', $horariobreak[0]->id)
-                // ->delete();
+                $deletes = DB::table('horariodocentes')
+                ->where('id', $horariobreak[0]->id)
+                ->delete();
 
-                DB::table('horariodocentes')
-                    ->where('id', $horariobreak[0]->id)
-                    ->update(['horario_break' => $hora, 'disponible' => $disponible, 'posicion' => $posicion]);
+                // DB::table('horariodocentes')
+                //     ->where('id', $horariobreak[0]->id)
+                //     ->update(['horario_break' => $hora, 'disponible' => $disponible, 'posicion' => $posicion]);
             }
             else {
                 DB::table('horariobreak')->insert([
@@ -792,6 +792,15 @@ class OficinaController extends Controller
 
                     ],
                 ]);
+
+                // $b=DB::table('horariobreak')->select('posicion')->where('id_horarioforo',$idHorarioForo)->get();
+
+                $hb= DB::table('horariodocentes')->select('id')-> where('posicion',$posicion)->get();
+                dd($hb);
+
+                // $delete = DB::table('horariodocentes')
+                // ->where('posicion', $horariobreak[0]->id)
+                // ->delete();
             }
     }
 }
