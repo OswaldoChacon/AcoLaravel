@@ -401,6 +401,7 @@ class OficinaController extends Controller
 
         $horariosForos = DB::table('horarioforos')
             ->select('horarioforos.horario_inicio', 'horarioforos.horario_termino', 'horarioforos.fecha_foro as fecha', 'horarioforos.id as id')
+            // , 'horarioforos.horario_break as break'
             ->join('foros', 'horarioforos.id_foro', '=', 'foros.id')
             ->where('foros.acceso', 1)
             ->where('horarioforos.id_foro', $id_foro)

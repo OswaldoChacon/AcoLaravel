@@ -185,10 +185,10 @@
       </thead>
       <tbody>
         <tr>
-            <th>Fecha</th>
-            <th>Horario</th>
-            <th colspan="2" align="center">Horio Break</th>
-            <th>Acciones</th>
+          <th>Fecha</th>
+          <th>Horario</th>
+          <th colspan="2" align="center">Horio Break</th>
+          <th>Acciones</th>
         </tr>
         @php
         $cont = 0;
@@ -204,45 +204,43 @@
           <td>{{$object->fecha}} </td>
           <td>{{$object->horario_inicio}} - {{$object->horario_termino}}</td>
           @foreach($horariobreak as $hb)
-            <td>{{$hb->horario_break}}</td>
+          <td>{{$hb->horario_break}}</td>
           @endforeach
-         <td>
+          <td>
             <button class="btn btn-warning">Editar horario</button>
 
             <ul class="list-unstyled components">
-                <li class="">
-                    <a href="#horas-{{$cont + 1}}" data-toggle="collapse" aria-expanded="false" class="btn btn-primary btn-sm">Agregar horario break de fecha {{$object->fecha}}</a>
-                    <ul class="collapse list-unstyled" id="horas-{{$cont + 1}}">
+              <li class="">
+                <a href="#horas-{{$cont + 1}}" data-toggle="collapse" aria-expanded="false" class="btn btn-primary btn-sm">Agregar horario break de fecha {{$object->fecha}}</a>
+                <ul class="collapse list-unstyled" id="horas-{{$cont + 1}}">
 
-                        @php
-                        for($i = 0; $i < count($intervalosContainer); $i++){ if($key==$i){ for($j=0; $j < count($intervalosContainer[$i]) ; $j++ ){ $horaExistente=false; @endphp
-                        @foreach($horariobreak as $itemC)
-                        @php if($itemC->horario_break == $intervalosContainer[$i][$j] && $object->id == $itemC->id_horarioforo){
-                        $horaExistente = true;
-                        }
-                        @endphp
-                        @endforeach
-                        <li>
-                            <div class="inputContainer">
-                                <input {{$horaExistente == false ? '' : 'checked'}} posicion="{{$posicion}}" class="checkHorarioBreak" id-horario-foros="{{$object->id}}" style="width: 25px; height: 25px" type="checkbox" name="status" value="participa">
-                                <small>{{$intervalosContainer[$i][$j]}}</small>
-                            </div>
-                        </li>
-                        @php
-                        $posicion++;
-                        }
-                        }
-                        }
-                        @endphp
+                  @php
+                  for($i = 0; $i < count($intervalosContainer); $i++){ if($key==$i){ for($j=0; $j < count($intervalosContainer[$i]) ; $j++ ){ $horaExistente=false; @endphp @foreach($horariobreak as $itemC) @php if($itemC->horario_break == $intervalosContainer[$i][$j] && $object->id == $itemC->id_horarioforo){
+                    $horaExistente = true;
+                    }
+                    @endphp
+                    @endforeach
+                    <li>
+                      <div class="inputContainer">
+                        <input {{$horaExistente == false ? '' : 'checked'}} posicion="{{$posicion}}" class="checkHorarioBreak" id-horario-foros="{{$object->id}}" style="width: 25px; height: 25px" type="checkbox" name="status" value="participa">
+                        <small>{{$intervalosContainer[$i][$j]}}</small>
+                      </div>
+                    </li>
+                    @php
+                    $posicion++;
+                    }
+                    }
+                    }
+                    @endphp
 
-                    </ul>
-                </li>
+                </ul>
+              </li>
             </ul>
             @php
             $cont++;
             @endphp
 
-         </td>
+          </td>
           <!-- <td><a href="/horarioBreak/horarioBreak"class="btn btn-primary btn-sm btnbreak">Agregar horario del break</a></td> -->
         </tr>
         @endforeach
@@ -257,7 +255,7 @@
 <script type="text/javascript">
   function capturar() {
     limpiar();
-    var cantidad = document.getElementById("cantidadDias").value;    
+    var cantidad = document.getElementById("cantidadDias").value;
     var botonGuardar = document.getElementById("guardar");
     var div = document.getElementById("main");
     if (cantidad > 0) {

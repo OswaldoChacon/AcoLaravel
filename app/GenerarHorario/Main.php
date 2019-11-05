@@ -43,11 +43,10 @@ class Main
     public $eventosProgramados = []; //List<Eventos> eventosProgramados = new ArrayList<>();
     public $eventosProgramados2 = []; //List<Eventos> eventosProgramados2 = new ArrayList<>()
 
+    public $receso;
 
 
-
-
-    public function __construct($eventosConMaestros, $maestros_et, $espaciosDeTiempo, $alpha, $beta, $q, $evaporation, $iterations, $ants, $estancado, $t_minDenominador, $num_aulas)
+    public function __construct($eventosConMaestros, $maestros_et, $espaciosDeTiempo, $alpha, $beta, $q, $evaporation, $iterations, $ants, $estancado, $t_minDenominador, $num_aulas,$receso)
     {
         // dd($espaciosDeTiempo);
         $this->problema = new Problema($eventosConMaestros, $maestros_et, $espaciosDeTiempo);
@@ -63,6 +62,11 @@ class Main
         $this->t_minDenominador = $t_minDenominador;
         // $this->t_min = $this->t_max/$this->t_minDenominador;
         $this->salones = $num_aulas;
+        foreach($receso as $itemReceso)
+        {            
+            $this->receso[] = $itemReceso->posicion;
+        }
+        // dd($this->receso);        
 
         //inicializarMatrices
         $this->pheromone = 0.0;
@@ -87,13 +91,20 @@ class Main
         // for (int i = 0; i < ants.size(); i++) {
         foreach ($this->ants as $ant) {
             for ($j = 0; $j < sizeof($this->cList); $j++) {
-                $ant->cListAlready[] = false;
+                // dd('receso',$receso);
+                $ant->cListAlready[] = false;                
                 $ant->Vi[] = 0;
                 $ant->ViolacionesDuras[] = 0;
                 $ant->Ai[] = null;
             }
-        }
-        // dd($this->problema->eventos);
+            // foreach($receso as $break){
+            foreach($this->receso as $break){
+                // dd($break);
+                $ant->cListAlready[$break] = true;       
+                // $this->probabilidad[$break->posicion] = 0.0; //.set(l, 0.0);                             
+            }                
+        }           
+        // dd($this->receso);
     }
     public function start()
     {
@@ -143,6 +154,7 @@ class Main
             $this->mejorHormigaGlobal();
             $this->updathePheromoneTrails();
             $this->reiniciarTmaxAndTmin();
+            
         }
         $this->contarViolacionesSuaves($this->currentGlobalBest);
         $this->penalizarEmpalmeMaestro($this->currentGlobalBest);
@@ -153,8 +165,13 @@ class Main
             // unset($array[$key]);
         // }
         $this->matrizSolucion = array_combine($this->problema->timeslotsHoras, $this->matrizSolucion);
+        // $this->currentGlobalBest->seTcantidadDeViolaciones(1);
+        $this->matrizViolacionesSuaves();
         // $this->imprimirSolucion = array_flip($this->problema->timeslotsHoras);
         // dd($this->currentGlobalBest);        
+    }
+    public function matrizViolacionesSuaves(){
+
     }
     public function imprimirSolucion($ant)
     {
@@ -164,7 +181,8 @@ class Main
             }
         }
         for ($k = 0; $k < sizeof($ant->Ai); $k++) {
-            for ($i = 0; $i < $this->salones; $i++) {
+            // for ($i = 0; $i < $this->salones; $i++) {
+            for ($i = 0; $i < $this->salones; $i++) {                
                 //Verifico si el "salon" esta vacio para poderlo asignar, si no lo pasó al siguiente, esto solo en la matriz de solución
                 if ($this->matrizSolucion[$ant->Ai[$k]][$i] == null) {
                     //System.out.println("No esta vacio");                
@@ -172,11 +190,18 @@ class Main
                     for ($j = 0; $j < sizeof($this->problema->eventos[$k]->maestroList); $j++) {
                         $this->matrizSolucion[$ant->Ai[$k]][$i] .= ", " . $this->problema->eventos[$k]->maestroList[$j]->nombre;
                         // eventosOrdenados.get(k).maestroList.get(j).name
-                    }
+                    }                    
+                    // dd($this->currentGlobalBest->Vi);                                        
                     break;
                 }
-            }
+            }            
         }
+        for($k=0;$k<sizeof($ant->Vi);$k++){
+            $this->matrizSolucion[$k][]= $ant->Vi[$k];
+        }
+        // dd("solucion",$this->matrizSolucion,"violaciones",$this->currentGlobalBest->Vi,"asignaciones",$ant->Ai,$this->problema->eventos);
+        // dd($this->currentGlobalBest);
+
         // foreach ($this->matrizSolucion as $key => $value) {
         //     // $i++;
         //     // if($i>1)
@@ -184,7 +209,7 @@ class Main
         //     $this->matrizSolucion[1] = $value;
         //     unset($this->matrizSolucion[$key]);
         // }
-        // $this->matrizSolucion = array_combine($this->problema->timeslotsHoras, $this->matrizSolucion);
+        // $this->matrizSolucion = array_combine($this->problema->timeslotsHoras, $this->matrizSolucion);        
     }
 
     public function reiniciarTmaxAndTmin()
@@ -248,7 +273,7 @@ class Main
             $this->t_min = $this->t_max / $this->t_minDenominador;
         } else {
             $this->encontroGlobal = false;
-        }
+        }        
     }
 
     public function busquedaLocal()
@@ -367,14 +392,16 @@ class Main
                     $indiceAsignacionEvento = $j;
                     break;
                 }
-            }
-
+            }            
             $timeslotMove = $currentTimeslot;
             $nextTS = false;
             $z = 0;
             while ($nextTS == false) {
                 $z++;
-                if ($z == $this->timeslot) {
+                // dd("espacios de tiempo recso",($this->timeslot - sizeof($this->receso)));
+                // if ($z == ($this->timeslot - sizeof($this->receso))) {
+                if ($z == ($this->timeslot)) {
+                    // dd("puto");
                     for ($k = 0; $k < $this->timeslot; $k++) {
                         $this->eventosOrdenados = array();
                         $posicionEventosProgramados = array();
@@ -415,7 +442,7 @@ class Main
                                 for ($m = 0; $m < sizeof($this->eventosProgramados2); $m++) {
                                     for ($l = 0; $l < sizeof($this->eventosProgramados[$indiceN2Evento]->maestroList); $l++) {
                                         // if (eventosProgramados2.get(m).maestroList.contains(eventosProgramados.get(indiceN2Evento).maestroList.get(l))) {
-                                        if (in_arrat($this->eventosProgramados[$indiceN2Evento]->maestroList[$l], $this->eventosProgramados2[$m]->maestroList)) {
+                                        if (in_array($this->eventosProgramados[$indiceN2Evento]->maestroList[$l], $this->eventosProgramados2[$m]->maestroList)) {
                                             $contadorN2++;
                                             break;
                                         }
@@ -478,7 +505,12 @@ class Main
                 } else {
                     $contadorNextTS = 0;
                     $timeslotMove++;
-                    if ($timeslotMove < $this->timeslot) {
+                    //evitar receso
+                    // dd($this->receso,$timeslotMove);                    
+                    // var_dump($timeslotMove);
+                    // && !in_array($timeslotMove,$this->receso)
+                    if ($timeslotMove < $this->timeslot ) {                        
+                        // dd($timeslotMove,$this->receso,!in_array($timeslotMove,$this->receso));
                         $this->eventosProgramados = array();
                         for ($j = 0; $j < sizeof($this->currentLocalBest->Ai); $j++) {
                             if ($this->currentLocalBest->Ai[$j] == $timeslotMove) {
@@ -518,7 +550,8 @@ class Main
         $this->penalizarEmpalmeMaestro($this->currentLocalBest);
         $this->contarViolacionesSuaves($this->currentLocalBest);
         if ($this->currentLocalBest->intViolacionesDuras > 0) {
-            dd("put");
+            // dd("put");
+            return 0;
         } else {
             $eventosMover = array();
             for ($i = 0; $i < sizeof($this->currentLocalBest->Vi); $i++) {
@@ -572,7 +605,9 @@ class Main
                 $z = 0;
                 while ($nextTS == false) {
                     $z++;
-                    if ($z == $this->timeslot) {
+                    
+                    // if ($z == ($this->timeslot - sizeof($this->receso))) {
+                    if ($z == ($this->timeslot)) {                        
                         $nextTS = true;
                         //System.exit(0);
                     } else {
@@ -581,6 +616,8 @@ class Main
                         //Error a veces porque asigna un espacio de tiempo fuera del intervalo                
                         //if(timeslotMove > timeslot)
                         $timeslotMove++;
+                        //receso                        
+                        // && !in_array($timeslotMove,$this->receso)
                         if ($timeslotMove < $this->timeslot) {
                             $this->eventosProgramados = array();
                             //System.out.println("TimeslotMove antes de camiar " + timeslotMove);
@@ -794,6 +831,7 @@ class Main
                 if ($contadorTime >= $this->salones) {
                     // ants.get(ant).cListAlready.set(ants.get(ant).Ai.get(i), true);
                     $ant->cListAlready[$ant->Ai[$i]] = true; //.set(ants.get(ant).Ai.get(i), true);
+                    // dd("aqui se ve el true ",$ant->cListAlready,"hormigas",$this->ants);
                 }
                 if ($contadorTime > $this->salones) {
                     // int newValue = contadorTime - salones;
@@ -846,6 +884,10 @@ class Main
                 // $ant->Ai [$j] =null;
                 $ant->cListAlready[$j] = false; //.set(j, false);
             }
+            foreach($this->receso as $break){
+                $ant->cListAlready[$break] = true;       
+                // $this->probabilidad[$break->posicion] = 0.0; //.set(l, 0.0);                             
+            }                
         }
     }
 
@@ -873,5 +915,6 @@ class Main
         $this->currentLocalBest->setRecorrido($recorrido);
         // dd($menor, "hormigaas", $this->ants,"mejor local",$this->currentLocalBest,"recorrido",$recorrido,"q",$this->q);
         // dd($this->currentLocalBest);       
-    }
+        // dd($this->currentLocalBest);
+    }    
 }

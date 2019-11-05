@@ -3,6 +3,7 @@
 @section('content')
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.1/xlsx.full.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/file-saver@2.0.2/dist/FileSaver.min.js"></script>
+<script type="text/javascript" src="{{ URL::asset('js/jquery.js') }}"></script>
 <style>
  table{
      text-align: justify;
@@ -14,8 +15,7 @@
 
 
         <div class="table-responvive">
-            <button type="button" class="btn-sm btn-primary" id="button-a">Descargar horario</button>
-
+            <button type="button" class="btn-sm btn-primary" id="btn">Descargar horario</button>
             <table class="table" id="mytable">
                 <thead>
                     <tr>
@@ -81,13 +81,7 @@
     </div>
 </div>
 
-<!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> -->
-<!-- <script type="text/javascript" src="https://unpkg.com/tableexport@5.2.0/dist/js/tableexport.js"></script> -->
 
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.1/xlsx.core.min.js"></script> -->
-<!-- <script type="text/javascript" src="{{ URL::asset('js/tableHTMLExport.js') }}"></script> -->
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.4.1/jspdf.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/2.3.5/jspdf.plugin.autotable.min.js"></script> -->
 <script>
     // $("table").tableHTMLExport({
     //     type: 'pjdf',
@@ -112,11 +106,10 @@
         for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
         return buf;
     }
-    $("#button-a").click(function() {
+    $("#btn").click(function() {
         saveAs(new Blob([s2ab(wbout)], {
             type: "application/octet-stream"
         }), 'horarios.xlsx');
     });
 </script>
-
 @endsection
