@@ -188,24 +188,37 @@
           <th>Fecha</th>
           <th>Horario</th>
           <th colspan="2" align="center">Horio Break</th>
-          <th>Acciones</th>
+          <th colspan="3" align="center">Acciones</th>
         </tr>
         @php
         $cont = 0;
+        $posicion = 0;
         @endphp
 
         @foreach ($horariosForos as $key => $object)
-
-        @php
-        $posicion = 0;
-
-        @endphp
         <tr>
           <td>{{$object->fecha}} </td>
           <td>{{$object->horario_inicio}} - {{$object->horario_termino}}</td>
-          @foreach($horariobreak as $hb)
-          <td>{{$hb->horario_break}}</td>
-          @endforeach
+          @foreach ($horariobreak as $key2 => $hb)
+          @php
+            if($object->id == $hb->id_horarioforo)
+            {
+          @endphp
+        <td> {{$hb->horario_break}}</td>
+        @php
+            }
+        @endphp
+        @endforeach
+        @foreach ($horariobreak as $key2 => $hb)
+          @php
+            if($object->id != $hb->id_horarioforo)
+            {
+          @endphp
+        <td> </td>
+        @php
+            }
+        @endphp
+        @endforeach
           <td>
             <button class="btn btn-warning">Editar horario</button>
 
@@ -215,7 +228,12 @@
                 <ul class="collapse list-unstyled" id="horas-{{$cont + 1}}">
 
                   @php
-                  for($i = 0; $i < count($intervalosContainer); $i++){ if($key==$i){ for($j=0; $j < count($intervalosContainer[$i]) ; $j++ ){ $horaExistente=false; @endphp @foreach($horariobreak as $itemC) @php if($itemC->horario_break == $intervalosContainer[$i][$j] && $object->id == $itemC->id_horarioforo){
+                  for($i = 0; $i < count($intervalosContainer); $i++){ if($key==$i){ for($j=0; $j < count($intervalosContainer[$i]) ; $j++ ){
+                    $horaExistente=false;
+                  @endphp
+                  @foreach($horariobreak as $itemC)
+                  @php
+                  if($itemC->horario_break == $intervalosContainer[$i][$j] && $object->id == $itemC->id_horarioforo){
                     $horaExistente = true;
                     }
                     @endphp

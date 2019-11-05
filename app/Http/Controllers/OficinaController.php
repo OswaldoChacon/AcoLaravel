@@ -395,7 +395,7 @@ class OficinaController extends Controller
 
             $minutos = $min[0]->minutos;
         } else {
-            Session::flash('mesage', "DEBE TENER ACTIVADO EL FORO AL CUAL DESEA GENERAR EL HORARIO, PARA PODER ASIGNAR HORARIO DISPONIBLE A LOS DOCENTES PARTICIPANTES ");
+            Session::flash('mesage', "DEBE TENER ACTIVADO EL FORO PARA ASIGNARLE SU HORARIO");
             Session::flash('alert-class', 'alert-danger');
         }
 
@@ -454,11 +454,30 @@ class OficinaController extends Controller
             ->where('forodoncentes.id_foro', $id_foro)
             ->get();
 
-            $horariobreak = DB::table('horariobreak')
-            ->where('disponible',1)
+        $horariobreak = DB::table('horariobreak')->select('id as id', 'id_horarioforo as id_hf', 'horario_break as horario_break', 'id_horarioforo as id_horarioforo')
+            ->where('disponible', 1)
             ->get();
 
-        return view('oficina.foros.configurarForo', compact('foro', 'docente', 'doc', 'horariosForos', 'name_jefe', 'intervalosContainer', 'horariosdocentes','horariobreak'));
+
+
+        $hb = DB::table('horariobreak')->select(
+            'horariobreak.posicion as p',
+            'horariobreak.id_horarioforo as id_hf',
+            'horarioforos.id as idhf'
+        )
+            ->join('horarioforos', 'horariobreak.id_horarioforo', '=', 'horarioforos.id')
+            ->where('disponible', 1)->get();
+
+        if (count($hb) > 0) {
+            foreach ($hb as $hd) {
+                $deletes = DB::table('horariodocentes')
+                    ->where('id_horarioforos', $hd->id_hf)
+                    ->where('posicion', $hd->p)
+                    ->delete();
+            }
+        }
+
+        return view('oficina.foros.configurarForo', compact('foro', 'docente', 'doc', 'horariosForos', 'name_jefe', 'intervalosContainer', 'horariosdocentes', 'horariobreak'));
     }
 
     public function agregarProfeAforo(Request $request, $id)
@@ -771,28 +790,23 @@ class OficinaController extends Controller
         $horariobreak = DB::table('horariobreak')
             ->where('id_horarioforo', $idHorarioForo)
             ->where('horario_break', $hora)
-            ->where('posicion',$posicion)
+            ->where('posicion', $posicion)
             ->get();
 
-            if (count($horariobreak) > 0) {
-                // $deletes = DB::table('horariodocentes')
-                // ->where('id', $horariobreak[0]->id)
-                // ->delete();
+        if (count($horariobreak) > 0) {
+            $deletes = DB::table('horariobreak')
+                ->where('id', $horariobreak[0]->id)
+                ->delete();
+        } else {
+            DB::table('horariobreak')->insert([
+                [
+                    'id_horarioforo' => $idHorarioForo,
+                    'horario_break' => $hora,
+                    'disponible' => $disponible,
+                    'posicion' => $posicion
 
-                DB::table('horariodocentes')
-                    ->where('id', $horariobreak[0]->id)
-                    ->update(['horario_break' => $hora, 'disponible' => $disponible, 'posicion' => $posicion]);
-            }
-            else {
-                DB::table('horariobreak')->insert([
-                    [
-                        'id_horarioforo' => $idHorarioForo,
-                        'horario_break' => $hora,
-                        'disponible' => $disponible,
-                        'posicion' => $posicion
-
-                    ],
-                ]);
-            }
+                ],
+            ]);
+        }
     }
 }
