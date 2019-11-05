@@ -188,18 +188,14 @@
           <th>Fecha</th>
           <th>Horario</th>
           <th colspan="2" align="center">Horio Break</th>
-          <th>Acciones</th>
+          <th colspan="3" align="center">Acciones</th>
         </tr>
         @php
         $cont = 0;
+        $posicion = 0;
         @endphp
 
         @foreach ($horariosForos as $key => $object)
-
-        @php
-        $posicion = 0;
-
-        @endphp
         <tr>
           <td>{{$object->fecha}} </td>
           <td>{{$object->horario_inicio}} - {{$object->horario_termino}}</td>
@@ -232,7 +228,12 @@
                 <ul class="collapse list-unstyled" id="horas-{{$cont + 1}}">
 
                   @php
-                  for($i = 0; $i < count($intervalosContainer); $i++){ if($key==$i){ for($j=0; $j < count($intervalosContainer[$i]) ; $j++ ){ $horaExistente=false; @endphp @foreach($horariobreak as $itemC) @php if($itemC->horario_break == $intervalosContainer[$i][$j] && $object->id == $itemC->id_horarioforo){
+                  for($i = 0; $i < count($intervalosContainer); $i++){ if($key==$i){ for($j=0; $j < count($intervalosContainer[$i]) ; $j++ ){
+                    $horaExistente=false;
+                  @endphp
+                  @foreach($horariobreak as $itemC)
+                  @php
+                  if($itemC->horario_break == $intervalosContainer[$i][$j] && $object->id == $itemC->id_horarioforo){
                     $horaExistente = true;
                     }
                     @endphp
