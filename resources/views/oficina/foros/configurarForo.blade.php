@@ -203,9 +203,26 @@
         <tr>
           <td>{{$object->fecha}} </td>
           <td>{{$object->horario_inicio}} - {{$object->horario_termino}}</td>
-          @foreach($horariobreak as $hb)
-          <td>{{$hb->horario_break}}</td>
-          @endforeach
+          @foreach ($horariobreak as $key2 => $hb)
+          @php
+            if($object->id == $hb->id_horarioforo)
+            {
+          @endphp
+        <td> {{$hb->horario_break}}</td>
+        @php
+            }
+        @endphp
+        @endforeach
+        @foreach ($horariobreak as $key2 => $hb)
+          @php
+            if($object->id != $hb->id_horarioforo)
+            {
+          @endphp
+        <td> </td>
+        @php
+            }
+        @endphp
+        @endforeach
           <td>
             <button class="btn btn-warning">Editar horario</button>
 

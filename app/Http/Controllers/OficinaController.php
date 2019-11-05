@@ -395,7 +395,7 @@ class OficinaController extends Controller
 
             $minutos = $min[0]->minutos;
         } else {
-            Session::flash('mesage', "DEBE TENER ACTIVADO EL FORO AL CUAL DESEA GENERAR EL HORARIO, PARA PODER ASIGNAR HORARIO DISPONIBLE A LOS DOCENTES PARTICIPANTES ");
+            Session::flash('mesage', "DEBE TENER ACTIVADO EL FORO PARA ASIGNARLE SU HORARIO");
             Session::flash('alert-class', 'alert-danger');
         }
 
@@ -454,9 +454,12 @@ class OficinaController extends Controller
             ->where('forodoncentes.id_foro', $id_foro)
             ->get();
 
-            $horariobreak = DB::table('horariobreak')
+            $horariobreak = DB::table('horariobreak')->select('id as id','id_horarioforo as id_hf','horario_break as horario_break','id_horarioforo as id_horarioforo')
             ->where('disponible',1)
             ->get();
+
+            // $horab= DB::table('horariobreak')->select('id as id','id_horarioforo as id_hf','horario_break as horario_break')->where ('disponible',1)->get();
+
 
         return view('oficina.foros.configurarForo', compact('foro', 'docente', 'doc', 'horariosForos', 'name_jefe', 'intervalosContainer', 'horariosdocentes','horariobreak'));
     }
@@ -775,13 +778,9 @@ class OficinaController extends Controller
             ->get();
 
             if (count($horariobreak) > 0) {
-                $deletes = DB::table('horariodocentes')
+                $deletes = DB::table('horariobreak')
                 ->where('id', $horariobreak[0]->id)
                 ->delete();
-
-                // DB::table('horariodocentes')
-                //     ->where('id', $horariobreak[0]->id)
-                //     ->update(['horario_break' => $hora, 'disponible' => $disponible, 'posicion' => $posicion]);
             }
             else {
                 DB::table('horariobreak')->insert([
@@ -797,7 +796,7 @@ class OficinaController extends Controller
                 // $b=DB::table('horariobreak')->select('posicion')->where('id_horarioforo',$idHorarioForo)->get();
 
                 $hb= DB::table('horariodocentes')->select('id')-> where('posicion',$posicion)->get();
-                dd($hb);
+                // dd($hb);
 
                 // $delete = DB::table('horariodocentes')
                 // ->where('posicion', $horariobreak[0]->id)
