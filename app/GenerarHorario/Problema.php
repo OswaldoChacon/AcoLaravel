@@ -52,13 +52,16 @@ class Problema
         // dd($this->timeslots);
         // dd("pu");
         // dd($this->timeslots);
-
-        if (!$this->validarExisteEspaciosEnComun()) {
-            Session::flash('message', "Algun proyecto no tiene espacios en comun para poder asignado en donde todos los maestros conincidan");
-        }
+        
         // dd($this->eventos);
         // dd("ppp");
         $this->ordenarEventos();
+        if (!$this->validarExisteEspaciosEnComun()) {
+            // return response()->json([ 'hello' => '404'], 404);
+            // return response()->json("espacios en comun", 422);
+            // dd("l");3            
+        }
+        // dd($this->eventos);
         // dd($this->eventos);
     }
     public function getListMaestros()
@@ -96,7 +99,7 @@ class Problema
         //     } else {
         //         $k++;
         //     }
-        // }
+        // }        
         return $aux_timeslot_common;
     }
     public function ordenarEventos()
@@ -120,8 +123,9 @@ class Problema
     {
         foreach ($this->eventos as $evento) {
             if ($evento->sizeComun < 1) {
+                // dd($evento);
                 return false;
-                return $evento;
+                // return $evento;
             }
             return true;
         }
