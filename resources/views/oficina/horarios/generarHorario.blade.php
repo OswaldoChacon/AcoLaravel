@@ -8,9 +8,9 @@
 
 <div class="card">
     <div class="card-body">
-        <form action="/generarHorarioAnt" method="POST">
-        @csrf
-        <!-- <meta name="csrf-token" content="{{ csrf_token() }}"> -->
+        <!-- <form action="/generarHorarioAnt" method="POST">
+        @csrf -->
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         @if (Session::has('message'))
         <div class="alert alert alert-danger" id="alert-fade">({{ Session::get('message') }})</div>
         @endif
@@ -48,9 +48,9 @@
                 <input type="number" name="t_minDenominador" class="form-control" id="test" value="5">
             </div>
         </div>
-        <!-- <button type="button" class="btn btn-sm btn-primary " id="generarHorario">Generar horario</button> -->
-        <button type="submit" class="btn btn-sm btn-primary " id="generarHorari">Generar horario</button>
-        </form>
+        <button type="button" class="btn btn-sm btn-primary " id="generarHorario">Generar horario</button>
+        <!-- <button type="submit" class="btn btn-sm btn-primary " id="generarHorari">Generar horario</button>
+        </form> -->
         <div class="container no-content" style="margin-top:10px">
         </div>
     </div>

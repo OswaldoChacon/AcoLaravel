@@ -46,7 +46,7 @@ class Main
     public $receso;
 
 
-    public function __construct($eventosConMaestros, $maestros_et, $espaciosDeTiempo, $alpha, $beta, $q, $evaporation, $iterations, $ants, $estancado, $t_minDenominador, $num_aulas,$receso)
+    public function __construct($eventosConMaestros, $maestros_et, $espaciosDeTiempo, $alpha, $beta, $q, $evaporation, $iterations, $ants, $estancado, $t_minDenominador, $num_aulas, $receso)
     {
         // dd($espaciosDeTiempo);
         $this->problema = new Problema($eventosConMaestros, $maestros_et, $espaciosDeTiempo);
@@ -62,8 +62,7 @@ class Main
         $this->t_minDenominador = $t_minDenominador;
         // $this->t_min = $this->t_max/$this->t_minDenominador;
         $this->salones = $num_aulas;
-        foreach($receso as $itemReceso)
-        {            
+        foreach ($receso as $itemReceso) {
             $this->receso[] = $itemReceso->posicion;
         }
         // dd($this->receso);        
@@ -92,18 +91,18 @@ class Main
         foreach ($this->ants as $ant) {
             for ($j = 0; $j < sizeof($this->cList); $j++) {
                 // dd('receso',$receso);
-                $ant->cListAlready[] = false;                
+                $ant->cListAlready[] = false;
                 $ant->Vi[] = 0;
                 $ant->ViolacionesDuras[] = 0;
                 $ant->Ai[] = null;
             }
             // foreach($receso as $break){
-            foreach($this->receso as $break){
+            foreach ($this->receso as $break) {
                 // dd($break);
-                $ant->cListAlready[$break] = true;       
+                $ant->cListAlready[$break] = true;
                 // $this->probabilidad[$break->posicion] = 0.0; //.set(l, 0.0);                             
-            }                
-        }           
+            }
+        }
         // dd($this->receso);
     }
     public function start()
@@ -154,15 +153,14 @@ class Main
             $this->mejorHormigaGlobal();
             $this->updathePheromoneTrails();
             $this->reiniciarTmaxAndTmin();
-            
         }
         $this->contarViolacionesSuaves($this->currentGlobalBest);
         $this->penalizarEmpalmeMaestro($this->currentGlobalBest);
         $this->imprimirSolucion($this->currentGlobalBest);
 
         // foreach ($this->currentGlobalBest as $key => $value) {
-            // $$this->currentGlobalBest[$this->problema($key)] = $value;
-            // unset($array[$key]);
+        // $$this->currentGlobalBest[$this->problema($key)] = $value;
+        // unset($array[$key]);
         // }
         $this->matrizSolucion = array_combine($this->problema->timeslotsHoras, $this->matrizSolucion);
         // $this->currentGlobalBest->seTcantidadDeViolaciones(1);
@@ -170,9 +168,8 @@ class Main
         // $this->imprimirSolucion = array_flip($this->problema->timeslotsHoras);
         // dd($this->currentGlobalBest);        
     }
-    public function matrizViolacionesSuaves(){
-
-    }
+    public function matrizViolacionesSuaves()
+    { }
     public function imprimirSolucion($ant)
     {
         for ($k = 0; $k < $this->timeslot; $k++) {
@@ -182,7 +179,7 @@ class Main
         }
         for ($k = 0; $k < sizeof($ant->Ai); $k++) {
             // for ($i = 0; $i < $this->salones; $i++) {
-            for ($i = 0; $i < $this->salones; $i++) {                
+            for ($i = 0; $i < $this->salones; $i++) {
                 //Verifico si el "salon" esta vacio para poderlo asignar, si no lo pasó al siguiente, esto solo en la matriz de solución
                 if ($this->matrizSolucion[$ant->Ai[$k]][$i] == null) {
                     //System.out.println("No esta vacio");                
@@ -190,14 +187,14 @@ class Main
                     for ($j = 0; $j < sizeof($this->problema->eventos[$k]->maestroList); $j++) {
                         $this->matrizSolucion[$ant->Ai[$k]][$i] .= ", " . $this->problema->eventos[$k]->maestroList[$j]->nombre;
                         // eventosOrdenados.get(k).maestroList.get(j).name
-                    }                    
+                    }
                     // dd($this->currentGlobalBest->Vi);                                        
                     break;
                 }
-            }            
+            }
         }
-        for($k=0;$k<sizeof($ant->Vi);$k++){
-            $this->matrizSolucion[$k][]= $ant->Vi[$k];
+        for ($k = 0; $k < sizeof($ant->Vi); $k++) {
+            $this->matrizSolucion[$k][] = $ant->Vi[$k];
         }
         // dd("solucion",$this->matrizSolucion,"violaciones",$this->currentGlobalBest->Vi,"asignaciones",$ant->Ai,$this->problema->eventos);
         // dd($this->currentGlobalBest);
@@ -273,7 +270,7 @@ class Main
             $this->t_min = $this->t_max / $this->t_minDenominador;
         } else {
             $this->encontroGlobal = false;
-        }        
+        }
     }
 
     public function busquedaLocal()
@@ -392,20 +389,27 @@ class Main
                     $indiceAsignacionEvento = $j;
                     break;
                 }
-            }            
+            }
             $timeslotMove = $currentTimeslot;
             $nextTS = false;
             $z = 0;
-            while ($nextTS == false) {
+            while ($nextTS == false) {                
                 $z++;
                 // dd("espacios de tiempo recso",($this->timeslot - sizeof($this->receso)));
-                // if ($z == ($this->timeslot - sizeof($this->receso))) {
-                if ($z == ($this->timeslot)) {
-                    // dd("puto");
+                if ($z > ($this->timeslot - sizeof($this->receso))) {                                             
+                    // echo ($z);
+                    // echo ("\n\n\n Entró a L2");
+                    // if ($z == ($this->timeslot)) {                                            
                     for ($k = 0; $k < $this->timeslot; $k++) {
-                        $this->eventosOrdenados = array();
+                        // if($k==2){
+                        // dd($k);}
+                        $this->eventosProgramados = array();
                         $posicionEventosProgramados = array();
-                        if ($k != $currentTimeslot) {
+                        // dd($this->eventosProgramados);
+                        //evitar receso
+                        // 
+                        if ($k != $currentTimeslot && !in_array($k, $this->receso)) {
+                            // dd("violaciones duras l2");
                             for ($j = 0; $j < sizeof($this->currentLocalBest->Ai); $j++) {
                                 //guardo en la lista, aquellos eventos que estan en el espacio de tiempo k para comparar con el evento a mover
                                 if ($this->currentLocalBest->Ai[$j] == $k) {
@@ -413,6 +417,7 @@ class Main
                                     $posicionEventosProgramados[] = $j;
                                 }
                             }
+                            // dd("Espacio de tiempo",$k,"Eventos programados",$this->eventosProgramados,"mejor hormiga locla",$this->currentLocalBest);
                             $contadorTest = 0;
                             $contadorN2 = 0;
                             for ($j = 0; $j < sizeof($this->eventosProgramados); $j++) {
@@ -454,7 +459,8 @@ class Main
                                     // currentLocalBest.Ai.set(posicionAiMover.get(i), k); //de donde genera el error al nuevo   al parecer ya esta
                                     $this->currentLocalBest->Ai[$posicionEventosProgramados[$indiceN2Evento]] = $currentTimeslot;  //del nuevo a donde genera el error
                                     $this->currentLocalBest->Ai[$posicionAiMover[$i]] = $k; //de donde genera el error al nuevo   al parecer ya esta
-                                    $nextTS = true;
+                                    $nextTS = true;               
+                                    // echo ("cambió L2 ContadorN2==0");
                                     $k = $this->timeslot + 1;
                                 }
                             } else if ($contadorTest == 0) {
@@ -475,7 +481,7 @@ class Main
                                             }
                                         }
                                         if ($contadorN2 == sizeof($this->eventosProgramados[$l]->maestroList)) {
-                                            $indiceN2Evento = l;
+                                            $indiceN2Evento = $l;
                                             $proyectosContadorN2++;
                                         }
                                     }
@@ -485,9 +491,17 @@ class Main
                                     // currentLocalBest.Ai.set(posicionAiMover.get(i), k); //de donde genera el error al nuevo   al parecer ya esta
                                     // indiceN2Evento = (int) (Math.random() * eventosProgramados.size());
                                     $indiceN2Evento = rand(0, sizeof($this->eventosProgramados));
+                                    if($indiceN2Evento > 0){
+                                        $indiceN2Evento -= 1;
+                                    }                                    
+                                    
+                                    // if($indiceN2Evento == 2){
+                                    //     dd("error proyectsContadorN2",$indiceN2Evento,"posivion",$posicionEventosProgramados);
+                                    // }                                    
                                     $this->currentLocalBest->Ai[$posicionEventosProgramados[$indiceN2Evento]] = $currentTimeslot;
                                     $this->currentLocalBest->Ai[$posicionAiMover[$i]] = $k;
-                                    $nextTS = true;
+                                    $nextTS = true;          
+                                    // echo ("cambió L2 proyectosContadorN2==2");                          
                                     $k = $this->timeslot + 1;
                                 }
                                 if ($proyectosContadorN2 == 1) {
@@ -496,53 +510,71 @@ class Main
 
                                     $this->currentLocalBest->Ai[$posicionEventosProgramados[$indiceN2Evento]] = $currentTimeslot;
                                     $this->currentLocalBest->Ai[$posicionAiMover[$i]] = $k;
-                                    $nextTS = true;
+                                    $nextTS = true;        
+                                    // echo ("cambió L2 proyectosContadorN2==1");                            
                                     $k = $this->timeslot + 1;
                                 }
                             }
                         }
                     }
                 } else {
+                    
                     $contadorNextTS = 0;
-                    $timeslotMove++;
-                    //evitar receso
+                    $timeslotMove++;                    
                     // dd($this->receso,$timeslotMove);                    
                     // var_dump($timeslotMove);
                     // && !in_array($timeslotMove,$this->receso)
-                    if ($timeslotMove < $this->timeslot ) {                        
-                        // dd($timeslotMove,$this->receso,!in_array($timeslotMove,$this->receso));
-                        $this->eventosProgramados = array();
-                        for ($j = 0; $j < sizeof($this->currentLocalBest->Ai); $j++) {
-                            if ($this->currentLocalBest->Ai[$j] == $timeslotMove) {
-                                $this->eventosProgramados[] = $this->problema->eventos[$j]; //.add(problema.eventosOrdenados.get(j));
-                                $contadorNextTS++;
-                            }
-                        }
-
-                        if ($contadorNextTS < $this->salones) {
-                            $contadorTest = 0;
-                            //cabe recalcar que eventosProgramados los uso para agregar a aquellos eventos que estan asignados en un mismo espacio de tiempo para poder verificar si existe o no empalme                
-                            for ($j = 0; $j < sizeof($this->eventosProgramados); $j++) {
-                                for ($k = 0; $k < sizeof($eventosMover[$i]->maestroList); $k++) {
-                                    // if (eventosMover.get(i).maestroList.contains(eventosProgramados.get(j).maestroList.get(k))) {
-                                    if (in_array($this->eventosProgramados[$j]->maestroList[$k], $eventosMover[$i]->maestroList)) {
-                                        //System.out.println("Comparando el evento problematico con el evento " + eventosProgramados.get(j).name);
-                                        //System.out.println(eventosProgramados.get(j).maestroList.get(k) + ", " + eventosMover.get(i).maestroList);
-                                        $contadorTest++;
-                                    }
+                    //evitar receso      
+                    // nuevocode
+                    // $this->eventosOrdenados = array();
+                    // $posicionEventosProgramados = array();              
+                    // echo ("\nentró a L1 ".$timeslotMove." valor de Z:".$z);
+                    if (!in_array($timeslotMove, $this->receso)) {                                                
+                        if ($timeslotMove < $this->timeslot) {
+                        // dd($this->ants);                        
+                            // dd($timeslotMove,$this->receso,!in_array($timeslotMove,$this->receso),$this->currentLocalBest->Ai);                        
+                            $this->eventosProgramados = array();
+                            // dd(sizeof($this->currentLocalBest->Ai));
+                            for ($j = 0; $j < sizeof($this->currentLocalBest->Ai); $j++) {                                                                
+                                // dd("timeslotMove",$timeslotMove,"currentlocalbest",$this->currentLocalBest->Ai[$j]);
+                                if ($this->currentLocalBest->Ai[$j] == $timeslotMove) {   
+                                    // echo ("\nError");                                 
+                                    $this->eventosProgramados[] = $this->problema->eventos[$j]; //.add(problema.eventosOrdenados.get(j));
+                                    $contadorNextTS++;
                                 }
                             }
-                            if ($contadorTest == 0) {
-                                // currentLocalBest.Ai.set(indiceAsignacionEvento, timeslotMove);
-                                $this->currentLocalBest->Ai[$indiceAsignacionEvento] = $timeslotMove;
-                                $nextTS = true;
-                                //System.out.println("El evento pudo ser reasignado");
+                            // echo (sizeof($this->eventosProgramados));
+                            // echo("contador".$contadorNextTS."\n");
+                            // echo ("\nsalio del ciclo Error");    
+                            // echo ($timeslotMove);
+                            // var_dump ($this->eventosProgramados,"\n");
+                            if ($contadorNextTS < $this->salones) {
+                                $contadorTest = 0;
+                                //cabe recalcar que eventosProgramados los uso para agregar a aquellos eventos que estan asignados en un mismo espacio de tiempo para poder verificar si existe o no empalme                
+                                for ($j = 0; $j < sizeof($this->eventosProgramados); $j++) {
+                                    for ($k = 0; $k < sizeof($eventosMover[$i]->maestroList); $k++) {
+                                        // if (eventosMover.get(i).maestroList.contains(eventosProgramados.get(j).maestroList.get(k))) {
+                                        if (in_array($this->eventosProgramados[$j]->maestroList[$k], $eventosMover[$i]->maestroList)) {
+                                            //System.out.println("Comparando el evento problematico con el evento " + eventosProgramados.get(j).name);
+                                            //System.out.println(eventosProgramados.get(j).maestroList.get(k) + ", " + eventosMover.get(i).maestroList);
+                                            $contadorTest++;
+                                        }
+                                    }
+                                }
+                                if ($contadorTest == 0) {
+                                    // currentLocalBest.Ai.set(indiceAsignacionEvento, timeslotMove);
+                                    $this->currentLocalBest->Ai[$indiceAsignacionEvento] = $timeslotMove;
+                                    // echo ("cambio");
+                                    $nextTS = true;                                    
+                                    //System.out.println("El evento pudo ser reasignado");
+                                }
+                                //System.out.println("El evento empalmado " + eventosMover.get(i).name + " Sera movido al nuevo espacio de tiempo " + timeslotMove + " en Ai se va cambiar " + indiceAsignacionEvento);
                             }
-                            //System.out.println("El evento empalmado " + eventosMover.get(i).name + " Sera movido al nuevo espacio de tiempo " + timeslotMove + " en Ai se va cambiar " + indiceAsignacionEvento);
                         }
-                    } else {
-                        $timeslotMove = -1;
-                    }
+                        else {
+                            $timeslotMove = -1;
+                        }
+                    } 
                 }
             }
         }
@@ -605,10 +637,10 @@ class Main
                 $z = 0;
                 while ($nextTS == false) {
                     $z++;
-                    
+
                     // if ($z == ($this->timeslot - sizeof($this->receso))) {
-                    if ($z == ($this->timeslot)) {                        
-                        $nextTS = true;
+                    if ($z == ($this->timeslot - sizeof($this->receso))) {
+                        $nextTS = true;                        
                         //System.exit(0);
                     } else {
                         $contadorNextTS = 0;
@@ -616,40 +648,42 @@ class Main
                         //Error a veces porque asigna un espacio de tiempo fuera del intervalo                
                         //if(timeslotMove > timeslot)
                         $timeslotMove++;
-                        //receso                        
+                        //evitar receso
                         // && !in_array($timeslotMove,$this->receso)
                         if ($timeslotMove < $this->timeslot) {
-                            $this->eventosProgramados = array();
-                            //System.out.println("TimeslotMove antes de camiar " + timeslotMove);
-                            for ($j = 0; $j < sizeof($this->currentLocalBest->Ai); $j++) {
-                                if ($this->currentLocalBest->Ai[$j] == $timeslotMove) {
-                                    $this->eventosProgramados[] = $this->problema->eventos[$j];
-                                    $contadorNextTS++;
+                            if (!in_array($timeslotMove, $this->receso)) {
+                                $this->eventosProgramados = array();
+                                //System.out.println("TimeslotMove antes de camiar " + timeslotMove);
+                                for ($j = 0; $j < sizeof($this->currentLocalBest->Ai); $j++) {
+                                    if ($this->currentLocalBest->Ai[$j] == $timeslotMove) {
+                                        $this->eventosProgramados[] = $this->problema->eventos[$j];
+                                        $contadorNextTS++;
+                                    }
                                 }
-                            }
-                            if ($contadorNextTS < $this->salones) {
-                                $contadorTest = 0;
-                                //cabe recalcar que eventosProgramados los uso para agregar a aquellos eventos que estan asignados en un mismo espacio de tiempo para poder verificar si existe o no empalme                
-                                for ($j = 0; $j < sizeof($this->eventosProgramados); $j++) {
-                                    for ($k = 0; $k < sizeof($eventosMover[$i]->maestroList); $k++) {
-                                        // if (eventosMover.get(i).maestroList.contains(eventosProgramados.get(j).maestroList.get(k))) {
-                                        if (in_array($this->eventosProgramados[$j]->maestroList[$k], $eventosMover[$i]->maestroList)) {
-                                            //System.out.println("Comparando el evento problematico con el evento " + eventosProgramados.get(j).name);
-                                            //System.out.println(eventosProgramados.get(j).maestroList.get(k) + ", " + eventosMover.get(i).maestroList);
-                                            $contadorTest++;
+                                if ($contadorNextTS < $this->salones) {
+                                    $contadorTest = 0;
+                                    //cabe recalcar que eventosProgramados los uso para agregar a aquellos eventos que estan asignados en un mismo espacio de tiempo para poder verificar si existe o no empalme                
+                                    for ($j = 0; $j < sizeof($this->eventosProgramados); $j++) {
+                                        for ($k = 0; $k < sizeof($eventosMover[$i]->maestroList); $k++) {
+                                            // if (eventosMover.get(i).maestroList.contains(eventosProgramados.get(j).maestroList.get(k))) {
+                                            if (in_array($this->eventosProgramados[$j]->maestroList[$k], $eventosMover[$i]->maestroList)) {
+                                                //System.out.println("Comparando el evento problematico con el evento " + eventosProgramados.get(j).name);
+                                                //System.out.println(eventosProgramados.get(j).maestroList.get(k) + ", " + eventosMover.get(i).maestroList);
+                                                $contadorTest++;
+                                            }
                                         }
                                     }
-                                }
-                                if ($contadorTest == 0) {
-                                    // if (eventosMover.get(i).espaciosComun.contains(timeslotMove)) {
-                                    if (in_array($timeslotMove, $eventosMover[$i]->espaciosComun)) {
-                                        // currentLocalBest.Ai.set(indiceAsignacionEvento, timeslotMove);
-                                        $this->currentLocalBest->Ai[$indiceAsignacionEvento] = $timeslotMove;
-                                        $nextTS = true;
+                                    if ($contadorTest == 0) {
+                                        // if (eventosMover.get(i).espaciosComun.contains(timeslotMove)) {
+                                        if (in_array($timeslotMove, $eventosMover[$i]->espaciosComun)) {
+                                            // currentLocalBest.Ai.set(indiceAsignacionEvento, timeslotMove);
+                                            $this->currentLocalBest->Ai[$indiceAsignacionEvento] = $timeslotMove;
+                                            $nextTS = true;                                            
+                                        }
+                                        //System.out.println("El evento pudo ser reasignado");
                                     }
-                                    //System.out.println("El evento pudo ser reasignado");
+                                    //System.out.println("El evento empalmado " + eventosMover.get(i).name + " Sera movido al nuevo espacio de tiempo " + timeslotMove + " en Ai se va cambiar " + indiceAsignacionEvento);
                                 }
-                                //System.out.println("El evento empalmado " + eventosMover.get(i).name + " Sera movido al nuevo espacio de tiempo " + timeslotMove + " en Ai se va cambiar " + indiceAsignacionEvento);
                             }
                         } else {
                             $timeslotMove = -1;
@@ -884,10 +918,10 @@ class Main
                 // $ant->Ai [$j] =null;
                 $ant->cListAlready[$j] = false; //.set(j, false);
             }
-            foreach($this->receso as $break){
-                $ant->cListAlready[$break] = true;       
+            foreach ($this->receso as $break) {
+                $ant->cListAlready[$break] = true;
                 // $this->probabilidad[$break->posicion] = 0.0; //.set(l, 0.0);                             
-            }                
+            }
         }
     }
 
@@ -916,5 +950,5 @@ class Main
         // dd($menor, "hormigaas", $this->ants,"mejor local",$this->currentLocalBest,"recorrido",$recorrido,"q",$this->q);
         // dd($this->currentLocalBest);       
         // dd($this->currentLocalBest);
-    }    
+    }
 }
