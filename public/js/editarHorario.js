@@ -1,16 +1,16 @@
-$(document).on("click",".checkHorarioJurado",function(){
+$(document).on("click",".modal .cambiar",function(){
     $(".loaderContainer").addClass('active');
-    var idDocente = $(this).attr('id-docente');
-    var idHorarioForo = $(this).attr('id-horario-foros');
-    var hora = $(this).parent().find("small").text();
-    var disponible = $(this).prop('checked') == true ? 1 : 0;
-    var posicion  = $(this).attr('posicion');
+    var element = $(this).parent().parent();
+    var fecha = element.find("input[name='fecha']").val();
+    var inicio = element.find("input[name='h_inicio']").val();
+    var termino = element.find("input[name='h_termino']").val();
+    var idHorario = element.find("input[name='idHorario']").val();
     var token = $("[name='_token']").val();
     $.ajax({
         headers: {'X-CSRF-TOKEN': token},
         type: "POST",
-        url: "/addHour/setHorarioJurado",
-        data: {'idDocente': idDocente, 'idHorarioForo': idHorarioForo, 'hora':hora, 'disponible': disponible, 'posicion': posicion},
+        url: "/foros/editarHorario",
+        data: { 'fecha': fecha, 'inicio':inicio, 'termino': termino, 'idHorario' : idHorario},
         success: function(){
             console.log("bien");
             $(".loaderContainer").removeClass('active');
@@ -37,4 +37,4 @@ $(document).on("click",".checkHorarioJurado",function(){
                 }, 3000);
         }
     });
-})
+});
