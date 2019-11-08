@@ -138,13 +138,15 @@ class HorarioController extends Controller
         $proyectos = ProyectoForo::where('participa', 1)->get();
 
         //receso
-        $receso = DB::table('horariobreak')->select('posicion')
+        $receso = DB::table('horariobreak')->select('horariobreak.posicion')
         ->join('horarioforos','horariobreak.id_horarioforo','=','horarioforos.id')
-        ->join('foros','horarioforos.id','=','foros.id')
-        ->where('acceso',1)->get()->toArray();
+        ->join('foros','horarioforos.id_foro','=','foros.id')
+        ->where('foros.acceso','=',1)->get()->toArray();
+
+        // $test = DB::table('horariobreak')->select('posicion')->get()->toArray();
+        // dd($test,$receso);
         // dd("array",$receso);
-        // SELECT foros.titulo,horariobreak.posicion from horariobreak inner JOIN
-        //  horarioforos on horariobreak.id_horarioforo = horarioforos.id inner JOIN foros on horarioforos.id_foro=foros.id where foros.acceso = 1
+        
         
 
         //proyectos ya con los maestros asociados verificar
@@ -155,8 +157,7 @@ class HorarioController extends Controller
             ->groupBy('proyectos.titulo')
             ->get()->each(function ($query) {
                 $query->maestros = explode(",", $query->maestros);
-            });
-
+            });            
         //solo maestros participantes a un proectos
         // $maestros_participantes = DB::table('jurados')->select('jurados.id','docentes.id as iddocente','docentes.nombre')
         // ->join('docentes','jurados.id_docente','=','docentes.id')
@@ -180,6 +181,7 @@ class HorarioController extends Controller
                 });
                 // $query->horas = array_map("intval",explode(",", $query->horas));
             });        
+            // dd($maestro_et);
         //espacios de tiempo
         $horarios = DB::table('horarioforos')
             ->select('horario_inicio as inicio', 'horario_termino as termino', 'fecha_foro as fecha', 'horarioforos.id as id')

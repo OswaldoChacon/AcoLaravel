@@ -51,7 +51,7 @@
         <button type="button" class="btn btn-sm btn-primary " id="generarHorario">Generar horario</button>
         <!-- <button type="submit" class="btn btn-sm btn-primary " id="generarHorari">Generar horario</button>
         </form> -->
-        <div class="container no-content" style="margin-top:10px">
+        <div class="container no-content" style="margin-top:10px; ">
         </div>
     </div>
 </div>
@@ -233,7 +233,7 @@
                 });
                 var table = $('#horarioGenerado').DataTable({
                     "language": {
-                        "emptyTable": "No se han podido cargar el horario"
+                        "emptyTable": "No se ha podido cargar el horario"
                     },
                     destroy: true,
                     "paging": false,
@@ -255,6 +255,7 @@
                         },
                         {
                             extend: 'pdfHtml5',
+                            orientation: 'landscape',
                             exportOptions: {
                                 columns: ':visible'
                             }
