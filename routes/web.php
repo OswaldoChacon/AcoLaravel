@@ -54,6 +54,7 @@ Route::post('agregarProfeAforo/{id}', 'OficinaController@agregarProfeAforo')->na
 Route::post('agregarProfeAforoJurado/{id}', 'OficinaController@agregarProfeAforoJurado')->name('agregarProfeAforoJurado');
 Route::post('actualizarDuracion/{id}', 'OficinaController@actualizarDuracion')->name('actualizarDuracion');
 Route::post('numAulas/{id}', 'OficinaController@numAulas')->name('numAulas');
+Route::post('numMaestros/{id}', 'OficinaController@numMaestros')->name('numMaestros');
 
 /////////////////////////////////						GET					/////////////////////////////////////////
 
@@ -215,6 +216,8 @@ Route::delete('sheets/{id}', 'EvidenciasController@destroy')->name('sheets.destr
 
 Route::post('horarios/edit-participa', 'Horario\HorarioProyectosController@editarParticipa');
 Route::post('addHourForo/{id}', 'Horario\HorarioController@addHourForo')->name('addHourForo');
+
+// Route::post('/actualizarHorarioForo/{id}', 'Horario\HorarioController@addHourForo')->name('actualizarHorarioForo');
 Route::post('addHourDocente/{id}', 'Horario\addHourController@addHourDocente')->name('addHourForo');
 
 Route::post('/generarHorarioAnt','Horario\HorarioController@generarHorario');
@@ -226,15 +229,22 @@ Route::get('addHour', 'Horario\HorarioJuradoController@index');
 Route::get('profes/horarios/{id?}', 'Horario\addHourController@agregarHorarios')->name('horariomaestro');
 Route::get('Jprojects/get-proyectos-foro', 'OficinaController@getProyectosForo');
 
+
+Route::post('foros/editarHorario', 'Horario\HorarioController@actualizarHorarioForo')->name('actualizarHorarioForo');
+
+Route::post('foros/borrarHorario', 'Horario\HorarioController@borrarHorarioForo')->name('borrarHorarioForo');
+
+
 Route::get('foros/horarioBreak/{id}','OficinaController@horarioBreak');
 Route::post('foros/horarioBreak','OficinaController@setHorarioBreak')->name('setHorarioBreak');
+
 // Route::get('horarioGenerado/{maestros}/{salones}/{resultado}','Horario\HorarioController@horarioGenerado');
 Route::get('horarioGenerado',function(){
     return view('oficina.horarios.horarioGenerado');
 });
-    // 
+    //
 
-
+    Route::post('actualizarHorarioForo/{id}', 'Horario\HorarioController@actualizarHorarioForo')->name('actualizarHorarioForo');
 
 
 

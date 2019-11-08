@@ -458,25 +458,6 @@ class OficinaController extends Controller
             ->where('disponible', 1)
             ->get();
 
-
-
-        $hb = DB::table('horariobreak')->select(
-            'horariobreak.posicion as p',
-            'horariobreak.id_horarioforo as id_hf',
-            'horarioforos.id as idhf'
-        )
-            ->join('horarioforos', 'horariobreak.id_horarioforo', '=', 'horarioforos.id')
-            ->where('disponible', 1)->get();
-
-        if (count($hb) > 0) {
-            foreach ($hb as $hd) {
-                $deletes = DB::table('horariodocentes')
-                    ->where('id_horarioforos', $hd->id_hf)
-                    ->where('posicion', $hd->p)
-                    ->delete();
-            }
-        }
-
         return view('oficina.foros.configurarForo', compact('foro', 'docente', 'doc', 'horariosForos', 'name_jefe', 'intervalosContainer', 'horariosdocentes', 'horariobreak'));
     }
 
@@ -666,6 +647,18 @@ class OficinaController extends Controller
         return redirect("configurarForo/$id");
     }
 
+    public function numMaestros(Request $requ, $id)
+    {
+
+        $id = Crypt::decrypt($id);
+        $numMaestros = Foro::find($id);
+        $numMaestros->num_maestros= $requ->numMaestros;
+        $numMaestros->save();
+
+        $id = Crypt::encrypt($id);
+        return redirect("configurarForo/$id");
+    }
+
     public function actualizarDuracion(Request $request, $id)
     {
         $id = Crypt::decrypt($id);
@@ -792,7 +785,7 @@ class OficinaController extends Controller
             ->where('horario_break', $hora)
             ->where('posicion', $posicion)
             ->get();
-        
+
 
         if (count($horariobreak) > 0) {
             $deletes = DB::table('horariobreak')
@@ -809,8 +802,6 @@ class OficinaController extends Controller
                 ],
             ]);
 
-
-
             $hb = DB::table('horariobreak')->select(
                 'horariobreak.posicion as p',
                 'horariobreak.id_horarioforo as id_hf',
@@ -818,7 +809,7 @@ class OficinaController extends Controller
             )
                 ->join('horarioforos', 'horariobreak.id_horarioforo', '=', 'horarioforos.id')
                 ->where('disponible', 1)->get();
-    
+
             if (count($hb) > 0) {
                 foreach ($hb as $hd) {
                     $deletes = DB::table('horariodocentes')
