@@ -171,8 +171,10 @@ class Main
         // $$this->currentGlobalBest[$this->problema($key)] = $value;
         // unset($array[$key]);
         // }
+
         $this->matrizSolucion = array_combine($this->problema->timeslotsHoras, $this->matrizSolucion);
-        // $this->currentGlobalBest->seTcantidadDeViolaciones(1);
+
+        
         $this->matrizViolacionesSuaves();
         // $this->imprimirSolucion = array_flip($this->problema->timeslotsHoras);
         // dd($this->currentGlobalBest);        
@@ -204,7 +206,7 @@ class Main
         }
         for ($k = 0; $k < sizeof($ant->Vi); $k++) {
             $this->matrizSolucion[$k][] = $ant->Vi[$k];
-        }
+        }        
         // dd("solucion",$this->matrizSolucion,"violaciones",$this->currentGlobalBest->Vi,"asignaciones",$ant->Ai,$this->problema->eventos);
         // dd($this->currentGlobalBest);
 
