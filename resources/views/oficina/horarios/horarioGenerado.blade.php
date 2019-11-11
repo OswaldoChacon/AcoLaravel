@@ -2,95 +2,52 @@
 
 @section('content')
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.1/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js"></script>
+
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/file-saver@2.0.2/dist/FileSaver.min.js"></script>
 <script type="text/javascript" src="{{ URL::asset('js/jquery.js') }}"></script>
 <style>
- table{
-     text-align: justify;
- }
+    table {
+        text-align: justify;
+    }
 </style>
 <div class="card">
     <div class="card-body">
-
-
-
-        <div class="table-responvive">
-            <button type="button" class="btn-sm btn-primary" id="btn">Descargar horario</button>
-            <table class="table" id="mytable">
-                <thead>
-                    <tr>
-                        <?php
-                        echo ('<th>Fecha</th>');
-                        for ($z = 0; $z < $salonesTable; $z++) {
-                            echo ('<th>Clave</th>');
-                            for ($y = 0; $y < $maestrosTable; $y++) {
-                                echo ('<th>Maestro</th>');
-                            }
-                            echo ('<th></th>');
-                        }
-                        ?>
-                    </tr>
-                </thead>
-                <?php foreach ($resultado as $key => $event) {
-                    echo ('<tr>');
-                    echo ('<td>' . $key . '</td>');
-                    foreach ($event as $titles) {
-                        foreach ($titles as $item) {
-                            echo ('<td>' . $item . '</td>');
-                        }
-                        echo ('<td></td>');
-                    }
-                    // foreach ($value as $cell) {
-                    //     echo ('<td>' . $cell . '</td>');
-                    // }
-                    echo ('</tr>');
-                } ?>
+        <!-- <a href="{{ route('donwloadPDF') }}" class="btn btn-sm btn-primary"> -->
+        <button class="btn btn-primary" id="btn">Descargar en Excel</button>
+        <button class="btn btn-primary" onclick="demoFromHTML()">PDF</button>
+        <!-- </a> -->
+        <div id="mytable">
+            <table class=" table">
+                <tr>llsls</tr>
+                @foreach($resultado as $date => $dates)
+                <tr>
+                    <td colspan="10" style="background:red;  text-align:center">{{$date}}</td>
+                </tr>
+                @foreach($dates as $hour => $hours)
+                <tr>
+                    <td>{{$hour}}</td>
+                    @foreach($hours as $event => $events)
+                    @if($events == null)
+                    @for($z = 0; $z < $maestrosTable+1; $z++) <td>
+                        </td>
+                        @endfor
+                        @endif
+                        @foreach($events as $item)
+                        <td>{{$item}}</td>
+                        @endforeach
+                        @endforeach
+                </tr>
+                @endforeach
+                @endforeach
             </table>
         </div>
-        <!-- <table class="table">                       
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Handle</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
-                </tr>
-            </tbody>
-        </table> -->
 
     </div>
 </div>
 
 
 <script>
-    // $("table").tableHTMLExport({
-    //     type: 'pjdf',
-    //     filename: 'sample.pdf',
-    //     orientation:'p'
-
-    //     // ignoreColumns: '.ignore',
-    //     // ignoreRows: '.ignore'
-    // });
     var wb = XLSX.utils.table_to_book(document.getElementById('mytable'), {
         sheet: "horarios"
     });
@@ -111,5 +68,44 @@
             type: "application/octet-stream"
         }), 'horarios.xlsx');
     });
+
+    function demoFromHTML() {
+        var pdf = new jsPDF('p', 'pt', 'letter');
+        // source can be HTML-formatted string, or a reference
+        // to an actual DOM element from which the text will be scraped.
+        source = $('#mytable')[0];
+
+        // we support special element handlers. Register them with jQuery-style 
+        // ID selector for either ID or node name. ("#iAmID", "div", "span" etc.)
+        // There is no support for any other type of selectors 
+        // (class, of compound) at this time.
+        specialElementHandlers = {
+            // element with id of "bypass" - jQuery style selector
+            '#bypassme': function(element, renderer) {
+                // true = "handled elsewhere, bypass text extraction"
+                return true
+            }
+        };
+        margins = {
+            top: 80,
+            bottom: 60,
+            left: 40,
+            width: 522
+        };
+        // all coords and widths are in jsPDF instance's declared units
+        // 'inches' in this case
+        pdf.fromHTML(
+            source, // HTML string or DOM elem ref.
+            margins.left, // x coord
+            margins.top, { // y coord
+                'width': margins.width, // max width of content on PDF
+                'elementHandlers': specialElementHandlers
+            },
+            function(dispose) {
+                // dispose: object with X, Y of the last line add to the PDF 
+                //          this allow the insertion of new lines after html
+                pdf.save('Test.pdf');
+            }, margins);
+    }
 </script>
 @endsection

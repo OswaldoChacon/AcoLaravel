@@ -46,11 +46,12 @@ return [
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),
+            // 'root' => public_path('horarios'),
         ],
 
         'public' => [
             'driver' => 'local',
-            'root' => storage_path('app/public'),
+            'root' => storage_path('app/public/horarios'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],

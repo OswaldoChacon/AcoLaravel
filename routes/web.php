@@ -244,14 +244,29 @@ Route::get('horarioGenerado', function () {
 });
 
 Route::get('proyectos', 'Horario\HorarioController@proyectosHorarioMaestros');
-// function () {               
-        // return view('oficina.horarios.proyectos');
-// });
 
 Route::post('actualizarHorarioForo/{id}', 'Horario\HorarioController@actualizarHorarioForo')->name('actualizarHorarioForo');
 
+Route::get('donwloadPDF','Horario\HorarioController@pdf')->name('donwloadPDF');
 
+Route::post('guardarHorarioPDF','Horario\HorarioController@savePDF');
 
+Route::get('/horario', function () {
+    // $filepath = 'horario.pdf';
+    // return response()->file(storage_path($filepath));
+    $filename = 'horario.pdf';
+    return response( Storage::disk('public')->get($filename), 200)
+    ->header('Content-Type', Storage::disk('public')
+        ->mimeType($filename)
+    );    
+
+});
+
+Route::get('horarioForo',function(){
+    return view('oficina.horarios.horaForo');
+});
+
+Route::get('excel','Horario\HorarioController@excel');
 // Route::get('horarios','Horario\HorarioController@index')->name('horarios');
 
 // Acceso a la vista de horarios donde se creara todo lo de las hormigas

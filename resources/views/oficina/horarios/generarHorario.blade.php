@@ -5,7 +5,6 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css">
 
-
 <div class="card">
     <div class="card-body">
         <!-- <form action="/generarHorarioAnt" method="POST">
@@ -66,13 +65,14 @@
             <tr>
                 <?php
                 echo ('<th>Fecha</th>');
+                echo ('<th>Hora</th>');
                 for ($z = 0; $z < $salones; $z++) {
                     echo ('<th>Clave</th>');
                     for ($y = 0; $y < $maestrosTable; $y++) {
                         echo ('<th>Maestro</th>');
                     }
                 }
-                echo ('<th>Violaciones de restricciones suaves</th>')
+                echo ('<th class="not-export">Violaciones de restricciones suaves</th>')
                 ?>
             </tr>
         </thead>
@@ -95,12 +95,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.6.0/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.6.0/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.0/js/buttons.colVis.min.js"></script>
 
 
 <script>
     // var salones = {{$salones}};
     // var maestros = {{$maestrosTable}} + 1;
     //  console.log(maestros);
+    var columns = document.getElementById('horarioGenerado').rows[0].cells.length
     $("#generarHorario").on('click', function() {
         $('div').remove('.remove');
         var alpha = $('input[name="alpha"]').val();
@@ -147,14 +149,15 @@
                 $.each(data, function(date, dates) {      
                     // alert(data[date]);                                       
                     tableHour += '<tr>';                
-                    tableHour += '<td colspan="10" style="background:red; text-align:center">'+date+'</td>';                    
-                    for (var z = 0; z < 9; z++) {                                
+                    tableHour += '<td colspan="'+columns+'">'+date+'</td>';                    
+                    for (var z = 0; z < columns-1; z++) {                                
                         tableHour += '<td style="display:none"></td>';                                
                     }                                         
                     tableHour += '</tr>';
                     // console.log(data[date]);
                     $.each(data[date],function(hour,hours){                                 
                         tableHour += '<tr>';
+                        tableHour += '<td></td>';
                         tableHour += '<td>' + hour + '</td>';
                         // console.log(data[date][hour]);                                                
                         $.each(data[date][hour], function(event, events) {                            
@@ -172,14 +175,14 @@
                         });
                         tableHour += '</tr>';
                     });     
-                    for (var z = 0; z < 2; z++) {                                
-                        tableHour += '<tr>';
-                        for (var y = 0; y < 10; y++) {                             
-                            tableHour += '<td></td>';                                
-                        }   
-                        tableHour += '</tr>';
-                    }                                                       
-                });
+                    // for (var z = 0; z < 2; z++) {                                
+                    //     tableHour += '<tr>';                                                
+                    //     for (var y = 0; y < columns; y++) {                             
+                    //         tableHour += '<td></td>';                                
+                    //     }   
+                    //     tableHour += '</tr>';
+                    // }                                                       
+                });                
                 var table = $('#horarioGenerado').DataTable({
                     "language": {
                         "emptyTable": "No se ha podido cargar el horario"
@@ -189,30 +192,47 @@
                     "ordering": false,
                     "info": false,
                     "searching": false,
+                    "autoWidth": true,
                     dom: 'Bfrtip',
                     "aoColumnDefs": [{
                         "aTargets": ['_all'],
                         "bSortable": false
                     }],
-                    buttons: [                   
+                    // "columns": [],                    
+                    buttons: [                           
                         {
                             extend: 'excelHtml5',
+                            className: "btn btn-primary",                
+                            messageTop: {{$maestrosTable}},
                             exportOptions: {
-                                columns: ':visible'
+                                columns: ':visible'                                
                             }
                             // "bShowAll": true
                         },
 
                         {
                             extend: 'pdfHtml5',
+                            messageTop: {{$maestrosTable}},
                             orientation: 'landscape',
                             exportOptions: {
-                                columns: ':visible'
+                                // columns: [columns]
+                                // columns: ':visible'
+                                // columns: [ columns, ':false' ]
+                                columns: ':visible:not(.not-export)'
                             }
                         },
+                        {
+                            extend:'colvis',
+                            text: 'Ocultar columna'
+                        },                 
+                        {
+                            extend:'copy',
+                            text: 'Copiar'
+                        },    
                     ]
                 });
                 table.clear();
+                // $('#horarioGenerado').append('<caption style="caption-side: bottom">A fictional company\'s staff table.</caption>');
                 table.rows.add($(tableHour)).draw();                
             },
             error: function(error) {

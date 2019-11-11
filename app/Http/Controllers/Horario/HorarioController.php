@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
 
+use PDF;
+use Maatwebsite\Excel\Concerns\FromView;
+
 use App\GenerarHorario\Maestros;
 use App\GenerarHorario\Problema;
 use App\GenerarHorario\Main;
@@ -256,7 +259,39 @@ class HorarioController extends Controller
         // dd($resultado);
         // $resultado_aux [] ="hola";
         // return $resultado_aux;
+        $maestrosTable = sizeof($proyectos_maestros[0]->maestros);
+        // $pdf = PDF::loadView('oficina.horarios.horas',compact('resultado','maestrosTable'))->setPaper('L', 'landscape');
+        // // ->save(public_path().'/horarios/horario.pdf');
+        //   return $pdf->stream('testfile.pdf')                
+        //        ->header('Content-Type','application/pdf');               
+        // return view('oficina.horarios.horarioGenerado',compact('resultado','maestrosTable'));
         return $resultado;
+    }
+    public function pdf(){
+        $data = [
+            'title' => 'First PDF for Medium',
+            'heading' => 'Hello from 99Points.info',
+            'content' => 'Lore.'        
+              ];
+          
+          $pdf = PDF::loadView('oficina.horarios.horas',$data);
+          return $pdf->stream('testfile.pdf')
+               ->header('Content-Type','application/pdf');
+        //   $pdf->render();
+        //   $pdf->loadHTML($view);
+        //   return $pdf->download('medium.pdf');
+    }
+    public function excel(){
+
+    }
+    
+    public function savePDF(Request $request){
+        // dd($request);
+        $file = $request->file('file');
+        $nombre = $file->getClientOriginalName();
+        // dd($nombre);
+        \Storage::disk('public')->put($nombre,  \File::get($file));
+
     }
     public function generarHorarioView()
     {
@@ -380,5 +415,5 @@ class HorarioController extends Controller
                 ->where('id', $hd->id)
                 ->delete();
         }
-    }
+    }    
 }
