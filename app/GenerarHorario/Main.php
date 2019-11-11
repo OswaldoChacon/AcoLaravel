@@ -103,6 +103,7 @@ class Main
                 // $this->probabilidad[$break->posicion] = 0.0; //.set(l, 0.0);                             
             }
         }
+        // dd($this->ants,$this->receso);
         // dd($this->receso);
     }
     public function start()
@@ -118,12 +119,17 @@ class Main
         // dd($this->ants);
         for ($i = 0; $i < $this->numberIteration; $i++) {
             $this->reset();
+            // dd($this->ants,$this->currentLocalBest,$this->probabilidad);
+            // if($i==2){
+            //     dd($i,$this->ants,$this->currentLocalBest,$this->probabilidad);
+            // }
             // for (int j = 0; j < ants.size(); j++) {
             foreach ($this->ants as $ant) {
                 // dd($ant);
                 for ($k = 0; $k < sizeof($this->problema->eventos); $k++) {
                     // foreach($this->problema->eventos as $evento){
                     $this->CalcularProbabilidades($k, $ant);
+                    // dd($ant,$this->probabilidad);
                     $numberDouble = (float) rand() / (float) getrandmax();
                     $total = 0;
                     for ($l = 0; $l < sizeof($this->cList); $l++) {
@@ -138,15 +144,18 @@ class Main
                             //System.out.println("Asignaciones: " + ants.get(j).Ai);
                             break;
                         }
-                    }
-                    $this->penalizar($ant);
-                    $this->penalizarMaestro($ant, $k, "$currentIndex");
+                    }                    
+                    $this->penalizar($ant);                                        
+                    $this->penalizarMaestro($ant, $k, "$currentIndex");                    
                     // $test++;
                 }
-                $this->penalizarEmpalmeMaestro($ant);
-                // dd("pp", $total, "ll", $ant);
+                $this->penalizarEmpalmeMaestro($ant);                
+                // dd($ant,$this->probabilidad);
             }
+            // dd($this->problema->eventos);
+            // dd($ant,$numberDouble,$total,$this->probabilidad);
             $this->mejorHormigaLocal();
+            // dd($this->ants,$this->currentLocalBest,$this->probabilidad);
             $this->busquedaLocal();
             $this->penalizarEmpalmeMaestro($this->currentLocalBest);
             $this->contarViolacionesSuaves($this->currentLocalBest);
@@ -162,8 +171,10 @@ class Main
         // $$this->currentGlobalBest[$this->problema($key)] = $value;
         // unset($array[$key]);
         // }
+
         $this->matrizSolucion = array_combine($this->problema->timeslotsHoras, $this->matrizSolucion);
-        // $this->currentGlobalBest->seTcantidadDeViolaciones(1);
+
+        
         $this->matrizViolacionesSuaves();
         // $this->imprimirSolucion = array_flip($this->problema->timeslotsHoras);
         // dd($this->currentGlobalBest);        
@@ -195,7 +206,7 @@ class Main
         }
         for ($k = 0; $k < sizeof($ant->Vi); $k++) {
             $this->matrizSolucion[$k][] = $ant->Vi[$k];
-        }
+        }        
         // dd("solucion",$this->matrizSolucion,"violaciones",$this->currentGlobalBest->Vi,"asignaciones",$ant->Ai,$this->problema->eventos);
         // dd($this->currentGlobalBest);
 
@@ -395,6 +406,7 @@ class Main
             $z = 0;
             while ($nextTS == false) {                
                 $z++;
+                // dd(($this->receso));
                 // dd("espacios de tiempo recso",($this->timeslot - sizeof($this->receso)));
                 if ($z > ($this->timeslot - sizeof($this->receso))) {                                             
                     // echo ($z);
@@ -409,6 +421,7 @@ class Main
                         //evitar receso
                         // 
                         if ($k != $currentTimeslot && !in_array($k, $this->receso)) {
+                            // dd(($this->receso));
                             // dd("violaciones duras l2");
                             for ($j = 0; $j < sizeof($this->currentLocalBest->Ai); $j++) {
                                 //guardo en la lista, aquellos eventos que estan en el espacio de tiempo k para comparar con el evento a mover
@@ -878,12 +891,19 @@ class Main
         }
     }
     public function CalcularProbabilidades($evento, $ant)
-    {
+    {        
+        // dd($this->matrizPheromoneT);
         $this->pheromone = 0.0;
         //cListUpdate(cList, cListAlready);
         for ($l = 0; $l < sizeof($this->cList); $l++) {
             // Ni_et.set(l, (1 / (1.0 + ants.get(ant).Vi.get(l))));
             $this->Ni_et[$l] = (1 / (1.0 + $ant->Vi[$l]));
+        }
+        // evitar receso CalcularProbabilidades
+        foreach ($this->receso as $break) {
+            // dd($this->receso);            
+            $this->Ni_et[$break]=0.0;
+            // $this->probabilidad[$break->posicion] = 0.0; //.set(l, 0.0);                             
         }
         // dd($this->Ni_et);
         //        System.out.println("Valor heuristico: " + Ni_et);
@@ -891,18 +911,27 @@ class Main
         for ($l = 0; $l < sizeof($this->cList); $l++) {
             // if (!ants.get(ant).cListAlready.get(l)) {
             if (!$ant->cListAlready[$l]) {
-                $this->pheromone += pow($this->matrizPheromoneT[$evento][$l], $this->alpha) * pow($this->Ni_et[$l], $this->beta);
+                // dd($ant->cListAlready[$l]);
+                // dd($this->Ni_et[$l]);
+                $this->pheromone += pow($this->matrizPheromoneT[$evento][$l], $this->alpha) * pow($this->Ni_et[$l], $this->beta);                
             }
-        }
+        }        
+        // dd($this->matrizPheromoneT);
         // for (int l = 0; l < cList.size(); l++) {
         for ($l = 0; $l < sizeof($this->cList); $l++) {
             if ($ant->cListAlready[$l]) {
-                $this->probabilidad[$l] = 0.0; //.set(l, 0.0);                
+                // dd("puto",$l);
+                // dd($this->cList);
+                $this->probabilidad[$l] = 0.0; //.set(l, 0.0);                                
             } else {
                 $numerador = pow($this->matrizPheromoneT[$evento][$l], $this->alpha) * pow($this->Ni_et[$l], $this->beta);
                 $this->probabilidad[$l] = $numerador / $this->pheromone; //.set(l, (numerador / pheromone));
             }
         }
+        // if($evento==21){
+        //     dd($this->Ni_et,$this->matrizPheromoneT,$ant,$this->probabilidad,$this->pheromone);
+        // }
+        // dd($this->probabilidad);        
         // dd($this->probabilidad);
         //System.out.println("Probabilidad: " + probabilidad);
     }
@@ -917,12 +946,16 @@ class Main
             for ($j = 0; $j < sizeof($this->cList); $j++) {
                 // $ant->Ai [$j] =null;
                 $ant->cListAlready[$j] = false; //.set(j, false);
+                $this->probabilidad[$j]=0.0;
             }
             foreach ($this->receso as $break) {
+                // dd($this->receso);
                 $ant->cListAlready[$break] = true;
+                $this->Ni_et[$break]=0.0;
                 // $this->probabilidad[$break->posicion] = 0.0; //.set(l, 0.0);                             
             }
         }
+        // dd($this->ants);
     }
 
     public function mejorHormigaLocal()
@@ -947,8 +980,8 @@ class Main
         $recorrido = $this->q / (1 + $menor);
         // dd($this->q,"menor",$menor,"recorrido",$recorrido);        
         $this->currentLocalBest->setRecorrido($recorrido);
-        // dd($menor, "hormigaas", $this->ants,"mejor local",$this->currentLocalBest,"recorrido",$recorrido,"q",$this->q);
-        // dd($this->currentLocalBest);       
+        // dd($menor, "hormigaas", $this->ants,"mejor local",$this->currentLocalBest,"recorrido",$recorrido,"q",$this->q);        
         // dd($this->currentLocalBest);
-    }
+        // dd($this->ants,$this->probabilidad,$this->currentLocalBest);
+    }    
 }

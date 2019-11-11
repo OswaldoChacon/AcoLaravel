@@ -87,10 +87,11 @@
                         <input class="form-control" type="number" name="cantidadDias" id="cantidadDias" placeholder="Días para desarrollar el foro">
                     </div>
                     <div class="form-group col-md-6">
-                        <div class="btn-group btn-group-sm" role="group">
+                        <!-- <div class="btn-group btn-group-sm" role="group"> -->
+                        <!-- <div> -->
                             <button type="button" class="btn btn-primary btn-sm" value="Registrar" onclick="capturar()">Generar</button>
                             <button type="button" class="btn btn-warning btn-sm" onclick="limpiar()">Cancelar</button>
-                        </div>
+                        <!-- </div> -->
                     </div>
                 </div>
                 <div class="form-group">
@@ -234,9 +235,9 @@
                     @endforeach
                     <td>
                         <!-- <button type="button" class="btn btn-warning" data-toggle="modal" data-target=".bd-example-modal-lg">Editar horario</button> -->
-                        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#exampleModal_{{$object->id}}" >Editar horario</button>
+                        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#exampleModal_{{$object->id}}">Editar horario</button>
 
-                        <div class="modal fade" id="exampleModal_{{$object->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+                        <div class="modal fade" id="exampleModal_{{$object->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -246,13 +247,13 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form  class="form-center">
-                                            <input type="hidden" name="idHorario" value="{{$object->id}}"/>
+                                        <form class="form-center">
+                                            <input type="hidden" name="idHorario" value="{{$object->id}}" />
 
                                             <div class="form-group">
-                                                <label for="recipient-name" class="col-form-label" >Fecha </label>
+                                                <label for="recipient-name" class="col-form-label">Fecha </label>
                                                 <input type="date" name="fecha" value="{{$object->fecha}}" class="form-control" min="<?php $hoy = date('Y-m-d');
-                                                                                                                                    echo $hoy; ?>"/>
+                                                                                                                                        echo $hoy; ?>" />
                                             </div>
                                             <div class="form-group">
                                                 <label for="message-text" class="col-form-label">Hora de Inicio </label>
@@ -266,15 +267,15 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary cambiar" data-dismiss="modal" >Guardar</button>
+                                        <button type="button" class="btn btn-primary cambiar" data-dismiss="modal">Guardar</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#borrarModal_{{$object->id}}" >Borrar</button>
+                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#borrarModal_{{$object->id}}">Borrar</button>
 
-                        <div class="modal fade" id="borrarModal_{{$object->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+                        <div class="modal fade" id="borrarModal_{{$object->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -284,13 +285,13 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form  class="form-center">
-                                        <input type="hidden" name="idHorario1" value="{{$object->id}}"/>
+                                        <form class="form-center">
+                                            <input type="hidden" name="idHorario1" value="{{$object->id}}" />
 
                                             <div class="form-group">
-                                            <label for="message-text" class="col-form-label"> ¡ ADVERTENCIA ! </label>
+                                                <label for="message-text" class="col-form-label"> ¡ ADVERTENCIA ! </label>
                                                 <label for="message-text" class="col-form-label">Se borraran los horarios break de este horario foro y
-                                                se borraran los registros de horarios disponibles de cada maestro en esa fecha y horario del foro eliminado.
+                                                    se borraran los registros de horarios disponibles de cada maestro en esa fecha y horario del foro eliminado.
                                                 </label>
                                                 <label for="message-text" class="col-form-label"> Fecha: {{$object->fecha}} Horario: {{$object->horario_inicio}} - {{$object->horario_termino}}
                                                 </label>
@@ -301,7 +302,7 @@
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
 
-                                        <button type="button" class="btn btn-primary borrar" data-dismiss="modal" >Borrar</button>
+                                        <button type="button" class="btn btn-primary borrar" data-dismiss="modal">Borrar</button>
 
                                     </div>
                                 </div>
@@ -347,10 +348,16 @@
             </tbody>
         </table>
     </div>
+    <form action="/guardarHorarioPDF" method="post" enctype="multipart/form-data">        
+    {{csrf_field()}}
+        <input type="file" class="fomr-control" name="file">
+        <!-- F-8" enctype="multipart/form-data" -->
+        <button type="submit" class="btn btn-primary btn-sm">Subir horario</button>
+    </form>    
     <br>
     <!-- </div> -->
 </div>
-</div>
+<!-- </div> -->
 
 
 @endsection
@@ -368,11 +375,13 @@
         if (cantidad > 0) {
             botonGuardar.style.display = "block";
         }
-        for (var i = 1; i <= cantidad; i++) {
-            // var contenedor = document.createElement("div");
-            // contenedor.setAttribute("class", "form-group");
-            div.innerHTML =
+        for (var i = 1; i <= cantidad; i++) {            
+            var contenedor = document.createElement("div");
+            contenedor.setAttribute("class", "form-group");
+            contenedor.innerHTML =
+            "<label for='matricula'> Día #" + i + "</label>" +
                 '<div class="form-group row">' +
+                // contenedor.innerHTML = "<label for='matricula'> Matricula #" + i + "</label>" +
                 '<div class="form-group col-xl-3"><label>Fecha</label><input type="date" name="fecha[]" class="form-control" min="<?php $hoy = date('Y-m-d');
                                                                                                                                     echo $hoy; ?>"/></div>' +
                 '<div class="form-group col-xl-3"><label>Hora de inicio</label><input type="time" name="h_inicio[]" class="form-control" min="07:00" max="18:00" /></div>' +

@@ -29,32 +29,6 @@
     </div>
   </div>
 </div>
-
-<!-- 
-<script type="text/javascript">
-  function deshabilitar(id, boton, boton2) {
-    var objeto = document.getElementsByClassName(id)
-    var buttons = document.getElementById(boton)
-    var buttons2 = document.getElementById(boton2)
-    if (objeto[0].disabled == true) {
-      for (var i = 0; i < objeto.length; i++) {
-        objeto[i].disabled = false;
-      }
-      // alert("esta bloqueado");
-      buttons.style.display = "none"
-      buttons2.style.display = "block"
-    } else {
-      for (var i = 0; i < objeto.length; i++) {
-        objeto[i].disabled = true;
-      }
-      buttons.style.display = "block"
-      buttons2.style.display = "none"
-      // alert("no esta bloqueado");
-    }
-  }
-</script> -->
 @endsection
 @push('srcProfesores')
-<script src="{{asset('js/jquery.js')}}"></script>
-<script src="{{asset('js/profesores.js')}}"></script>
 @endpush

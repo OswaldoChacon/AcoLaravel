@@ -14,17 +14,11 @@ class Problema
     //Arraylist entero donde se almacenan los espacios de tiempo
     public $timeslots = []; // = new ArrayList<>();
     
-    public $timeslotsHoras = [];
-    // public $eventosOrdenados = [];
-
-    // public $aux_maestros = [];
-    // protected $aux_timeslot_common = [];
+    public $timeslotsHoras = [];    
+    
     public function __construct($eventosConMaestros, $maestros_et, $espaciosDeTiempo)    
     {
-        $this->timeslotsHoras = $espaciosDeTiempo;
-        // dd($this->timeslotsHoras);
-        // dd($maestros_et);
-        // for($i = 0; $i<count($maestrosParticipantes);$i++){
+        $this->timeslotsHoras = $espaciosDeTiempo;        
         foreach ($maestros_et as $jurado) {
             $this->maestros[] = new Maestros($jurado->nombre, $jurado->horas);
         }
@@ -36,11 +30,8 @@ class Problema
                     $aux_maestro[] = $maestro;
             }
             $this->eventos[] = new Eventos($evento->id, $evento->titulo, $aux_maestro);
-        }
-        // dd("hola");
-        foreach ($this->eventos as $evento) {
-            // unset($aux_timeslot_common);
-            // dd($evento);
+        }        
+        foreach ($this->eventos as $evento) {            
             $evento->setPosibleEspaciosT($this->getEspaciosEnComun($evento));
             $evento->setSizeComun(sizeof($evento->espaciosComun));
         }
@@ -56,20 +47,16 @@ class Problema
         // dd($this->eventos);
         // dd("ppp");
         $this->ordenarEventos();
-        if (!$this->validarExisteEspaciosEnComun()) {
-            // return response()->json([ 'hello' => '404'], 404);
-            // return response()->json("espacios en comun", 422);
-            // dd("l");3            
-        }
-        // dd($this->eventos);
-        // dd($this->eventos);
+        if (!$this->validarExisteEspaciosEnComun()) {            
+        }        
     }
     public function getListMaestros()
     {
         return $this->eventos;
     }
     public function getEspaciosEnComun($evento)
-    {        
+    {
+        $test =array();
         // unset($this->aux_timeslot_common);
         $maestro_1 = sizeof($evento->maestroList[0]->horario);
         $maestro_2 = sizeof($evento->maestroList[1]->horario);
@@ -79,28 +66,18 @@ class Problema
         $maestro_2 = ($evento->maestroList[1]->horario);
         $maestro_3 = ($evento->maestroList[2]->horario);
 
-        $aux_timeslot_common = array_intersect($maestro_1, $maestro_2,$maestro_3);
-        $aux_timeslot_common = array_values($aux_timeslot_common);
-        // dd($aux_timeslot_common);
-        // if($evento->maestroList[0]->horario[0] ==  $evento->maestroList[1]->horario[0]){
-        //     dd("puto");
-        // }        
-        // $i = $j = $k = 0;                        
-        // while ($i < $maestro_1 && $j < $maestro_2 && $k < $maestro_3) {
-        //     if ($evento->maestroList[0]->horario[$i] == $evento->maestroList[1]->horario[$j] && $evento->maestroList[1]->horario[$j] == $evento->maestroList[2]->horario[$k]) {                
-        //         $aux_timeslot_common[] = $evento->maestroList[0]->horario[$i];
-        //         $i++;
-        //         $j++;
-        //         $k++;
-        //     } else if ($evento->maestroList[0]->horario[$i] < $evento->maestroList[1]->horario[$j]) {
-        //         $i++;
-        //     } else if ($evento->maestroList[1]->horario[$j] < $evento->maestroList[2]->horario[$k]) {
-        //         $j++;
-        //     } else {
-        //         $k++;
-        //     }
-        // }        
-        return $aux_timeslot_common;
+        $aux_timeslot_common = array_intersect($maestro_1, $maestro_2,$maestro_3);        
+        $aux_timeslot_common = array_values($aux_timeslot_common);       
+        
+        foreach($evento->maestroList as $maestros){
+            $test[] = $maestros->horario;
+        }
+        // dd($test);
+        $result = call_user_func_array('array_intersect', $test);
+        $result=array_values($result);
+        // dd($result);
+        // return $aux_timeslot_common;
+        return $result;
     }
     public function ordenarEventos()
     {     

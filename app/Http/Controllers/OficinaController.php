@@ -377,7 +377,8 @@ class OficinaController extends Controller
             ]);
             Session::flash('message', "Foro Creado");
             $foro = Foro::all();
-            return view('oficina.foros', compact('foro'));
+            // return view('oficina.foros', compact('foro'));
+            return redirect()->route('foros');
         } else {
             Session::flash('message', "Numero de foro ya existentes");
             return redirect()->route('crearForo');

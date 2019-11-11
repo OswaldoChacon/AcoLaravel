@@ -5,7 +5,6 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css">
 
-
 <div class="card">
     <div class="card-body">
         <!-- <form action="/generarHorarioAnt" method="POST">
@@ -33,7 +32,7 @@
             </div>
             <div class="form-group col-md-4 col-xl-3">
                 <label for="iterations">Número de iteraciones</label>
-                <input type="number" name="iterations" class="form-control" value="200">
+                <input type="number" name="iterations" class="form-control" value="2">
             </div>
             <div class="form-group col-md-4 col-xl-3">
                 <label for="ants">Número de hormigas</label>
@@ -48,10 +47,13 @@
                 <input type="number" name="t_minDenominador" class="form-control" id="test" value="5">
             </div>
         </div>
-        <button type="button" class="btn btn-sm btn-primary " id="generarHorario">Generar horario</button>
+        <button type="button" class="btn btn-sm btn-primary " id="generarHorario">Generar horario</button>        
         <!-- <button type="submit" class="btn btn-sm btn-primary " id="generarHorari">Generar horario</button>
         </form> -->
-        <div class="container no-content" style="margin-top:10px">
+        <div class="container no-content" style="margin-top:10px; ">
+        <!-- <div class="remove">
+
+        </div> -->
         </div>
     </div>
 </div>
@@ -63,13 +65,14 @@
             <tr>
                 <?php
                 echo ('<th>Fecha</th>');
+                echo ('<th>Hora</th>');
                 for ($z = 0; $z < $salones; $z++) {
                     echo ('<th>Clave</th>');
                     for ($y = 0; $y < $maestrosTable; $y++) {
                         echo ('<th>Maestro</th>');
                     }
                 }
-                echo ('<th>Violaciones de restricciones suaves</th>')
+                echo ('<th class="not-export">Violaciones de restricciones suaves</th>')
                 ?>
             </tr>
         </thead>
@@ -81,7 +84,7 @@
 
 
 
-@push('hour')
+@push('generarHorario')
 
 
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
@@ -92,14 +95,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.6.0/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.6.0/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.0/js/buttons.colVis.min.js"></script>
 
 
 <script>
     // var salones = {{$salones}};
     // var maestros = {{$maestrosTable}} + 1;
     //  console.log(maestros);
+    var columns = document.getElementById('horarioGenerado').rows[0].cells.length
     $("#generarHorario").on('click', function() {
-        $('span').remove('.text-danger');
+        $('div').remove('.remove');
         var alpha = $('input[name="alpha"]').val();
         var beta = $('input[name="beta"]').val();
         var Q = $('input[name="Q"]').val();
@@ -126,142 +131,108 @@
                 ants: ants,
                 estancado: estancado,
                 t_minDenominador: t_minDenominador
-            },
-            // statusCode: {                
-            //     200: function(data) {                    
-            //         $(".loaderContainer").removeClass('active');
-            //         var tableHour = '';
-            //         $.each(data, function(key, lastkey) {
-            //             tableHour += '<tr>';
-            //             tableHour += '<td>' + key + '</td>';
-            //             $.each(data[key], function(event, events) {
-            //                 if (data[key][event].length == 0) {
-            //                     for (var z = 0; z < {{$maestrosTable}}+1; z++) {
-            //                         tableHour += '<td></td>';
-            //                     }
-            //                 }
-            //                 $.each(data[key][event], function(item, items) {
-            //                     tableHour += '<td>' + data[key][event][item] + '</td>';
-            //                 });
-            //             });
-            //             tableHour += '</tr>';
-            //         });
-            //         var table = $('#horarioGenerado').DataTable({
-            //             "language": {
-            //                 "emptyTable": "No se han podido disminuir todas las restricciones suaves"
-            //             },
-            //             destroy: true,
-            //             "paging": false,
-            //             "ordering": false,
-            //             "info": false,
-            //             "searching": false,
-            //             dom: 'Bfrtip',
-            //             "aoColumnDefs": [{
-            //                 "aTargets": ['_all'],
-            //                 "bSortable": false
-            //             }],
-            //             buttons: [{
-            //                     extend: 'excelHtml5',
-            //                     exportOptions: {
-            //                         columns: ':visible'
-            //                     }
-            //                     // "bShowAll": true
-            //                 },
-            //                 {
-            //                     extend: 'pdfHtml5',
-            //                     exportOptions: {
-            //                         columns: ':visible'
-            //                     }
-            //                 },
-            //             ]
-            //         });
-            //         table.clear();
-            //         table.rows.add($(tableHour)).draw();
-
-            //     },
-            //     204: function(info){
-            //         // alert(info);
-            //         console.log(info);
-            //         $(".loaderContainer").removeClass('active');       
-            //         var newElement = '<span class="text-danger">Existe al menos un proyecto que no contiene espacios en comun entre los maestros o no se han podido resolver todas las restricciones suaves</span>'+
-            //                         '<a href="/"  class="btn btn-primary btn-sm">Buton</a>';
-            //         $('.no-content').after(newElement);
-
-                    
-            //     },
-            //     422: function(error) {
-            //         $(".loaderContainer").removeClass('active');       
-            //         console.log(error);
-            //         var er = error.responseJSON.errors;
-            //         // alert(error);
-            //         console.log(er);
-
-            //     }                
-
-            // }
+            },       
             success: function(data) {                
                 if(data==null)     {
-                    $('.no-content').after('<span class="text-danger">Existe al menos un proyecto que no contiene espacios en comun entre los maestros</span>');
-                }
-                var data_aux = data;
-                console.log(data_aux);
+                    $('.no-content').after('<div class="remove"><span class="text-danger">Existe al menos un proyecto que no contiene espacios en comun entre los maestros</span><a href="proyectos" class="btn-primary btn-sm btn">Ver eventos</a></div>');
+                }                
+                // console.log(data_aux);
                 // console.log(data.shift());
-                $.each(data, function(key, lastkey) {
-                    if([key] ==0){
-                    //  delete data_aux[key];
-                    alert(key);
-                     delete data[key];
-                    }                   
-                });                               
-                console.log(data_aux);
+                // $.each(data, function(key, lastkey) {
+                //     if([key] ==0){                    
+                //     alert(key);
+                //      delete data[key];
+                //     }                   
+                // });                                               
                 $(".loaderContainer").removeClass('active');
                 var tableHour = '';
-                $.each(data, function(key, lastkey) {                    
-                    tableHour += '<tr>';
-                    tableHour += '<td>' + key + '</td>';
-                    $.each(data[key], function(event, events) {
-                        if (data[key][event].length == 0) {
-                            for (var z = 0; z < {{$maestrosTable}}+1; z++) {
-                                tableHour += '<td></td>';
-                            }                            
-                        }
-                        $.each(data[key][event], function(item, items) {
-                            tableHour += '<td>' + data[key][event][item] + '</td>';
-                        });
-                    });
+                $.each(data, function(date, dates) {      
+                    // alert(data[date]);                                       
+                    tableHour += '<tr>';                
+                    tableHour += '<td colspan="'+columns+'">'+date+'</td>';                    
+                    for (var z = 0; z < columns-1; z++) {                                
+                        tableHour += '<td style="display:none"></td>';                                
+                    }                                         
                     tableHour += '</tr>';
-                });
+                    // console.log(data[date]);
+                    $.each(data[date],function(hour,hours){                                 
+                        tableHour += '<tr>';
+                        tableHour += '<td></td>';
+                        tableHour += '<td>' + hour + '</td>';
+                        // console.log(data[date][hour]);                                                
+                        $.each(data[date][hour], function(event, events) {                            
+                            // console.log(data[date][hour][event]);
+                            // alert(data[date][hour][event]);
+                            // alert(event);
+                            if (data[date][hour][event].length == 0) {
+                                for (var z = 0; z < {{$maestrosTable}}+1; z++) {
+                                    tableHour += '<td></td>';
+                                }                            
+                            }                            
+                            $.each(data[date][hour][event], function(item, items) {                                
+                                tableHour += '<td>' + data[date][hour][event][item] + '</td>';
+                            });
+                        });
+                        tableHour += '</tr>';
+                    });     
+                    // for (var z = 0; z < 2; z++) {                                
+                    //     tableHour += '<tr>';                                                
+                    //     for (var y = 0; y < columns; y++) {                             
+                    //         tableHour += '<td></td>';                                
+                    //     }   
+                    //     tableHour += '</tr>';
+                    // }                                                       
+                });                
                 var table = $('#horarioGenerado').DataTable({
                     "language": {
-                        "emptyTable": "No se han podido cargar el horario"
+                        "emptyTable": "No se ha podido cargar el horario"
                     },
                     destroy: true,
                     "paging": false,
                     "ordering": false,
                     "info": false,
                     "searching": false,
+                    "autoWidth": true,
                     dom: 'Bfrtip',
                     "aoColumnDefs": [{
                         "aTargets": ['_all'],
                         "bSortable": false
                     }],
-                    buttons: [                   
+                    // "columns": [],                    
+                    buttons: [                           
                         {
                             extend: 'excelHtml5',
+                            className: "btn btn-primary",                
+                            messageTop: {{$maestrosTable}},
                             exportOptions: {
-                                columns: ':visible'
+                                columns: ':visible'                                
                             }
                             // "bShowAll": true
                         },
+
                         {
                             extend: 'pdfHtml5',
+                            messageTop: {{$maestrosTable}},
+                            orientation: 'landscape',
                             exportOptions: {
-                                columns: ':visible'
+                                // columns: [columns]
+                                // columns: ':visible'
+                                // columns: [ columns, ':false' ]
+                                columns: ':visible:not(.not-export)'
                             }
                         },
+                        {
+                            extend:'colvis',
+                            text: 'Ocultar columna'
+                        },                 
+                        {
+                            extend:'copy',
+                            text: 'Copiar'
+                        },    
                     ]
                 });
                 table.clear();
+                // $('#horarioGenerado').append('<caption style="caption-side: bottom">A fictional company\'s staff table.</caption>');
                 table.rows.add($(tableHour)).draw();                
             },
             error: function(error) {
