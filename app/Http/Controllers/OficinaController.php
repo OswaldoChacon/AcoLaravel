@@ -343,11 +343,16 @@ class OficinaController extends Controller
         // $user1 = $user->prefijo . '  ' . $user->nombre . '  ' . $user->paterno . '  ' . $user->materno;
         $foro = Foro::where('noforo', $request->noforo)->first();
         if ($foro == null) {
-            $acc = Foro::where('acceso', 1)->first();
-            if ($acc != null) {
-                $acc->acceso = 0;
-                $acc->save();
+            $a = DB::table('foros')->where('acceso', '=', 1)->get();
+
+            if (count($a) > 0) {
+                foreach ($a as $item) {
+                    $inactivo = Foro::find($item->id);
+                    $inactivo->acceso = 0;
+                    $inactivo->save();
+                }
             }
+
             for ($i = 0; $i < $tama; $i++) {
                 $docenteacceso = Docente::where('acceso', 1)->first();
                 if ($docenteacceso != null) {
@@ -364,7 +369,9 @@ class OficinaController extends Controller
                     'anoo' => $request->anoo,
                     'lim_alumnos' => 0,
                     'duracion' => 0,
-                    'acceso' => 0,
+                    'acceso' => 1,
+                    'num_aulas'=> 0,
+                    'num_maestros'=>0,
                     'id_user' => $user->id,
                 ],
             ]);
