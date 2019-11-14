@@ -194,11 +194,11 @@ class HorarioController extends Controller
                 // dd($item->fecha);
                 $newDate = strtotime('+' . $minutos . 'minute', $newDate);
                 $newDate = date('H:i:s', $newDate);
-                $temp = $item->fecha . "" . $item->inicio . " - " . $newDate;                
-                $temp2 = $item->inicio . " - " . $newDate;                
+                $temp = $item->fecha . "" . $item->inicio . " - " . $newDate;
+                $temp2 = $item->inicio . " - " . $newDate;
                 $item->inicio = $newDate;
                 if ($newDate > $item->termino) { } else {
-                    array_push($intervalo, $temp);                    
+                    array_push($intervalo, $temp);
                 }
             }
             // dd(($intervalo));
@@ -224,7 +224,7 @@ class HorarioController extends Controller
         $resultado_aux = array();
         $resultadoItem = array();
         $resultado = array();
-        $resul = array();        
+        $resul = array();
         foreach ($matrizSolucion as $key => $items) {
             foreach ($items as $item) {
                 unset($aux);
@@ -234,36 +234,36 @@ class HorarioController extends Controller
                 $resul[] = $aux;
             }
             // $resultado_aux[$key] = $resul;
-            $resultado_aux[$key] = $resul;            
+            $resultado_aux[$key] = $resul;
             unset($resul);
-        }        
+        }
         // // dd($resultado_aux);
-        $indice = 0;        
+        $indice = 0;
         foreach ($resultado_aux as $key => $item) {
             if ($key == $testTable[$indice]) {
                 // if(strpos($key, $horarios[$indice]->fecha)){
-                // $horarios[0]->fecha                
+                // $horarios[0]->fecha
                 $resultadoItem[str_replace($horarios[$indice]->fecha, '', $key)] = $item;
                 // dd($item);
                 // array_push($resultado, $resultadoItem);
                 $resultado[$horarios[$indice]->fecha]=$resultadoItem;
                 $indice += 1;
                 $resultadoItem = array();
-            } else {               
-                // $trimmed = str_replace($search, '', $subject) ; 
-                // $tttt = str_replace($horarios[$indice]->fecha, '', $key) ; 
+            } else {
+                // $trimmed = str_replace($search, '', $subject) ;
+                // $tttt = str_replace($horarios[$indice]->fecha, '', $key) ;
                 // dd($tttt);
                 $resultadoItem[str_replace($horarios[$indice]->fecha, '', $key)] = $item;
             }
         }
-        // dd($resultado);
+        dd($resultado);
         // $resultado_aux [] ="hola";
         // return $resultado_aux;
         $maestrosTable = sizeof($proyectos_maestros[0]->maestros);
         // $pdf = PDF::loadView('oficina.horarios.horas',compact('resultado','maestrosTable'))->setPaper('L', 'landscape');
         // // ->save(public_path().'/horarios/horario.pdf');
-        //   return $pdf->stream('testfile.pdf')                
-        //        ->header('Content-Type','application/pdf');               
+        //   return $pdf->stream('testfile.pdf')
+        //        ->header('Content-Type','application/pdf');
         // return view('oficina.horarios.horarioGenerado',compact('resultado','maestrosTable'));
         return $resultado;
     }
@@ -271,9 +271,9 @@ class HorarioController extends Controller
         $data = [
             'title' => 'First PDF for Medium',
             'heading' => 'Hello from 99Points.info',
-            'content' => 'Lore.'        
+            'content' => 'Lore.'
               ];
-          
+
           $pdf = PDF::loadView('oficina.horarios.horas',$data);
           return $pdf->stream('testfile.pdf')
                ->header('Content-Type','application/pdf');
@@ -284,7 +284,7 @@ class HorarioController extends Controller
     public function excel(){
 
     }
-    
+
     public function savePDF(Request $request){
         // dd($request);
         $file = $request->file('file');
@@ -415,5 +415,5 @@ class HorarioController extends Controller
                 ->where('id', $hd->id)
                 ->delete();
         }
-    }    
+    }
 }

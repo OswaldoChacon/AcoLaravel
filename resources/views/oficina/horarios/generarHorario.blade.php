@@ -7,9 +7,9 @@
 
 <div class="card">
     <div class="card-body">
-        <!-- <form action="/generarHorarioAnt" method="POST">
-        @csrf -->
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+        <form action="/generarHorarioAnt" method="POST">
+        @csrf
+        <!-- <meta name="csrf-token" content="{{ csrf_token() }}"> -->
         @if (Session::has('message'))
         <div class="alert alert alert-danger" id="alert-fade">({{ Session::get('message') }})</div>
         @endif
@@ -47,9 +47,9 @@
                 <input type="number" name="t_minDenominador" class="form-control" id="test" value="5">
             </div>
         </div>
-        <button type="button" class="btn btn-sm btn-primary " id="generarHorario">Generar horario</button>        
-        <!-- <button type="submit" class="btn btn-sm btn-primary " id="generarHorari">Generar horario</button>
-        </form> -->
+        <!-- <button type="button" class="btn btn-sm btn-primary " id="generarHorario">Generar horario</!-->
+        <button type="submit" class="btn btn-sm btn-primary " id="generarHorari">Generar horario</button>
+        </form>
         <div class="container no-content" style="margin-top:10px; ">
         <!-- <div class="remove">
 
@@ -131,58 +131,58 @@
                 ants: ants,
                 estancado: estancado,
                 t_minDenominador: t_minDenominador
-            },       
-            success: function(data) {                
+            },
+            success: function(data) {
                 if(data==null)     {
                     $('.no-content').after('<div class="remove"><span class="text-danger">Existe al menos un proyecto que no contiene espacios en comun entre los maestros</span><a href="proyectos" class="btn-primary btn-sm btn">Ver eventos</a></div>');
-                }                
+                }
                 // console.log(data_aux);
                 // console.log(data.shift());
                 // $.each(data, function(key, lastkey) {
-                //     if([key] ==0){                    
+                //     if([key] ==0){
                 //     alert(key);
                 //      delete data[key];
-                //     }                   
-                // });                                               
+                //     }
+                // });
                 $(".loaderContainer").removeClass('active');
                 var tableHour = '';
-                $.each(data, function(date, dates) {      
-                    // alert(data[date]);                                       
-                    tableHour += '<tr>';                
-                    tableHour += '<td colspan="'+columns+'">'+date+'</td>';                    
-                    for (var z = 0; z < columns-1; z++) {                                
-                        tableHour += '<td style="display:none"></td>';                                
-                    }                                         
+                $.each(data, function(date, dates) {
+                    // alert(data[date]);
+                    tableHour += '<tr>';
+                    tableHour += '<td colspan="'+columns+'">'+date+'</td>';
+                    for (var z = 0; z < columns-1; z++) {
+                        tableHour += '<td style="display:none"></td>';
+                    }
                     tableHour += '</tr>';
                     // console.log(data[date]);
-                    $.each(data[date],function(hour,hours){                                 
+                    $.each(data[date],function(hour,hours){
                         tableHour += '<tr>';
                         tableHour += '<td></td>';
                         tableHour += '<td>' + hour + '</td>';
-                        // console.log(data[date][hour]);                                                
-                        $.each(data[date][hour], function(event, events) {                            
+                        // console.log(data[date][hour]);
+                        $.each(data[date][hour], function(event, events) {
                             // console.log(data[date][hour][event]);
                             // alert(data[date][hour][event]);
                             // alert(event);
                             if (data[date][hour][event].length == 0) {
                                 for (var z = 0; z < {{$maestrosTable}}+1; z++) {
                                     tableHour += '<td></td>';
-                                }                            
-                            }                            
-                            $.each(data[date][hour][event], function(item, items) {                                
+                                }
+                            }
+                            $.each(data[date][hour][event], function(item, items) {
                                 tableHour += '<td>' + data[date][hour][event][item] + '</td>';
                             });
                         });
                         tableHour += '</tr>';
-                    });     
-                    // for (var z = 0; z < 2; z++) {                                
-                    //     tableHour += '<tr>';                                                
-                    //     for (var y = 0; y < columns; y++) {                             
-                    //         tableHour += '<td></td>';                                
-                    //     }   
+                    });
+                    // for (var z = 0; z < 2; z++) {
+                    //     tableHour += '<tr>';
+                    //     for (var y = 0; y < columns; y++) {
+                    //         tableHour += '<td></td>';
+                    //     }
                     //     tableHour += '</tr>';
-                    // }                                                       
-                });                
+                    // }
+                });
                 var table = $('#horarioGenerado').DataTable({
                     "language": {
                         "emptyTable": "No se ha podido cargar el horario"
@@ -198,14 +198,14 @@
                         "aTargets": ['_all'],
                         "bSortable": false
                     }],
-                    // "columns": [],                    
-                    buttons: [                           
+                    // "columns": [],
+                    buttons: [
                         {
                             extend: 'excelHtml5',
-                            className: "btn btn-primary",                
+                            className: "btn btn-primary",
                             messageTop: {{$maestrosTable}},
                             exportOptions: {
-                                columns: ':visible'                                
+                                columns: ':visible'
                             }
                             // "bShowAll": true
                         },
@@ -224,21 +224,21 @@
                         {
                             extend:'colvis',
                             text: 'Ocultar columna'
-                        },                 
+                        },
                         {
                             extend:'copy',
                             text: 'Copiar'
-                        },    
+                        },
                     ]
                 });
                 table.clear();
                 // $('#horarioGenerado').append('<caption style="caption-side: bottom">A fictional company\'s staff table.</caption>');
-                table.rows.add($(tableHour)).draw();                
+                table.rows.add($(tableHour)).draw();
             },
             error: function(error) {
-                $(".loaderContainer").removeClass('active');                
+                $(".loaderContainer").removeClass('active');
                 console.log(error);
-                var er = error.responseJSON.errors;                                
+                var er = error.responseJSON.errors;
                 // alert(error);
                 console.log(er);
                 $.each(er, function(name, message) {

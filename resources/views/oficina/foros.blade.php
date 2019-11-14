@@ -35,7 +35,7 @@
             <td>
               <button class="btn btn-success btn-xs bnt-block" onclick="location.href='configurarForo/{{Crypt::encrypt($for->id)}}'">Configuración</button>
               <button class="btn btn-info btn-xs bnt-block" onclick="location.href='proyecto/{{Crypt::encrypt($for->id)}}'">Proyectos</button>
-              <!-- <button class="btn btn-info btn-xs bnt-block" onclick="location.href='proyecto/{{Crypt::encrypt($for->id)}}'">Proyectos</button> -->
+              <a href="/eliminarForo/{{$for->id}}"class="btn btn-danger btn-sm btnbreak">Borrar</a>
             </td>
           </tr>
           @endforeach

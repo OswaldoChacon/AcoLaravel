@@ -17,7 +17,7 @@
         display: none;
     }
 </style>
-{{csrf_field()}}
+
 <div class="card">
     <div class="card-header">
         <h5 class="card-title">Configuracion del Foro: {{$foro->noforo}}º</h5>
@@ -57,7 +57,7 @@
         @if ($foro->acceso==1)
         <!-- Formullario para agregar un docente como maestro de taller de investigación -->
         <form class="oculto" id="contenido1" method="post" action="/agregarProfeAforo/{{Crypt::encrypt($foro->id)}}" class="form-center">
-
+        {{csrf_field()}}
             <br>
             <!-- <div class="container"> -->
             <div class="form-group col-12">
@@ -78,9 +78,8 @@
         </form>
 
 
-
         <form method="post" action="/addHourForo/{{Crypt::encrypt($foro->id)}}" class="form-center">
-
+        {{csrf_field()}}
             <div id="addHour" class="oculto">
                 <div class="row">
                     <div class="form-group col-md-6">
@@ -143,7 +142,7 @@
                 <tr>
                     <div class="row">
                         <form class="form-inline" method="post" action="/actulizar/{{Crypt::encrypt($foro->id)}}">
-
+                        {{csrf_field()}}
                             <td>Limite de alumnos por proyecto: <strong>{{$foro->lim_alumnos}}</strong> </td>
                             <td><input class="form-inline" type="number" name="no_alumnos" inputmode="Numero de  foro" style='width:70px; height:25px' required /></td>
                             <td><button type="submit" class="btn btn-primary btn-sm" class="form-inline" value="Registrar" name="lim">Guardar</button>
@@ -156,7 +155,7 @@
                 <tr>
                     <div class="row">
                         <form class="form-inline" method="post" action="/actualizarDuracion/{{Crypt::encrypt($foro->id)}} ">
-
+                        {{csrf_field()}}
                             <td>Duración de exposición por evento: <strong> {{$foro->duracion}} min </strong></td>
                             <td><input class="form-inline" type="number" name="duracion" class="form-control" min="10" pattern="[0-9]" style='width:70px; height:25px' required /></td>
                             <td> <button class="btn btn-primary form-inline btn-sm" value="Registrar" name="btnGuardar">Guardar</button></td>
@@ -168,7 +167,7 @@
                 <tr>
                     <div class="row">
                         <form class="form-inline" method="post" action="/numAulas/{{Crypt::encrypt($foro->id)}} ">
-
+                        {{csrf_field()}}
                             <td>Número de aulas a utilizar en el evento: <strong> {{$foro->num_aulas}} </strong></td>
                             <td><input class="form-inline" type="number" name="numAulas" class="form-control" min="1" max="5" pattern="[0-9]" style='width:70px; height:25px' required /></td>
                             <td> <button class="btn btn-primary form-inline btn-sm" value="Registrar" name="numeroAulas">Guardar</button></td>
@@ -180,7 +179,7 @@
                 <tr>
                     <div class="row">
                         <form class="form-inline" method="post" action="/numMaestros/{{Crypt::encrypt($foro->id)}} ">
-
+                        {{csrf_field()}}
                             <td>Número de maestros a considerar como jueces para cada proyecto: <strong> {{$foro->num_maestros}} </strong></td>
                             <td><input class="form-inline" type="number" name="numMaestros" class="form-control" min="1" max="5" pattern="[0-9]" style='width:70px; height:25px' required /></td>
                             <td> <button class="btn btn-primary form-inline btn-sm" value="Registrar" name="numeroMaestros">Guardar</button></td>
@@ -248,6 +247,7 @@
                                     </div>
                                     <div class="modal-body">
                                         <form class="form-center">
+                                        {{csrf_field()}}
                                             <input type="hidden" name="idHorario" value="{{$object->id}}" />
 
                                             <div class="form-group">
@@ -286,6 +286,7 @@
                                     </div>
                                     <div class="modal-body">
                                         <form class="form-center">
+                                        {{csrf_field()}}
                                             <input type="hidden" name="idHorario1" value="{{$object->id}}" />
 
                                             <div class="form-group">
@@ -348,12 +349,12 @@
             </tbody>
         </table>
     </div>
-    <form action="/guardarHorarioPDF" method="post" enctype="multipart/form-data">        
+    <form action="/guardarHorarioPDF" method="post" enctype="multipart/form-data">
     {{csrf_field()}}
         <input type="file" class="fomr-control" name="file">
         <!-- F-8" enctype="multipart/form-data" -->
         <button type="submit" class="btn btn-primary btn-sm">Subir horario</button>
-    </form>    
+    </form>
     <br>
     <!-- </div> -->
 </div>
@@ -375,7 +376,7 @@
         if (cantidad > 0) {
             botonGuardar.style.display = "block";
         }
-        for (var i = 1; i <= cantidad; i++) {            
+        for (var i = 1; i <= cantidad; i++) {
             var contenedor = document.createElement("div");
             contenedor.setAttribute("class", "form-group");
             contenedor.innerHTML =

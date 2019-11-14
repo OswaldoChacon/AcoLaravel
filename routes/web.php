@@ -70,6 +70,7 @@ Route::get('lineaDeInvetigacion', 'OficinaController@lineaDeInvetigacion')->name
 Route::get('areadeconocimiento', 'OficinaController@areadeconocimiento')->name('areadeconocimiento');
 Route::get('/', 'Auth\LoginController@showLoginFrom')->middleware('guest');
 Route::get('configurarForo/{id_foro}', 'OficinaController@configurarForo')->name('configurarForo');
+Route::get('eliminarForo/{id}', 'OficinaController@eliminarForo')->name('eliminarForo');
 Route::get('crearForo', 'OficinaController@crearForo')->name('crearForo');
 Route::get('foros', 'OficinaController@foros')->name('foros');
 Route::get('/activar/{id}', 'OficinaController@activar')->name('activar');
@@ -258,7 +259,7 @@ Route::get('/horario', function () {
     return response( Storage::disk('public')->get($filename), 200)
     ->header('Content-Type', Storage::disk('public')
         ->mimeType($filename)
-    );    
+    );
 
 });
 

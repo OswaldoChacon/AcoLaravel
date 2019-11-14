@@ -342,25 +342,10 @@ class OficinaController extends Controller
         // $docente = Docente::where('id', Auth::guard('docentes')->user()->id)->first();
         // $user1 = $user->prefijo . '  ' . $user->nombre . '  ' . $user->paterno . '  ' . $user->materno;
         $foro = Foro::where('noforo', $request->noforo)->first();
-        if ($foro == null) {
-            $a = DB::table('foros')->where('acceso', '=', 1)->get();
+        $anoo = Foro::where('anoo',$request->anoo)->get();
 
-            if (count($a) > 0) {
-                foreach ($a as $item) {
-                    $inactivo = Foro::find($item->id);
-                    $inactivo->acceso = 0;
-                    $inactivo->save();
-                }
-            }
+        if ($foro == null && count($anoo) < 2) {
 
-            for ($i = 0; $i < $tama; $i++) {
-                $docenteacceso = Docente::where('acceso', 1)->first();
-                if ($docenteacceso != null) {
-                    $docenteacceso->acceso = 0;
-                    // dd($docenteacceso);
-                    $docenteacceso->save();
-                }
-            }
             DB::table('foros')->insert([
                 [
                     'noforo' => $request->noforo,
@@ -369,7 +354,7 @@ class OficinaController extends Controller
                     'anoo' => $request->anoo,
                     'lim_alumnos' => 0,
                     'duracion' => 0,
-                    'acceso' => 1,
+                    'acceso' => 0,
                     'num_aulas'=> 0,
                     'num_maestros'=>0,
                     'id_user' => $user->id,
@@ -380,7 +365,7 @@ class OficinaController extends Controller
             // return view('oficina.foros', compact('foro'));
             return redirect()->route('foros');
         } else {
-            Session::flash('message', "Numero de foro ya existentes");
+            Session::flash('message', "Numero de foro ya existente o hay un foro en un periodo y año duplicado");
             return redirect()->route('crearForo');
         }
     }
@@ -390,6 +375,21 @@ class OficinaController extends Controller
         $foro = Foro::all();
         return view('oficina.foros', compact('foro'));
     }
+
+    public function eliminarForo(Request $requ, $id)
+    {
+        $foro = Foro::find($id);
+
+        $f = DB::table('foros')->where('id', $id)->first();
+        if ($f != null) {
+        $deletes = DB::table('foros')
+            ->where('id', $f->id)
+            ->delete();
+            }
+        return back();
+    }
+
+
     public function configurarForo($id_foro)
     {
         $docente = DB::table('docentes')->where('acceso', 0)->get();
