@@ -187,7 +187,7 @@ class Main
             for ($i = 0; $i < $this->salones; $i++) {
                 $this->matrizSolucion[$k][$i] = null;
             }
-        }
+        }        
         for ($k = 0; $k < sizeof($ant->Ai); $k++) {
             // for ($i = 0; $i < $this->salones; $i++) {
             for ($i = 0; $i < $this->salones; $i++) {
@@ -197,6 +197,7 @@ class Main
                     $this->matrizSolucion[$ant->Ai[$k]][$i] = $this->problema->eventos[$k]->name;
                     for ($j = 0; $j < sizeof($this->problema->eventos[$k]->maestroList); $j++) {
                         $this->matrizSolucion[$ant->Ai[$k]][$i] .= ", " . $this->problema->eventos[$k]->maestroList[$j]->nombre;
+                        // $this->matrizSolucion[$ant->Ai[$k]][$this->problema->eventos[$k]->name] = $this->problema->eventos[$k]->maestroList[$j]->nombre;
                         // eventosOrdenados.get(k).maestroList.get(j).name
                     }
                     // dd($this->currentGlobalBest->Vi);                                        
