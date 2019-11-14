@@ -47,7 +47,7 @@
                 <input type="number" name="t_minDenominador" class="form-control" id="test" value="5">
             </div>
         </div>
-        <!-- <button type="button" class="btn btn-sm btn-primary " id="generarHorario">Generar horario</!-->
+        <!-- <button type="button" class="btn btn-sm btn-primary " id="generarHorario">Generar horario</button>         -->
         <button type="submit" class="btn btn-sm btn-primary " id="generarHorari">Generar horario</button>
         </form>
         <div class="container no-content" style="margin-top:10px; ">

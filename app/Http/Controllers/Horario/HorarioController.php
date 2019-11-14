@@ -175,7 +175,7 @@ class HorarioController extends Controller
             ->join('foros', 'horarioforos.id_foro', '=', 'foros.id')
             ->where('foros.acceso', 1)
             ->get();
-        // dd($maestro_et);
+        // dd($proyectos_maestros);
 
         // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // //
         $min = DB::table('foros')->select('duracion as minutos')->where('acceso', '=', 1)->get();
@@ -183,7 +183,7 @@ class HorarioController extends Controller
         $minutos = $min[0]->minutos;
         $longitud = count($horarios);
         $temp = " ";
-        $temp2= " ";
+        $temp2 = " ";
         $intervalosContainer = array();
         $testTable = array();
         // dd($horarios);
@@ -237,61 +237,102 @@ class HorarioController extends Controller
             $resultado_aux[$key] = $resul;
             unset($resul);
         }
-        // // dd($resultado_aux);
+        // dd($resultado_aux);
         $indice = 0;
+        $tituloLlave = array();
         foreach ($resultado_aux as $key => $item) {
+            // dd("este es el item",$item,$key,$resultado_aux);
+            $tituloLlave = array();
+            foreach ($item as $keyItem => $itemItems) {
+                // dd($itemItems);
+                if(sizeof($itemItems) > 1){
+                    // dd($resultado_aux,$itemItems[0]);
+                    $temporalLlave = $itemItems[0];
+                    // dd($temporalLlave,$itemItems);
+                    unset($itemItems[0]);
+                    $tituloLlave[$temporalLlave] = $itemItems;
+                }
+                else{
+                    $tituloLlave[$keyItem] = $itemItems;
+                }
+            }
             if ($key == $testTable[$indice]) {
+                // dd("este es el item",$item,$key);
                 // if(strpos($key, $horarios[$indice]->fecha)){
                 // $horarios[0]->fecha
-                $resultadoItem[str_replace($horarios[$indice]->fecha, '', $key)] = $item;
+
+                // dd($tituloLlave,$resultado_aux,$key);
+                $resultadoItem[str_replace($horarios[$indice]->fecha, '', $key)] = $tituloLlave;
                 // dd($item);
                 // array_push($resultado, $resultadoItem);
-                $resultado[$horarios[$indice]->fecha]=$resultadoItem;
+                $resultado[$horarios[$indice]->fecha] = $resultadoItem;
                 $indice += 1;
                 $resultadoItem = array();
             } else {
-                // $trimmed = str_replace($search, '', $subject) ;
-                // $tttt = str_replace($horarios[$indice]->fecha, '', $key) ;
-                // dd($tttt);
-                $resultadoItem[str_replace($horarios[$indice]->fecha, '', $key)] = $item;
+                $resultadoItem[str_replace($horarios[$indice]->fecha, '', $key)] = $tituloLlave;
             }
         }
-        dd($resultado);
-        // $resultado_aux [] ="hola";
-        // return $resultado_aux;
+        // dd($resultado);
         $maestrosTable = sizeof($proyectos_maestros[0]->maestros);
         // $pdf = PDF::loadView('oficina.horarios.horas',compact('resultado','maestrosTable'))->setPaper('L', 'landscape');
         // // ->save(public_path().'/horarios/horario.pdf');
         //   return $pdf->stream('testfile.pdf')
         //        ->header('Content-Type','application/pdf');
         // return view('oficina.horarios.horarioGenerado',compact('resultado','maestrosTable'));
+
+
+
+
+        //database
+        $testFinal2 = array();
+        $testFinal = array();
+        $testFinal3 = array();
+        foreach ($resultado as $date => $dates) {
+            foreach ($dates as $hour => $hours) {
+                foreach ($hours as $event => $events) {
+                    // dd(sizeof($events));
+                    if ($events != null && sizeof($events) > 1) {
+                        foreach ($events as $keyItem => $item) {
+                            // $testFinal []= array_push()
+                            // dd($date,$hour,$item,$events);
+                            array_push($testFinal, $date, $hour, $event, $item);
+                            array_push($testFinal2, $testFinal);
+                            $testFinal = array();
+                        }
+                    }
+                }
+            }
+        }
+        dd($testFinal2,$matrizSolucion, $resultado);
+
+        dd($resultado);
         return $resultado;
     }
-    public function pdf(){
+    public function pdf()
+    {
         $data = [
             'title' => 'First PDF for Medium',
             'heading' => 'Hello from 99Points.info',
             'content' => 'Lore.'
-              ];
+        ];
 
-          $pdf = PDF::loadView('oficina.horarios.horas',$data);
-          return $pdf->stream('testfile.pdf')
-               ->header('Content-Type','application/pdf');
+        $pdf = PDF::loadView('oficina.horarios.horas', $data);
+        return $pdf->stream('testfile.pdf')
+            ->header('Content-Type', 'application/pdf');
         //   $pdf->render();
         //   $pdf->loadHTML($view);
         //   return $pdf->download('medium.pdf');
     }
-    public function excel(){
+    public function excel()
+    { }
 
-    }
-
-    public function savePDF(Request $request){
+    public function savePDF(Request $request)
+    {
         // dd($request);
         $file = $request->file('file');
         $nombre = $file->getClientOriginalName();
         // dd($nombre);
         \Storage::disk('public')->put($nombre,  \File::get($file));
-
     }
     public function generarHorarioView()
     {
