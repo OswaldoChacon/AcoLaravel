@@ -237,22 +237,42 @@ class HorarioController extends Controller
             $resultado_aux[$key] = $resul;
             unset($resul);
         }
-        // // dd($resultado_aux);
+        // dd($resultado_aux);
         $indice = 0;
+        $tituloLlave = array();
         foreach ($resultado_aux as $key => $item) {
+            // dd("este es el item",$item,$key,$resultado_aux);     
+            $tituloLlave = array();
+            foreach ($item as $keyItem => $itemItems) {
+                // dd($itemItems);                
+                if(sizeof($itemItems) > 1){
+                    // dd($resultado_aux,$itemItems[0]);
+                    $temporalLlave = $itemItems[0];
+                    // dd($temporalLlave,$itemItems);
+                    unset($itemItems[0]);
+                    $tituloLlave[$temporalLlave] = $itemItems;
+                }          
+                else{
+                    $tituloLlave[$keyItem] = $itemItems;
+                }      
+            }
             if ($key == $testTable[$indice]) {
+                // dd("este es el item",$item,$key);
                 // if(strpos($key, $horarios[$indice]->fecha)){
                 // $horarios[0]->fecha                
-                $resultadoItem[str_replace($horarios[$indice]->fecha, '', $key)] = $item;
+                
+                // dd($tituloLlave,$resultado_aux,$key);
+                $resultadoItem[str_replace($horarios[$indice]->fecha, '', $key)] = $tituloLlave;
                 // dd($item);
                 // array_push($resultado, $resultadoItem);
                 $resultado[$horarios[$indice]->fecha] = $resultadoItem;
                 $indice += 1;
                 $resultadoItem = array();
             } else {               
-                $resultadoItem[str_replace($horarios[$indice]->fecha, '', $key)] = $item;
+                $resultadoItem[str_replace($horarios[$indice]->fecha, '', $key)] = $tituloLlave;
             }
         }        
+        dd($resultado);
         $maestrosTable = sizeof($proyectos_maestros[0]->maestros);
         // $pdf = PDF::loadView('oficina.horarios.horas',compact('resultado','maestrosTable'))->setPaper('L', 'landscape');
         // // ->save(public_path().'/horarios/horario.pdf');
