@@ -272,7 +272,7 @@ class HorarioController extends Controller
                 $resultadoItem[str_replace($horarios[$indice]->fecha, '', $key)] = $tituloLlave;
             }
         }        
-        dd($resultado);
+        // dd($resultado);
         $maestrosTable = sizeof($proyectos_maestros[0]->maestros);
         // $pdf = PDF::loadView('oficina.horarios.horas',compact('resultado','maestrosTable'))->setPaper('L', 'landscape');
         // // ->save(public_path().'/horarios/horario.pdf');
@@ -294,8 +294,8 @@ class HorarioController extends Controller
                     if ($events != null && sizeof($events) > 1) {
                         foreach ($events as $keyItem => $item) {
                             // $testFinal []= array_push()
-                            // dd($events);
-                            array_push($testFinal, $date, $hour, $item,$event+1);
+                            // dd($date,$hour,$item,$events);
+                            array_push($testFinal, $date, $hour, $event, $item);
                             array_push($testFinal2, $testFinal);                            
                             $testFinal = array();                            
                         }

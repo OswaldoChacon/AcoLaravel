@@ -196,7 +196,7 @@ class Main
                     //System.out.println("No esta vacio");                
                     $this->matrizSolucion[$ant->Ai[$k]][$i] = $this->problema->eventos[$k]->name;
                     for ($j = 0; $j < sizeof($this->problema->eventos[$k]->maestroList); $j++) {
-                        $this->matrizSolucion[$ant->Ai[$k]][$i] .= ", " . $this->problema->eventos[$k]->maestroList[$j]->nombre;
+                        $this->matrizSolucion[$ant->Ai[$k]][$i] .= "," . $this->problema->eventos[$k]->maestroList[$j]->nombre;
                         // $this->matrizSolucion[$ant->Ai[$k]][$this->problema->eventos[$k]->name] = $this->problema->eventos[$k]->maestroList[$j]->nombre;
                         // eventosOrdenados.get(k).maestroList.get(j).name
                     }
