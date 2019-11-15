@@ -280,32 +280,61 @@ class HorarioController extends Controller
         //        ->header('Content-Type','application/pdf');
         // return view('oficina.horarios.horarioGenerado',compact('resultado','maestrosTable'));
 
+        $deletes = DB::table('horariogenerado')
+        ->delete();
 
-
-
+        $aulas= DB::table('foros')->select('num_aulas')->where('acceso',1)->first();
+        $numAulas = $aulas->num_aulas;
+        // dd($numAulas);
         //database
         $testFinal2 = array();
         $testFinal = array();
         $testFinal3 = array();
+
+
+
         foreach ($resultado as $date => $dates) {
             foreach ($dates as $hour => $hours) {
+                $cont= 0;
                 foreach ($hours as $event => $events) {
-                    // dd(sizeof($events));
+                    $cont++;
                     if ($events != null && sizeof($events) > 1) {
-                        foreach ($events as $keyItem => $item) {
-                            // $testFinal []= array_push()
-                            // dd($date,$hour,$item,$events);
-                            array_push($testFinal, $date, $hour, $event, $item);
-                            array_push($testFinal2, $testFinal);
-                            $testFinal = array();
+                        foreach ($events as $keyItem => $item ) {
+                            $project = DB::table('proyectos')->select('proyectos.id as id',)
+                            ->join('foros','proyectos.id_foro','=','foros.id')
+                            ->where('proyectos.titulo','=',$event)->where('foros.acceso',1)->first();
+
+                            $docentes = DB::TABLE('docentes')->select('id')
+                            ->where(DB::raw("CONCAT(prefijo,' ',nombre, ' ', paterno,' ', materno)"),'=',$item)->first();
+
+
+                                array_push($testFinal, $date, $hour, $project->id, $docentes->id, $cont);
+                                array_push($testFinal2, $testFinal);
+                                $testFinal = array();
                         }
                     }
                 }
             }
         }
-        dd($testFinal2,$matrizSolucion, $resultado);
 
-        dd($resultado);
+    // dd($testFinal2);
+    // implode ( ' ' , $testFinal2 );
+    // dd($testFinal2);
+         foreach($testFinal2 as $registro){
+                    DB::table('horariogenerado')->insert([
+                        [
+                            'fecha' => $registro[0],
+                            'hora' => $registro[1],
+                            'id_proyecto' => $registro[2],
+                            'id_docente'=>$registro[3],
+                            'aula'=> $registro[4],
+                        ],
+                    ]);
+
+
+               }
+
+        // dd($resultado);
         return $resultado;
     }
     public function pdf()

@@ -249,5 +249,10 @@ class DocenteController extends Controller
 
       return view('docentes.index', compact('notificacione', 'docente'));
   }
+  public function horario($id){
+
+    // $horarioAsignado=
+
+  }
 
 }

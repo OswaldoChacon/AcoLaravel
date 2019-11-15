@@ -107,6 +107,7 @@ Route::post('dartokenAlumnoP', 'DocenteController@dartokenAlumnoP')->name('darto
 /////////////////////////////////						GET					/////////////////////////////////////////
 
 Route::get('docente', 'DocenteController@index')->name('docenteLogin');
+Route::get('horariogeneradoDocente','DocenteController@horario')->name('horario');
 Route::get('/editar/docente/{id}', 'DocenteController@editar')->name('editar');
 Route::get('registaralumno', 'DocenteController@registaralumno')->name('registaralumno');
 Route::get('notificacionesdocentes', 'DocenteController@notificaciones')->name('notificacionesdocentes');
