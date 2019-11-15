@@ -327,7 +327,7 @@ class HorarioController extends Controller
                             'hora' => $registro[1],
                             'id_proyecto' => $registro[2],
                             'id_docente'=>$registro[3],
-                            'aula'=> $registro[4],
+                            'salon'=> $registro[4],
                         ],
                     ]);
 
