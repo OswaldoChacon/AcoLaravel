@@ -22,7 +22,7 @@ class Problema
         foreach ($maestros_et as $jurado) {
             $this->maestros[] = new Maestros($jurado->nombre, $jurado->horas);
         }
-        // dd($this->maestros);
+        // dd($this->maestros);    
         foreach ($eventosConMaestros as $evento) {
             unset($aux_maestro);
             foreach ($this->maestros as $maestro) {
@@ -31,6 +31,7 @@ class Problema
             }
             $this->eventos[] = new Eventos($evento->id, $evento->titulo, $aux_maestro);
         }        
+        // dd($this->eventos);
         foreach ($this->eventos as $evento) {            
             $evento->setPosibleEspaciosT($this->getEspaciosEnComun($evento));
             $evento->setSizeComun(sizeof($evento->espaciosComun));

@@ -184,30 +184,30 @@ class Main
     public function imprimirSolucion($ant)
     {
         for ($k = 0; $k < $this->timeslot; $k++) {
-            for ($i = 0; $i < $this->salones; $i++) {
+            for ($i = 1; $i <= $this->salones; $i++) {
                 $this->matrizSolucion[$k][$i] = null;
             }
         }        
+        for ($k = 0; $k < sizeof($ant->Vi); $k++) {
+            $this->matrizSolucion[$k][0] = $ant->Vi[$k];
+        } 
+        // dd($this->matrizSolucion);
         for ($k = 0; $k < sizeof($ant->Ai); $k++) {
             // for ($i = 0; $i < $this->salones; $i++) {
-            for ($i = 0; $i < $this->salones; $i++) {
+            for ($i = 1; $i <= $this->salones; $i++) {
                 //Verifico si el "salon" esta vacio para poderlo asignar, si no lo pasó al siguiente, esto solo en la matriz de solución
-                if ($this->matrizSolucion[$ant->Ai[$k]][$i] == null) {
-                    //System.out.println("No esta vacio");                
+                if ($this->matrizSolucion[$ant->Ai[$k]][$i] == null) {                    
                     $this->matrizSolucion[$ant->Ai[$k]][$i] = $this->problema->eventos[$k]->name;
                     for ($j = 0; $j < sizeof($this->problema->eventos[$k]->maestroList); $j++) {
                         $this->matrizSolucion[$ant->Ai[$k]][$i] .= "," . $this->problema->eventos[$k]->maestroList[$j]->nombre;
-                        // $this->matrizSolucion[$ant->Ai[$k]][$this->problema->eventos[$k]->name] = $this->problema->eventos[$k]->maestroList[$j]->nombre;
-                        // eventosOrdenados.get(k).maestroList.get(j).name
-                    }
-                    // dd($this->currentGlobalBest->Vi);                                        
+                        // $this->matrizSolucion[$ant->Ai[$k]][$this->problema->eventos[$k]->name] = $this->problema->eventos[$k]->maestroList[$j]->nombre;                        
+                    }                    
                     break;
                 }
             }
         }
-        for ($k = 0; $k < sizeof($ant->Vi); $k++) {
-            $this->matrizSolucion[$k][] = $ant->Vi[$k];
-        }        
+               
+        // dd($this->matrizSolucion);
         // dd("solucion",$this->matrizSolucion,"violaciones",$this->currentGlobalBest->Vi,"asignaciones",$ant->Ai,$this->problema->eventos);
         // dd($this->currentGlobalBest);
 
@@ -651,7 +651,6 @@ class Main
                 $z = 0;
                 while ($nextTS == false) {
                     $z++;
-
                     // if ($z == ($this->timeslot - sizeof($this->receso))) {
                     if ($z == ($this->timeslot - sizeof($this->receso))) {
                         $nextTS = true;                        

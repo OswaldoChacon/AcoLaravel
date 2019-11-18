@@ -7,9 +7,9 @@
 
 <div class="card">
     <div class="card-body">
-        <form action="/generarHorarioAnt" method="POST">
-        @csrf
-        <!-- <meta name="csrf-token" content="{{ csrf_token() }}"> -->
+        <!-- <form action="/generarHorarioAnt" method="POST">
+        @csrf -->
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         @if (Session::has('message'))
         <div class="alert alert alert-danger" id="alert-fade">({{ Session::get('message') }})</div>
         @endif
@@ -47,9 +47,9 @@
                 <input type="number" name="t_minDenominador" class="form-control" id="test" value="5">
             </div>
         </div>
-        <!-- <button type="button" class="btn btn-sm btn-primary " id="generarHorario">Generar horario</button>         -->
-        <button type="submit" class="btn btn-sm btn-primary " id="generarHorari">Generar horario</button>
-        </form>
+        <button type="button" class="btn btn-sm btn-primary " id="generarHorario">Generar horario</button>        
+        <!-- <button type="submit" class="btn btn-sm btn-primary " id="generarHorari">Generar horario</button>
+        </form> -->
         <div class="container no-content" style="margin-top:10px; ">
         <!-- <div class="remove">
 
@@ -66,13 +66,13 @@
                 <?php
                 echo ('<th>Fecha</th>');
                 echo ('<th>Hora</th>');
+                echo ('<th class="not-export">Violaciones</th>');
                 for ($z = 0; $z < $salones; $z++) {
                     echo ('<th>Clave</th>');
                     for ($y = 0; $y < $maestrosTable; $y++) {
                         echo ('<th>Maestro</th>');
                     }
-                }
-                echo ('<th class="not-export">Violaciones de restricciones suaves</th>')
+                }                
                 ?>
             </tr>
         </thead>
@@ -160,18 +160,33 @@
                         tableHour += '<td></td>';
                         tableHour += '<td>' + hour + '</td>';
                         // console.log(data[date][hour]);
+                        // alert(hour);
                         $.each(data[date][hour], function(event, events) {
-                            // console.log(data[date][hour][event]);
+                            // console.log(event+","+data[date][hour][event]);
+                            console.log(data);
                             // alert(data[date][hour][event]);
-                            // alert(event);
+                            // alert(data[date][hour][event].length);
                             if (data[date][hour][event].length == 0) {
                                 for (var z = 0; z < {{$maestrosTable}}+1; z++) {
                                     tableHour += '<td></td>';
                                 }
+                            }              
+                            else if(data[date][hour][event].length == 1){
+                                $.each(data[date][hour][event], function(item, items) {
+                                    tableHour += '<td>' + data[date][hour][event][item]+ '</td>';
+                                    // alert(data[date][hour][event]);
+                                });                                
+                                
+                            }             
+                            else 
+                            {
+                                tableHour += '<td>'+event+'</td>';
+                                $.each(data[date][hour][event], function(item, items) {
+                                    tableHour += '<td>' + data[date][hour][event][item] + '</td>';
+                                
+                                });
                             }
-                            $.each(data[date][hour][event], function(item, items) {
-                                tableHour += '<td>' + data[date][hour][event][item] + '</td>';
-                            });
+                          
                         });
                         tableHour += '</tr>';
                     });

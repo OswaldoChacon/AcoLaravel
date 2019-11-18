@@ -195,7 +195,7 @@ class HorarioController extends Controller
                 $newDate = strtotime('+' . $minutos . 'minute', $newDate);
                 $newDate = date('H:i:s', $newDate);
                 $temp = $item->fecha . "" . $item->inicio . " - " . $newDate;
-                $temp2 = $item->inicio . " - " . $newDate;
+                // $temp2 = $item->inicio . " - " . $newDate;
                 $item->inicio = $newDate;
                 if ($newDate > $item->termino) { } else {
                     array_push($intervalo, $temp);
@@ -226,33 +226,41 @@ class HorarioController extends Controller
         $resultado = array();
         $resul = array();
         foreach ($matrizSolucion as $key => $items) {
-            foreach ($items as $item) {
+            for ($i = 0; $i < sizeof($items); $i++) {
+                $resul[$i] = [];
+            }
+            foreach ($items as $keyItems => $item) {
                 unset($aux);
                 $aux = array_filter(explode(",", $item), function ($value) {
                     return ($value !== null && $value !== false && $value !== '');
                 });
-                $resul[] = $aux;
+                // dd($items,$keyItems,$aux);
+                // dd($items,$keyItems);
+                // $resul[] = $aux;
+                $resul[$keyItems] = $aux;
+                // dd($resul);
+                // dd($item,$aux);
             }
             // $resultado_aux[$key] = $resul;
             $resultado_aux[$key] = $resul;
+            // dd($resul,$resultado_aux,$matrizSolucion);
             unset($resul);
         }
-        // dd($resultado_aux);
+        // dd($matrizSolucion,$resultado_aux);
         $indice = 0;
         $tituloLlave = array();
         foreach ($resultado_aux as $key => $item) {
             // dd("este es el item",$item,$key,$resultado_aux);
             $tituloLlave = array();
             foreach ($item as $keyItem => $itemItems) {
-                // dd($itemItems);
-                if(sizeof($itemItems) > 1){
+                // dd($item);
+                if (sizeof($itemItems) > 1) {
                     // dd($resultado_aux,$itemItems[0]);
                     $temporalLlave = $itemItems[0];
                     // dd($temporalLlave,$itemItems);
                     unset($itemItems[0]);
                     $tituloLlave[$temporalLlave] = $itemItems;
-                }
-                else{
+                } else {
                     $tituloLlave[$keyItem] = $itemItems;
                 }
             }
@@ -272,6 +280,9 @@ class HorarioController extends Controller
                 $resultadoItem[str_replace($horarios[$indice]->fecha, '', $key)] = $tituloLlave;
             }
         }
+        // 
+        // $u=$resultado;
+        // krsort($resultado);
         // dd($resultado);
         $maestrosTable = sizeof($proyectos_maestros[0]->maestros);
         // $pdf = PDF::loadView('oficina.horarios.horas',compact('resultado','maestrosTable'))->setPaper('L', 'landscape');
@@ -279,61 +290,51 @@ class HorarioController extends Controller
         //   return $pdf->stream('testfile.pdf')
         //        ->header('Content-Type','application/pdf');
         // return view('oficina.horarios.horarioGenerado',compact('resultado','maestrosTable'));
-
+        // dd($resultado);
         $deletes = DB::table('horariogenerado')
-        ->delete();
+            ->delete();
 
-        $aulas= DB::table('foros')->select('num_aulas')->where('acceso',1)->first();
+        $aulas = DB::table('foros')->select('num_aulas')->where('acceso', 1)->first();
         $numAulas = $aulas->num_aulas;
         // dd($numAulas);
         //database
         $testFinal2 = array();
         $testFinal = array();
-        $testFinal3 = array();
-
-
-
         foreach ($resultado as $date => $dates) {
             foreach ($dates as $hour => $hours) {
-                $cont= 0;
+                $cont = 0;
                 foreach ($hours as $event => $events) {
-                    $cont++;
+                    // $cont= 0;
+                    // $cont++;                    
                     if ($events != null && sizeof($events) > 1) {
-                        foreach ($events as $keyItem => $item ) {
+                        $cont++;
+                        // dd($hours,$event,$events,$cont);
+                        foreach ($events as $keyItem => $item) {
                             $project = DB::table('proyectos')->select('proyectos.id as id',)
-                            ->join('foros','proyectos.id_foro','=','foros.id')
-                            ->where('proyectos.titulo','=',$event)->where('foros.acceso',1)->first();
-
+                                ->join('foros', 'proyectos.id_foro', '=', 'foros.id')
+                                ->where('proyectos.titulo', '=', $event)->where('foros.acceso', 1)->first();
                             $docentes = DB::TABLE('docentes')->select('id')
-                            ->where(DB::raw("CONCAT(prefijo,' ',nombre, ' ', paterno,' ', materno)"),'=',$item)->first();
-
-
-                                array_push($testFinal, $date, $hour, $project->id, $docentes->id, $cont);
-                                array_push($testFinal2, $testFinal);
-                                $testFinal = array();
+                                ->where(DB::raw("CONCAT(prefijo,' ',nombre, ' ', paterno,' ', materno)"), '=', $item)->first();
+                            array_push($testFinal, $date, $hour, $project->id, $docentes->id, $cont);
+                            array_push($testFinal2, $testFinal);
+                            $testFinal = array();
                         }
                     }
                 }
             }
         }
-
-    // dd($testFinal2);
-    // implode ( ' ' , $testFinal2 );
-    // dd($testFinal2);
-         foreach($testFinal2 as $registro){
-                    DB::table('horariogenerado')->insert([
-                        [
-                            'fecha' => $registro[0],
-                            'hora' => $registro[1],
-                            'id_proyecto' => $registro[2],
-                            'id_docente'=>$registro[3],
-                            'salon'=> $registro[4],
-                        ],
-                    ]);
-
-
-               }
-
+        // dd($resultado,$testFinal2);
+        foreach ($testFinal2 as $registro) {
+            DB::table('horariogenerado')->insert([
+                [
+                    'fecha' => $registro[0],
+                    'hora' => $registro[1],
+                    'id_proyecto' => $registro[2],
+                    'id_docente' => $registro[3],
+                    'salon' => $registro[4],
+                ],
+            ]);
+        }
         // dd($resultado);
         return $resultado;
     }
@@ -380,6 +381,53 @@ class HorarioController extends Controller
     }
     public function proyectosHorarioMaestros()
     {
+        $horarios = DB::table('horarioforos')
+            ->select('horario_inicio as inicio', 'horario_termino as termino', 'fecha_foro as fecha', 'horarioforos.id as id')
+            ->join('foros', 'horarioforos.id_foro', '=', 'foros.id')
+            ->where('foros.acceso', 1)
+            ->get();        
+
+        // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // //
+        $min = DB::table('foros')->select('duracion as minutos')->where('acceso', '=', 1)->get();        
+        $minutos = $min[0]->minutos;
+        $longitud = count($horarios);
+        $temp = " ";
+        $temp2 = " ";
+        $intervalosContainer = array();
+        $testTable = array();        
+        foreach ($horarios as $item) {
+            $intervalosContainer[$item->fecha] = [];
+        }
+        $indice = 0;        
+        foreach ($horarios as $item) {            
+            $intervalo = array();                 
+            while ($item->inicio < $item->termino) {                     
+                $intervalo[$indice] = [];                           
+                $newDate = strtotime('+0 hour', strtotime($item->inicio));
+                // dd($item->fecha);
+                $newDate = strtotime('+' . $minutos . 'minute', $newDate);
+                $newDate = date('H:i:s', $newDate);
+                $temp = $item->inicio . " - " . $newDate;
+                // $item->fecha . " ".
+                // $temp2 = $item->inicio . " - " . $newDate;
+                $item->inicio = $newDate;
+                if ($newDate > $item->termino) { } else {
+                    // array_push($intervalo, $temp);
+                    $intervalo[$indice] = $temp;
+                }                
+                $indice++;
+            }
+            // $testTable[] = $intervalo[sizeof($intervalo) - 1];
+            $testTable[] = $intervalo[$indice - 1];
+         
+            $intervalosContainer[$item->fecha] = $intervalo;
+        }        
+        foreach ($intervalosContainer as $intervaloTotal) {
+            foreach ($intervaloTotal as $itemIntervaloTotal) {
+                $intervalosUnion[] = $itemIntervaloTotal;
+            }
+        }
+
         $proyectos_maestros = DB::table('jurados')->select('proyectos.id', 'proyectos.titulo', DB::raw('group_concat( Distinct docentes.prefijo," ",docentes.nombre," ",docentes.paterno," ",docentes.materno) as maestros'))
             ->join('docentes', 'jurados.id_docente', '=', 'docentes.id')
             ->join('proyectos', 'jurados.id_proyecto', '=', 'proyectos.id')
@@ -398,9 +446,17 @@ class HorarioController extends Controller
                 });
             });
         $problema = new Problema($proyectos_maestros, $maestro_et, []);
-        $proyectos = $problema->eventos;
+        $proyectos = $problema->eventos;        
+
         // dd($proyectos);
-        return view('oficina.horarios.proyectos', compact('proyectos'));
+        // dd($intervalosContainer);
+        $horarios = DB::table('horarioforos')
+            ->select('horario_inicio as inicio', 'horario_termino as termino', 'fecha_foro as fecha', 'horarioforos.id as id')
+            ->join('foros', 'horarioforos.id_foro', '=', 'foros.id')
+            ->where('foros.acceso', 1)
+            ->get();
+        // dd($proyectos);
+        return view('oficina.horarios.proyectos', compact('proyectos', 'intervalosContainer'));
     }
     public function actualizarHorarioForo(Request $request)
     {

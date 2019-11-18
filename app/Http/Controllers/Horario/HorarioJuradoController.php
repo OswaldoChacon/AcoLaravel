@@ -63,6 +63,7 @@ class HorarioJuradoController extends Controller
             }
             array_push($intervalosContainer, $intervalo);
         }
+        // dd($intervalosContainer);
 
         $posicionbreak= DB::table('horariobreak')->select('horariobreak.id as id','horariobreak.id_horarioforo as id_horarioforo',
         'horariobreak.horario_break as horariobreal','horariobreak.posicion as posicion','horariobreak.disponible as disponible',
