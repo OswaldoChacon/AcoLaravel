@@ -279,24 +279,11 @@ class HorarioController extends Controller
             } else {
                 $resultadoItem[str_replace($horarios[$indice]->fecha, '', $key)] = $tituloLlave;
             }
-        }
-        // 
-        // $u=$resultado;
-        // krsort($resultado);
-        // dd($resultado);
-        $maestrosTable = sizeof($proyectos_maestros[0]->maestros);
-        // $pdf = PDF::loadView('oficina.horarios.horas',compact('resultado','maestrosTable'))->setPaper('L', 'landscape');
-        // // ->save(public_path().'/horarios/horario.pdf');
-        //   return $pdf->stream('testfile.pdf')
-        //        ->header('Content-Type','application/pdf');
-        // return view('oficina.horarios.horarioGenerado',compact('resultado','maestrosTable'));
-        // dd($resultado);
-        $deletes = DB::table('horariogenerado')
+        }        
+        
+        DB::table('horariogenerado')
             ->delete();
-
-        $aulas = DB::table('foros')->select('num_aulas')->where('acceso', 1)->first();
-        $numAulas = $aulas->num_aulas;
-        // dd($numAulas);
+        
         //database
         $testFinal2 = array();
         $testFinal = array();
@@ -353,8 +340,7 @@ class HorarioController extends Controller
         //   $pdf->loadHTML($view);
         //   return $pdf->download('medium.pdf');
     }
-    public function excel()
-    { }
+    
 
     public function savePDF(Request $request)
     {

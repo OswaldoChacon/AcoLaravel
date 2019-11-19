@@ -60,6 +60,7 @@
 
 
 <div class="table-responsive">
+    <!-- {{$salones}} -->
     <table class="table" id="horarioGenerado">
         <thead>
             <tr>
