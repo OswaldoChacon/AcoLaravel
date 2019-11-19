@@ -280,7 +280,7 @@ class HorarioController extends Controller
                 $resultadoItem[str_replace($horarios[$indice]->fecha, '', $key)] = $tituloLlave;
             }
         }
-        // 
+        //
         // $u=$resultado;
         // krsort($resultado);
         // dd($resultado);
@@ -305,7 +305,7 @@ class HorarioController extends Controller
                 $cont = 0;
                 foreach ($hours as $event => $events) {
                     // $cont= 0;
-                    // $cont++;                    
+                    // $cont++;
                     if ($events != null && sizeof($events) > 1) {
                         $cont++;
                         // dd($hours,$event,$events,$cont);
@@ -385,24 +385,24 @@ class HorarioController extends Controller
             ->select('horario_inicio as inicio', 'horario_termino as termino', 'fecha_foro as fecha', 'horarioforos.id as id')
             ->join('foros', 'horarioforos.id_foro', '=', 'foros.id')
             ->where('foros.acceso', 1)
-            ->get();        
+            ->get();
 
         // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // //
-        $min = DB::table('foros')->select('duracion as minutos')->where('acceso', '=', 1)->get();        
+        $min = DB::table('foros')->select('duracion as minutos')->where('acceso', '=', 1)->get();
         $minutos = $min[0]->minutos;
         $longitud = count($horarios);
         $temp = " ";
         $temp2 = " ";
         $intervalosContainer = array();
-        $testTable = array();        
+        $testTable = array();
         foreach ($horarios as $item) {
             $intervalosContainer[$item->fecha] = [];
         }
-        $indice = 0;        
-        foreach ($horarios as $item) {            
-            $intervalo = array();                 
-            while ($item->inicio < $item->termino) {                     
-                $intervalo[$indice] = [];                           
+        $indice = 0;
+        foreach ($horarios as $item) {
+            $intervalo = array();
+            while ($item->inicio < $item->termino) {
+                $intervalo[$indice] = [];
                 $newDate = strtotime('+0 hour', strtotime($item->inicio));
                 // dd($item->fecha);
                 $newDate = strtotime('+' . $minutos . 'minute', $newDate);
@@ -414,14 +414,14 @@ class HorarioController extends Controller
                 if ($newDate > $item->termino) { } else {
                     // array_push($intervalo, $temp);
                     $intervalo[$indice] = $temp;
-                }                
+                }
                 $indice++;
             }
             // $testTable[] = $intervalo[sizeof($intervalo) - 1];
             $testTable[] = $intervalo[$indice - 1];
-         
+
             $intervalosContainer[$item->fecha] = $intervalo;
-        }        
+        }
         foreach ($intervalosContainer as $intervaloTotal) {
             foreach ($intervaloTotal as $itemIntervaloTotal) {
                 $intervalosUnion[] = $itemIntervaloTotal;
@@ -446,7 +446,7 @@ class HorarioController extends Controller
                 });
             });
         $problema = new Problema($proyectos_maestros, $maestro_et, []);
-        $proyectos = $problema->eventos;        
+        $proyectos = $problema->eventos;
 
         // dd($proyectos);
         // dd($intervalosContainer);
