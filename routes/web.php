@@ -107,7 +107,7 @@ Route::post('dartokenAlumnoP', 'DocenteController@dartokenAlumnoP')->name('darto
 /////////////////////////////////						GET					/////////////////////////////////////////
 
 Route::get('docente', 'DocenteController@index')->name('docenteLogin');
-Route::get('horariogeneradoDocente','DocenteController@horario')->name('horario');
+Route::get('horariogeneradoDocente','DocenteController@horario')->name('horariogeneradoDocente');
 Route::get('/editar/docente/{id}', 'DocenteController@editar')->name('editar');
 Route::get('registaralumno', 'DocenteController@registaralumno')->name('registaralumno');
 Route::get('notificacionesdocentes', 'DocenteController@notificaciones')->name('notificacionesdocentes');
@@ -135,7 +135,7 @@ Route::post('Guardar/{id}', 'AlumnoController@save2')->name('Guardar');
 Route::post('RegistarProyecto/{id}', 'AlumnoController@RegistarProyecto')->name('RegistarProyecto');
 
 /////////////////////////////////						GET					/////////////////////////////////////////
-
+Route::get('horariogeneradoAlumno','AlumnoController@horario')->name('horariogeneradoAlumno');
 Route::get('/editar/alumno/{id}', 'AlumnoController@editar')->name('editar');
 Route::get('dictamen', 'AlumnoController@dictamen')->name('dictamen');
 Route::get('alumno', 'AlumnoController@index')->name('alumnoLogin');

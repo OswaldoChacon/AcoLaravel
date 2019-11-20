@@ -37,7 +37,7 @@
 				</li>
 				<li>
 					<!-- <a href="/registraProyecto">Registrar Poryecto</a> -->
-					<a href="{{route('notificacionesdocentes')}}">Notificaciones <span class="badge">{{$notificacione}}</span></a>
+					<a href="{{route('notificacionesdocentes')}}">Notificaciones <span class="badge"></span></a>
 				</li>
 				<li>
 					<a href="{{route('proyectosAsessorados')}}">Proyectos como asesor</a>

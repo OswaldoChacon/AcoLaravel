@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Console;
 use \PDF;
+use DB;
 use Storage;
 
 
@@ -404,5 +405,17 @@ class AlumnoController extends Controller
     $notificacione = Notificacione::where('id_alumno', Auth::guard('alumnos')->user()->id)->where('envio', 1)->count();
 
     return view('alumno.mostrarEvaluacion', compact('notificacione', 'hoja'));
+  }
+  public function horario(){
+
+    $alumno = Auth::id();
+    $name= DB::table('alumnos')->select('nombre','paterno','materno','id_proyecto')->where('id',$alumno)->first();
+    $idproyecto=DB::table('alumnos')->select('id_proyecto')->where('id',$alumno)->first();
+    $id=$idproyecto->id_proyecto;
+    // dd($id);
+    $horario= DB::table('horariogenerado')->select('fecha','hora','salon')->where('id_proyecto',$id)->first();
+    // dd($horario);
+    return view('alumno.horariogeneradoAlumno',compact('horario','name'));
+
   }
 }

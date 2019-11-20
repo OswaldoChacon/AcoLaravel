@@ -249,10 +249,15 @@ class DocenteController extends Controller
 
       return view('docentes.index', compact('notificacione', 'docente'));
   }
-  public function horario($id){
+  public function horario(){
 
-    // $horarioAsignado=
+    // $docente = Docente::find(Auth()->user()->id);
+    $docente = Auth::id();
+    $name= DB::table('docentes')->select('prefijo','nombre','paterno','materno')->where('id',$docente)->first();
+//  dd($name);
+    $horario= DB::table('horariogenerado')->select('fecha','hora','id_proyecto','salon')->where('id_docente',$docente)->get();
+    // dd($horario);
+    return view('docentes.horariogeneradoDocente',compact('horario','name'));
 
   }
-
 }
