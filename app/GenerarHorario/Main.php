@@ -22,7 +22,7 @@ class Main
     public $ants = []; //List<Ant> ants = new ArrayList<>(); //hormigas creadas    
     public $cList = []; //List<Integer> cList = new ArrayList<>(); //timeslots para asignar    
     public $breaks = []; //List<Integer> breaks = new ArrayList<>(); //timeslots para especificar receso
-    public $eventosOrdenados = []; //List<Eventos> eventosOrdenados = new ArrayList<>();
+    
 
     // Random random = new Random(); //numero random    
     public $matrizPheromoneT = array();  //matriz de asignacion de evento a Ts
@@ -32,79 +32,58 @@ class Main
     public $problema; //Problema problema;
     public $eventos; //int eventos;
     public $salones; //int salones;
-    public $timeslot; //int timeslot;
-    public $TSCommon = []; //List<Integer> TSCommon = new ArrayList<>();
-    public $recorrdio; //Double recorrido;
+    public $timeslot; //int timeslot;    
     public $currentLocalBest; //Ant currentLocalBest;
-    public $currentGlobalBest; //Ant currentGlobalBest;
-    public $bestSoFar; //Ant bestSoFar;
+    public $currentGlobalBest; //Ant currentGlobalBest;    
     public $encontroGlobal = false; //boolean encontroGlobal = false;
     public $contadorGlobal = 0; //int contadorGlobal = 0;
     public $eventosProgramados = []; //List<Eventos> eventosProgramados = new ArrayList<>();
     public $eventosProgramados2 = []; //List<Eventos> eventosProgramados2 = new ArrayList<>()
 
-    public $receso;
-
-
     public function __construct($eventosConMaestros, $maestros_et, $espaciosDeTiempo, $alpha, $beta, $q, $evaporation, $iterations, $ants, $estancado, $t_minDenominador, $num_aulas, $receso)
-    {
-        // dd($espaciosDeTiempo);
+    {        
         $this->problema = new Problema($eventosConMaestros, $maestros_et, $espaciosDeTiempo);
         $this->alpha = $alpha;
         $this->beta = $beta;
-        $this->q = $q;
-        // dd($this->q+1);
+        $this->q = $q;     
         $this->rho = $evaporation;
         $this->numberIteration = $iterations;
         $this->numberOfAnts = $ants;
         $this->estancado = $estancado;
         $this->t_max = 1 / $this->rho;
-        $this->t_minDenominador = $t_minDenominador;
-        // $this->t_min = $this->t_max/$this->t_minDenominador;
+        $this->t_minDenominador = $t_minDenominador;        
         $this->salones = $num_aulas;
         foreach ($receso as $itemReceso) {
             $this->receso[] = $itemReceso->posicion;
-        }
-        // dd($this->receso);        
-
-        //inicializarMatrices
+        }        
+        
         $this->pheromone = 0.0;
         $this->eventos = sizeof($this->problema->eventos);
         $this->timeslot = sizeof($this->problema->timeslots);
-        // dd($problema->timeslots);
         $this->matrizPheromoneT = array(); //new Double[eventos][timeslot];
         $this->matrizSolucion = array(); //new String[timeslot][salones];        
 
         for ($i = 0; $i < $this->eventos; $i++) {
             for ($j = 0; $j < $this->timeslot; $j++) {
-                $this->matrizPheromoneT[$i][$j] = $this->t_max;
-                //System.out.print(matrizPheromoneT[i][j] + "\t");
+                $this->matrizPheromoneT[$i][$j] = $this->t_max;                
             }
-        }
-        // dd($this->matrizPheromoneT);        
+        }        
         for ($i = 0; $i < $this->numberOfAnts; $i++) {
             $this->ants[] = new Ant($i, $this->problema);
         }
-        $this->cList = $this->problema->timeslots;
-        // dd($this->cList);
-        // for (int i = 0; i < ants.size(); i++) {
+        $this->cList = $this->problema->timeslots;        
         foreach ($this->ants as $ant) {
-            for ($j = 0; $j < sizeof($this->cList); $j++) {
-                // dd('receso',$receso);
+            for ($j = 0; $j < sizeof($this->cList); $j++) {                
                 $ant->cListAlready[] = false;
                 $ant->Vi[] = 0;
                 $ant->ViolacionesDuras[] = 0;
                 $ant->Ai[] = null;
             }
             // foreach($receso as $break){
-            foreach ($this->receso as $break) {
-                // dd($break);
-                $ant->cListAlready[$break] = true;
-                // $this->probabilidad[$break->posicion] = 0.0; //.set(l, 0.0);                             
+            foreach ($this->receso as $break) {                
+                $ant->cListAlready[$break] = true;                
             }
-        }
-        // dd($this->ants,$this->receso);
-        // dd($this->receso);
+        }        
     }
     public function start()
     {
@@ -112,50 +91,31 @@ class Main
         global $currentIndex;
         global $total;
         for ($i = 0; $i < sizeof($this->cList); $i++) {
-            $this->Ni_et[] = 0.0;
-            //Ai.add(0.0);
+            $this->Ni_et[] = 0.0;            
             $this->probabilidad[] = 0.0;
-        }
-        // dd($this->ants);
+        }        
         for ($i = 0; $i < $this->numberIteration; $i++) {
-            $this->reset();
-            // dd($this->ants,$this->currentLocalBest,$this->probabilidad);
-            // if($i==2){
-            //     dd($i,$this->ants,$this->currentLocalBest,$this->probabilidad);
-            // }
-            // for (int j = 0; j < ants.size(); j++) {
-            foreach ($this->ants as $ant) {
-                // dd($ant);
-                for ($k = 0; $k < sizeof($this->problema->eventos); $k++) {
-                    // foreach($this->problema->eventos as $evento){
-                    $this->CalcularProbabilidades($k, $ant);
-                    // dd($ant,$this->probabilidad);
+            $this->reset();            
+            foreach ($this->ants as $ant) {                
+                for ($k = 0; $k < sizeof($this->problema->eventos); $k++) {                    
+                    $this->CalcularProbabilidades($k, $ant);                    
                     $numberDouble = (float) rand() / (float) getrandmax();
                     $total = 0;
-                    for ($l = 0; $l < sizeof($this->cList); $l++) {
-                        //System.out.println("Clist "+cList.size());
-                        $total += $this->probabilidad[$l];
-                        //System.out.println("Total: " + total+"\tIteracion de la lista: "+l+"\t numero aleatorio: "+numberDouble);                                                
+                    for ($l = 0; $l < sizeof($this->cList); $l++) {                        
+                        $total += $this->probabilidad[$l];                        
                         if ($total >= $numberDouble) {
-                            $currentIndex = $l;
-                            // dd("Total: ", $total,"numero aleatorio: ",$numberDouble,"Espacio de tiempo elegido ",$l);                  
-                            //System.out.println("Evento K :" + problema.getEventos().size());                            
-                            $ant->Ai[] = $l; // ants.get(j).Ai.add(l);                                                                                    
-                            //System.out.println("Asignaciones: " + ants.get(j).Ai);
+                            $currentIndex = $l;                            
+                            $ant->Ai[] = $l; // ants.get(j).Ai.add(l);                                                                                                                
                             break;
                         }
                     }                    
                     $this->penalizar($ant);                                        
                     $this->penalizarMaestro($ant, $k, "$currentIndex");                    
-                    // $test++;
+                    
                 }
-                $this->penalizarEmpalmeMaestro($ant);                
-                // dd($ant,$this->probabilidad);
-            }
-            // dd($this->problema->eventos);
-            // dd($ant,$numberDouble,$total,$this->probabilidad);
-            $this->mejorHormigaLocal();
-            // dd($this->ants,$this->currentLocalBest,$this->probabilidad);
+                $this->penalizarEmpalmeMaestro($ant);                                
+            }            
+            $this->mejorHormigaLocal();            
             $this->busquedaLocal();
             $this->penalizarEmpalmeMaestro($this->currentLocalBest);
             $this->contarViolacionesSuaves($this->currentLocalBest);
@@ -165,22 +125,11 @@ class Main
         }
         $this->contarViolacionesSuaves($this->currentGlobalBest);
         $this->penalizarEmpalmeMaestro($this->currentGlobalBest);
-        $this->imprimirSolucion($this->currentGlobalBest);
+        $this->imprimirSolucion($this->currentGlobalBest);        
 
-        // foreach ($this->currentGlobalBest as $key => $value) {
-        // $$this->currentGlobalBest[$this->problema($key)] = $value;
-        // unset($array[$key]);
-        // }
-
-        $this->matrizSolucion = array_combine($this->problema->timeslotsHoras, $this->matrizSolucion);
-
-        
-        $this->matrizViolacionesSuaves();
-        // $this->imprimirSolucion = array_flip($this->problema->timeslotsHoras);
-        // dd($this->currentGlobalBest);        
-    }
-    public function matrizViolacionesSuaves()
-    { }
+        $this->matrizSolucion = array_combine($this->problema->timeslotsHoras, $this->matrizSolucion);        
+        $this->matrizViolacionesSuaves();        
+    }  
     public function imprimirSolucion($ant)
     {
         for ($k = 0; $k < $this->timeslot; $k++) {
@@ -191,9 +140,8 @@ class Main
         for ($k = 0; $k < sizeof($ant->Vi); $k++) {
             $this->matrizSolucion[$k][0] = $ant->Vi[$k];
         } 
-        // dd($this->matrizSolucion);
-        for ($k = 0; $k < sizeof($ant->Ai); $k++) {
-            // for ($i = 0; $i < $this->salones; $i++) {
+        
+        for ($k = 0; $k < sizeof($ant->Ai); $k++) {        
             for ($i = 1; $i <= $this->salones; $i++) {
                 //Verifico si el "salon" esta vacio para poderlo asignar, si no lo pasó al siguiente, esto solo en la matriz de solución
                 if ($this->matrizSolucion[$ant->Ai[$k]][$i] == null) {                    
@@ -205,20 +153,7 @@ class Main
                     break;
                 }
             }
-        }
-               
-        // dd($this->matrizSolucion);
-        // dd("solucion",$this->matrizSolucion,"violaciones",$this->currentGlobalBest->Vi,"asignaciones",$ant->Ai,$this->problema->eventos);
-        // dd($this->currentGlobalBest);
-
-        // foreach ($this->matrizSolucion as $key => $value) {
-        //     // $i++;
-        //     // if($i>1)
-        //     // dd($key);
-        //     $this->matrizSolucion[1] = $value;
-        //     unset($this->matrizSolucion[$key]);
-        // }
-        // $this->matrizSolucion = array_combine($this->problema->timeslotsHoras, $this->matrizSolucion);        
+        }                        
     }
 
     public function reiniciarTmaxAndTmin()
@@ -245,11 +180,8 @@ class Main
                 $this->matrizPheromoneT[$i][$j] *= (1 - $this->rho);
             }
         }
-
         for ($j = 0; $j < sizeof($this->currentGlobalBest->Ai); $j++) {
-            $this->matrizPheromoneT[$j][$this->currentGlobalBest->Ai[$j]] += $this->currentGlobalBest->recorrido;
-            //matrizPheromoneT[i][j] * rho;                
-            //System.out.println("jajajajajajjaja " + j + " " + currentLocalBest.Ai.get(j));
+            $this->matrizPheromoneT[$j][$this->currentGlobalBest->Ai[$j]] += $this->currentGlobalBest->recorrido;            
         }
 
         if ($this->encontroGlobal) {
@@ -270,8 +202,7 @@ class Main
     public function mejorHormigaGlobal()
     {
         if ($this->currentGlobalBest == null) {
-            $this->currentGlobalBest = $this->currentLocalBest;
-            // dd($this->currentGlobalBest,"rho",$this->rho);
+            $this->currentGlobalBest = $this->currentLocalBest;            
             $this->encontroGlobal = true;
             $this->t_max = 1 / $this->rho * $this->currentGlobalBest->recorrido;
             $this->t_min = $this->t_max / $this->t_minDenominador;
@@ -344,7 +275,7 @@ class Main
                 for ($j = 0; $j < sizeof($this->currentLocalBest->Ai); $j++) {
                     if ($this->currentLocalBest->Ai[$j] == $i) {
                         //los agrega a la lista de eventos programados para su uso posterior de analizar si hay dos maestros iguales en ese mismo espacio de tiempo
-                        $this->eventosProgramados[] = $this->problema->eventos[$j]; //eventosProgramados.add(problema.eventosOrdenados.get(j));
+                        $this->eventosProgramados[] = $this->problema->eventos[$j]; 
                         $posicionAi[] = $j;
                     }
                 }
@@ -386,8 +317,7 @@ class Main
         // dd("mejor hormiga",$this->currentLocalBest,"eventos a mover",$eventosMover,"posicion de los eventos a mover",$posicionAiMover);
         for ($i = 0; $i < sizeof($eventosMover); $i++) {
             for ($j = 0; $j < sizeof($this->problema->eventos); $j++) {
-                //Obtengo el espacio de tiempo en donde esta asignado actualmente
-                // if (eventosMover.get(i).name.equals(problema.eventosOrdenados.get(j).name)) {
+                //Obtengo el espacio de tiempo en donde esta asignado actualmente                
                 if ($eventosMover[$i]->name == $this->problema->eventos[$j]->name) {
                     //currentTimeslot representa el espacio de tiempo actual, el cual esta asignado y esta generando hcv                    
                     $currentTimeslot = $this->currentLocalBest->Ai[$j]; //.Ai.get(j);
@@ -539,8 +469,7 @@ class Main
                     // var_dump($timeslotMove);
                     // && !in_array($timeslotMove,$this->receso)
                     //evitar receso      
-                    // nuevocode
-                    // $this->eventosOrdenados = array();
+                    // nuevocode                    
                     // $posicionEventosProgramados = array();              
                     // echo ("\nentró a L1 ".$timeslotMove." valor de Z:".$z);
                     if (!in_array($timeslotMove, $this->receso)) {                                                
@@ -553,7 +482,7 @@ class Main
                                 // dd("timeslotMove",$timeslotMove,"currentlocalbest",$this->currentLocalBest->Ai[$j]);
                                 if ($this->currentLocalBest->Ai[$j] == $timeslotMove) {   
                                     // echo ("\nError");                                 
-                                    $this->eventosProgramados[] = $this->problema->eventos[$j]; //.add(problema.eventosOrdenados.get(j));
+                                    $this->eventosProgramados[] = $this->problema->eventos[$j]; 
                                     $contadorNextTS++;
                                 }
                             }
@@ -609,8 +538,7 @@ class Main
                     for ($j = 0; $j < sizeof($this->currentLocalBest->Ai); $j++) {
                         //eventosMover.clear();
                         if ($this->currentLocalBest->Ai[$j] == $i) {
-                            //los agrega a la lista de eventos programados para su uso posterior de analizar si hay dos maestros iguales en ese mismo espacio de tiempo
-                            // eventosProgramados.add(problema.eventosOrdenados.get(j));
+                            //los agrega a la lista de eventos programados para su uso posterior de analizar si hay dos maestros iguales en ese mismo espacio de tiempo                            
                             $this->eventosProgramados[] = $this->problema->eventos[$j];
                         }
                     }
@@ -723,8 +651,7 @@ class Main
             global $newValue;
             $newValue = 0;
             global $timeloslot;
-            $timeloslot = 0;
-            //int indice = problema.eventosOrdenados.get(j).espaciosComun.size();
+            $timeloslot = 0;            
             //for (int k = 0; k < indice; k++) {
             // if ($this->problema->eventos[$j]->espaciosComun . contains(ant . Ai . get(j))) {
             if (in_array($ant->Ai[$j], $this->problema->eventos[$j]->espaciosComun)) {
@@ -774,8 +701,8 @@ class Main
                 if ($ant->Ai[$j] == $i) {
                     // dd("indice i",$i,"evento programado ",$ant->Ai[$j]);
                     //los agrega a la lista de eventos programados para su uso posterior de analizar si hay dos maestros iguales en ese mismo espacio de tiempo
-                    // eventosProgramados.add(ant.problema.eventosOrdenados.get(j));
-                    $this->eventosProgramados[] = $ant->problema->eventos[$j]; //(ant.problema.eventosOrdenados.get(j));                    
+                    
+                    $this->eventosProgramados[] = $ant->problema->eventos[$j]; 
                 }
             }
             // dd($this->eventosProgramados);
@@ -842,8 +769,7 @@ class Main
         global $encontrado;
         $encontrado = false;
         global $newValue;
-        $newValue = 0;
-        // int indice = ant.problema.eventosOrdenados.get(evento).espaciosComun.size();                
+        $newValue = 0;        
         $indice = $ant->problema->eventos[$evento]->sizeComun;
         for ($i = 0; $i < $indice; $i++) {
             // dd($ant,"evento", $ant->problema->eventos[$evento]->espaciosComun[5]);
