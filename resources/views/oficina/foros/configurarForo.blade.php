@@ -188,6 +188,18 @@
                         </form>
                     </div>
                 </tr>
+                <tr>
+                    <div class="row">
+                        <form class="form-inline" method="post" action="/prefijoProyecto/{{Crypt::encrypt($foro->id)}} ">
+                        {{csrf_field()}}
+                            <td>Asignar prefijo del proyecto: <strong> {{$foro->prefijo_proyecto}} </strong></td>
+                            <td><input class="form-inline" value="-" name="prefijoProyecto" class="form-control"  style='width:70px; height:25px' required /></td>
+                            <td> <button title="¡NO OLVIDE EL GUIÓN!" class="btn btn-primary form-inline btn-sm" value="Registrar">Guardar</button></td>
+                            {!! $errors->first('prefijo_proyecto','<span class="help-block alert alert-danger">:message</span>')!!}
+                            </td>
+                        </form>
+                    </div>
+                </tr>
             </tbody>
         </table>
     </div>

@@ -34,6 +34,7 @@ class AlumnoController extends Controller
   {
     $notificacione =0;// Notificacione::where('id_alumno', Auth::guard('alumnos')->user()->id)->where('envio', 1)->count();
     return view('alumno.alumno', compact('notificacione'));
+
   }
 
   public function editar($id)
@@ -120,6 +121,33 @@ class AlumnoController extends Controller
     $ProyectoForo->nombre_de_empresa = $request->empresa;
     $ProyectoForo->seminario_id = $foro->id;
     $ProyectoForo->alumno_id = $alumno->id;
+
+    $prefijo=DB::table('foros')->select('prefijo_proyecto')->where('id',$foro);
+    $numproyectos= DB::table('proyectos')->where('id_foro',$foro)->get();
+    $contador=$numproyectos;
+    if(count($contador)>0)
+    {
+      $contador++;
+      if($contador < 10)
+      {
+        strval($contador);
+        $temp= " 0 " . $contador;
+      }
+      else{
+        strval($contador);
+        $temp=$contador;
+      }
+
+    }
+    else{
+      $contador=1;
+      strval($contador);
+      $temp= " 0 " . $contador;
+    }
+
+    $id_proyecto=$prefijo . $temp;
+
+    $proyectoForo->id_proyecto=$id_proyecto;
     $ProyectoForo->save();
 
     $alumnos = count($request->alumno, COUNT_RECURSIVE);
@@ -412,10 +440,14 @@ class AlumnoController extends Controller
     $name= DB::table('alumnos')->select('nombre','paterno','materno','id_proyecto')->where('id',$alumno)->first();
     $idproyecto=DB::table('alumnos')->select('id_proyecto')->where('id',$alumno)->first();
     $id=$idproyecto->id_proyecto;
+    $clave=DB::table('proyectos')->select('id_proyecto')->where('id',$id)->first();
+    $id_prefijo=$clave->id_proyecto;
+    // dd($id_prefijo);
+
     // dd($id);
     $horario= DB::table('horariogenerado')->select('fecha','hora','salon')->where('id_proyecto',$id)->first();
     // dd($horario);
-    return view('alumno.horariogeneradoAlumno',compact('horario','name'));
+    return view('alumno.horariogeneradoAlumno',compact('horario','name','id_prefijo'));
 
   }
 }

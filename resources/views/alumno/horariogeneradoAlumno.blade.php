@@ -11,14 +11,18 @@
         <thead>
           <th>Fecha </th>
           <th>Hora</th>
+          <th>Proyecto</th>
           <th>Salon</th>
+
         </thead>
         <tbody>
 
           <tr>
             <td>{{$horario->fecha}}</td>
             <td>{{$horario->hora}}</td>
+            <td>{{$id_prefijo}}</td>
             <td>{{$horario->salon}}</td>
+
           </tr>
 
         </tbody>

@@ -20,7 +20,7 @@
           <tr>
             <td>{{$h->fecha}}</td>
             <td>{{$h->hora}}</td>
-            <td>{{$h->id_proyecto}}</td>
+            <td>{{$h->idpp}}</td>
             <td>{{$h->salon}}</td>
           </tr>
           @endforeach

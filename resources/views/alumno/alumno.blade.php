@@ -77,9 +77,7 @@
 							<i class="far fa-edit"></i><span>Editar</span>
 						</a>
 					</div>
-					<!--  -->
-					<!--  -->
-					<!--  -->
+
 					<div class="collapse navbar-collapse" id="navbarSupportedContent">
 						<ul class="nav navbar-nav ml-auto">
 							<li class="nav-item active">
