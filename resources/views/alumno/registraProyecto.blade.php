@@ -23,6 +23,9 @@
   <br>
 </div>
 <div class="panel-body">
+@if(Session::has('mensage'))
+                    <p class="alert {{ Session::get('alert-class', 'alert-success') }}">{{ Session::get('mensage') }}</p>
+                    @endif
   <form method="post" action="/RegistarProyecto/{{$foro->id}}" class="form-center">
     {{csrf_field()}}
     <label for="titulo">Titulo</label>
@@ -40,7 +43,7 @@
       <select name="categorias" id="categorias" class="form-control">
         <option value="">Linea de investigacion</option>
         @foreach($lineadeinvestigacion as $linea)
-        <option value="{{$linea->linea}}">{{$linea->linea}}</option>
+        <option value="{{$linea->id}}">{{$linea->linea}}</option>
         @endforeach
       </select>
     </div>
@@ -48,16 +51,16 @@
     <div class="col-md-3">
       <label for="" class="control-label">Tipo de Titulación</label>
       <select class="form-control" name="productos" id="productos">
-        <option value="Investigació(Tesis)">Investigació(Tesis)</option>
-        <option value="Desarrollo Tecnológico(Residencia Profesional)">Desarrollo Tecnológico(Residencia Profesional)</option>
-        <option value="Innovacion Tecnológica">Innovacion Tecnológica</option>
-        <option value="Otros">Otros</option>
+        <option value="">Tipo de Titulación</option>
+        @foreach ($aredeconocimiento as $area)
+        <option value="{{$area->id}}">{{$area->	areade}}</option>
+        @endforeach
       </select> <br>
-      <p>Otros</p><input name="id_input" id="id_input" type="text" disabled>
+      <p>Otro</p><input name="id_input" id="id_input" type="text" disabled>
     </div>
     <div class="col-md-3">
       <label for="" class="control-label">Asesor</label>
-      <select class="form-control" name="assesor">
+      <select class="form-control" name="assesor" id="assesor">
         <option>Asesor</option>
         @foreach($docente as $fd)
         <option value="{{$fd->id}}">{{$fd->prefijo}} {{$fd->nombre}} {{$fd->paterno}} {{$fd->materno}}</option>
@@ -93,7 +96,7 @@
     {!! $errors->first('empresa','<span class="help-block">:message</span>')!!}
     <th><br><br>Oficina</th>
     <br>
-    <td name='oficina'>{{$foro->oficina}}</td>
+    <!-- <td name='oficina'>{{$foro->oficina}}</td> -->
     <br><br>
     <button type="submit" class="btn btn-primary" value="Registrar" name="">Guardar</button>
   </form>
