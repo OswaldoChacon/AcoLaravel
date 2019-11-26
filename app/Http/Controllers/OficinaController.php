@@ -666,6 +666,17 @@ class OficinaController extends Controller
         $id = Crypt::encrypt($id);
         return redirect("configurarForo/$id");
     }
+    public function prefijoProyecto(Request $req, $id)
+    {
+
+        $id = Crypt::decrypt($id);
+        $prefijoProyecto = Foro::find($id);
+        $prefijoProyecto->prefijo_proyecto= $req->prefijoProyecto;
+        $prefijoProyecto->save();
+
+        $id = Crypt::encrypt($id);
+        return redirect("configurarForo/$id");
+    }
 
     public function actualizarDuracion(Request $request, $id)
     {

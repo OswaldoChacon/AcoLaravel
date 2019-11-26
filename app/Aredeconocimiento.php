@@ -17,7 +17,7 @@ class Aredeconocimiento extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'linea', 'areade',
+        'linea', 'areade','id'
     ];
 
     /**
