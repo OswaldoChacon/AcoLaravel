@@ -71,7 +71,7 @@
                                 <li>
                                     <!-- {{$maestro->nombre}} ({{count($maestro->horario)}}) -->
                                     <!-- <span>Esp. de tiempo en comunsssssssssssssss</span> -->
-                                    <span>({{count($proyecto->espaciosComun)}})</span>
+                                    <span>Cantidad: {{count($proyecto->espaciosComun)}}</span>
                                 </li>
                                 @foreach($intervalosContainer as $keyFechas => $horas)
                                 <!-- <ul class="list-unstyled components"> -->

@@ -245,7 +245,7 @@ Route::get('horarioGenerado', function () {
     return view('oficina.horarios.horarioGenerado');
 });
 
-Route::get('proyectos', 'Horario\HorarioController@proyectosHorarioMaestros');
+Route::get('proyectosJurado', 'Horario\HorarioController@proyectosHorarioMaestros');
 
 Route::post('actualizarHorarioForo/{id}', 'Horario\HorarioController@actualizarHorarioForo')->name('actualizarHorarioForo');
 
@@ -278,3 +278,10 @@ Route::get('excel','Horario\HorarioController@excel');
 // });
 
 // Route::post('agregarProfeAforo/{id}','OficinaController@agregarProfeAforo')->name('agregarProfeAforo');
+
+
+//mis rutas sunny
+Route::get('EstadoDeProyectoAlumno/{id}','AlumnoController@EstadoDeProyectoAlumno')->name('EstadoDeProyectoAlumno');
+Route::get('registroIr/{id}', 'AlumnoController@registroIr');
+Route::get('detalleSeminario', 'AlumnoController@detalleSeminario');
+Route::get('solicitarResidencia/{id}', 'AlumnoController@solicitarResidencia');

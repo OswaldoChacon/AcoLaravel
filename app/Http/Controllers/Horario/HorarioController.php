@@ -297,7 +297,7 @@ class HorarioController extends Controller
                         $cont++;
                         // dd($hours,$event,$events,$cont);
                         foreach ($events as $keyItem => $item) {
-                            $project = DB::table('proyectos')->select('proyectos.id as id',)
+                            $project = DB::table('proyectos')->select('proyectos.id as id')
                                 ->join('foros', 'proyectos.id_foro', '=', 'foros.id')
                                 ->where('proyectos.titulo', '=', $event)->where('foros.acceso', 1)->first();
                             $docentes = DB::TABLE('docentes')->select('id')

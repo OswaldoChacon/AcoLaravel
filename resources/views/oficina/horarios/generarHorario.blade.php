@@ -14,22 +14,14 @@
         <div class="alert alert alert-danger" id="alert-fade">({{ Session::get('message') }})</div>
         @endif
         <div class="row">
-            <div class="form-group col-md-4 col-xl-2 ">
+            <!--<div class="form-group col-md-4 col-xl-2 ">
                 <label for="alpha">Alfa</label>
-                <input type="number" step="any" name="alpha" class="form-control" value="1">
-            </div>
-            <div class="form-group col-md-4 col-xl-2">
-                <label for="alpha">Beta</label>
-                <input type="number" name="beta" class="form-control" value="2">
-            </div>
-            <div class="form-group col-md-4 col-xl-2">
-                <label for="Q">Q</label>
-                <input type="number" name="Q" class="form-control" value="1">
-            </div>
-            <div class="form-group col-md-4 col-xl-3">
-                <label for="evaporation">Factor de evaporación</label>
-                <input type="number" name="evaporation" class="form-control" value="0.1">
-            </div>
+                </div>-->
+            <input type="hidden" step="any" name="alpha" class="form-control" value="1">                                    
+            <input type="hidden" name="beta" class="form-control" value="2">                                    
+            <input type="hidden" name="Q" class="form-control" value="1">                                
+            <input type="hidden" name="evaporation" class="form-control" value="0.1">
+            <input type="hidden" name="t_minDenominador" class="form-control" id="test" value="10">            
             <div class="form-group col-md-4 col-xl-3">
                 <label for="iterations">Número de iteraciones</label>
                 <input type="number" name="iterations" class="form-control" value="2">
@@ -41,11 +33,7 @@
             <div class="form-group col-md-4 col-xl-3">
                 <label for="estancado">Número de estancamiento</label>
                 <input type="number" name="estancado" class="form-control" value="5">
-            </div>
-            <div class="form-group  col-md-4 col-xl-3">
-                <label for="t_minDenominador">t_minDenominador</label>
-                <input type="number" name="t_minDenominador" class="form-control" id="test" value="5">
-            </div>
+            </div>                        
         </div>
         <button type="button" class="btn btn-sm btn-primary " id="generarHorario">Generar horario</button>        
         <!-- <button type="submit" class="btn btn-sm btn-primary " id="generarHorari">Generar horario</button>
@@ -99,10 +87,7 @@
 <script src="https://cdn.datatables.net/buttons/1.6.0/js/buttons.colVis.min.js"></script>
 
 
-<script>
-    // var salones = {{$salones}};
-    // var maestros = {{$maestrosTable}} + 1;
-    //  console.log(maestros);
+<script>    
     var columns = document.getElementById('horarioGenerado').rows[0].cells.length
     $("#generarHorario").on('click', function() {
         $('div').remove('.remove');
@@ -115,7 +100,7 @@
         var estancado = $('input[name="estancado"]').val();
         var t_minDenominador = $('input[name="t_minDenominador"]').val();
         var salones = $('input[name="salones"]').val();
-        var maestrosTable = $('input[name="maestrosTable"]').val();
+        var maestrosTable = $('input[name="maestrosTable"]').val();        
         $(".loaderContainer").addClass('active');
         $.ajax({
             headers: {
@@ -136,37 +121,21 @@
             success: function(data) {
                 if(data==null)     {
                     $('.no-content').after('<div class="remove"><span class="text-danger">Existe al menos un proyecto que no contiene espacios en comun entre los maestros</span><a href="proyectos" class="btn-primary btn-sm btn">Ver eventos</a></div>');
-                }
-                // console.log(data_aux);
-                // console.log(data.shift());
-                // $.each(data, function(key, lastkey) {
-                //     if([key] ==0){
-                //     alert(key);
-                //      delete data[key];
-                //     }
-                // });
+                }               
                 $(".loaderContainer").removeClass('active');
                 var tableHour = '';
-                $.each(data, function(date, dates) {
-                    // alert(data[date]);
+                $.each(data, function(date, dates) {                    
                     tableHour += '<tr>';
                     tableHour += '<td colspan="'+columns+'">'+date+'</td>';
                     for (var z = 0; z < columns-1; z++) {
                         tableHour += '<td style="display:none"></td>';
                     }
-                    tableHour += '</tr>';
-                    // console.log(data[date]);
+                    tableHour += '</tr>';                    
                     $.each(data[date],function(hour,hours){
                         tableHour += '<tr>';
                         tableHour += '<td></td>';
-                        tableHour += '<td>' + hour + '</td>';
-                        // console.log(data[date][hour]);
-                        // alert(hour);
-                        $.each(data[date][hour], function(event, events) {
-                            // console.log(event+","+data[date][hour][event]);
-                            console.log(data);
-                            // alert(data[date][hour][event]);
-                            // alert(data[date][hour][event].length);
+                        tableHour += '<td>' + hour + '</td>';                        
+                        $.each(data[date][hour], function(event, events) {                                                        
                             if (data[date][hour][event].length == 0) {
                                 for (var z = 0; z < {{$maestrosTable}}+1; z++) {
                                     tableHour += '<td></td>';
@@ -174,8 +143,7 @@
                             }              
                             else if(data[date][hour][event].length == 1){
                                 $.each(data[date][hour][event], function(item, items) {
-                                    tableHour += '<td>' + data[date][hour][event][item]+ '</td>';
-                                    // alert(data[date][hour][event]);
+                                    tableHour += '<td>' + data[date][hour][event][item]+ '</td>';                                    
                                 });                                
                                 
                             }             
@@ -190,14 +158,7 @@
                           
                         });
                         tableHour += '</tr>';
-                    });
-                    // for (var z = 0; z < 2; z++) {
-                    //     tableHour += '<tr>';
-                    //     for (var y = 0; y < columns; y++) {
-                    //         tableHour += '<td></td>';
-                    //     }
-                    //     tableHour += '</tr>';
-                    // }
+                    });                    
                 });
                 var table = $('#horarioGenerado').DataTable({
                     "language": {
@@ -222,18 +183,13 @@
                             messageTop: {{$maestrosTable}},
                             exportOptions: {
                                 columns: ':visible'
-                            }
-                            // "bShowAll": true
+                            }                          
                         },
-
                         {
                             extend: 'pdfHtml5',
                             messageTop: {{$maestrosTable}},
                             orientation: 'landscape',
-                            exportOptions: {
-                                // columns: [columns]
-                                // columns: ':visible'
-                                // columns: [ columns, ':false' ]
+                            exportOptions: {                          
                                 columns: ':visible:not(.not-export)'
                             }
                         },
@@ -247,15 +203,13 @@
                         },
                     ]
                 });
-                table.clear();
-                // $('#horarioGenerado').append('<caption style="caption-side: bottom">A fictional company\'s staff table.</caption>');
+                table.clear();                
                 table.rows.add($(tableHour)).draw();
             },
             error: function(error) {
                 $(".loaderContainer").removeClass('active');
                 console.log(error);
-                var er = error.responseJSON.errors;
-                // alert(error);
+                var er = error.responseJSON.errors;                
                 console.log(er);
                 $.each(er, function(name, message) {
                     $('input[name=' + name + ']').after('<span class="text-danger">' + message + '</span>');
