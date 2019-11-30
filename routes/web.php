@@ -245,7 +245,7 @@ Route::get('horarioGenerado', function () {
     return view('oficina.horarios.horarioGenerado');
 });
 
-Route::get('proyectos', 'Horario\HorarioController@proyectosHorarioMaestros');
+Route::get('proyectosJurado', 'Horario\HorarioController@proyectosHorarioMaestros');
 
 Route::post('actualizarHorarioForo/{id}', 'Horario\HorarioController@actualizarHorarioForo')->name('actualizarHorarioForo');
 
