@@ -78,8 +78,11 @@
 							<a href="/addHour">Asignar horario del jurado</a>
 						</li>
 						<li>
-							<a href="/generarHorario">Generar horario</a>
+							<a href="/proyectosJurado">Proyectos participantes</a>
 						</li>
+						<li>
+							<a href="/generarHorario">Generar horario</a>
+						</li>						
 					</ul>
 				</li>
 				<li>

@@ -465,6 +465,7 @@ class AlumnoController extends Controller
 
     $alumno = Auth::id();
     $name= DB::table('alumnos')->select('nombre','paterno','materno','id_proyecto')->where('id',$alumno)->first();
+    
     $idproyecto=DB::table('alumnos')->select('id_proyecto')->where('id',$alumno)->first();
     $id=$idproyecto->id_proyecto;
     $clave=DB::table('proyectos')->select('id_proyecto')->where('id',$id)->first();
@@ -477,4 +478,117 @@ class AlumnoController extends Controller
     return view('alumno.horariogeneradoAlumno',compact('horario','name','id_prefijo'));
 
   }
+
+
+//sunny
+
+public function EstadoDeProyectoAlumno($id)
+{
+
+  $alumno = Auth::id();
+  
+  $name= DB::table('alumnos')->select('nombre','paterno','materno','id_proyecto')->where('id',$alumno)->first();
+  //dd($name);
+  $control= DB::table('alumnos')->select('nocontro','id_proyecto','nombre','paterno','materno','id_proyecto')->where('id',$alumno)->first();
+  
+  $idp =  DB::table('alumnos')->select('id_proyecto')->where('id','=',$alumno)->first();
+  //var_dump( $idp );
+  //$stm->bindValue(":id",$rut);
+  $bar = (array) $idp; 
+
+  //$gsent->fetchColumn();
+ // dd($idp);
+ $jurado = DB::table('jurados')->select('id')->where('id_proyecto',$bar)->get();
+ //dd($jurado);
+
+  $proyectos = DB::table('proyectos')->select('titulo')->where('id',$bar)->first();
+ 
+  //$proyectos = DB::table('proyectos')->select('id')->where('id_proyecto',$alumno)->first();
+
+  //dd($proyectos);
+  return view('alumno.estadoAlumno',compact('alumno','name','control','proyectos','jurado'));
+}
+
+public function solicitarResidencia($id)
+{
+
+  $alumno = Auth::id();
+  
+  $name= DB::table('alumnos')->select('nombre','paterno','materno','id_proyecto')->where('id',$alumno)->first();
+  //dd($name);
+  $control= DB::table('alumnos')->select('nocontro','id_proyecto','nombre','paterno','materno','id_proyecto')->where('id',$alumno)->first();
+  
+  $idp =  DB::table('alumnos')->select('id_proyecto')->where('id','=',$alumno)->first();
+  //var_dump( $idp );
+  //$stm->bindValue(":id",$rut);
+  $bar = (array) $idp; 
+
+  //$gsent->fetchColumn();
+ // dd($idp);
+ $jurado = DB::table('jurados')->select('id')->where('id_proyecto',$bar)->get();
+ //dd($jurado);
+
+  $proyectos = DB::table('proyectos')->select('titulo')->where('id',$bar)->first();
+  $asesor = DB::table('proyectos')->select('id_asesor')->where('id',$bar)->first();
+  $bar2 = (array) $asesor; 
+  $asesorP = DB::table('docentes')->select('prefijo','nombre','paterno','materno')->where('id',$bar2)->first();
+  //dd($asesorP);
+  
+  //$proyectos = DB::table('proyectos')->select('id')->where('id_proyecto',$alumno)->first();
+
+  //dd($proyectos);
+  return view('alumno.solicitarResidencia',compact('alumno','name','control','proyectos','jurado','asesor','asesorP'));
+}
+
+
+public function EstadoDeProyectoAlumno2($id)
+{
+  $notificacione=Notificacione::where('id_alumno',Auth::guard('alumnos')->user()->id)->where('envio',1)->get()->count();
+  $id =Crypt::decrypt($id);
+  //$ProyectoForoAlumno = ProyectoForoAlumno::find($id);
+  $ProyectoForoAlumno = ProyectoForoAlumno::where('id_alumno', '=', $id)->first();
+  $alumnoenproyecto = ProyectoForoAlumno::all();
+  $alumno = alumno::all();
+  $docente = Docente::all();
+ // $docente = Docente::find($id);
+  $foro=Foro::find($ProyectoForoAlumno->id_foro);
+  $proyectoForo=ProyectoForo::find($ProyectoForoAlumno->id_proyecto);
+  $Forodoncente=Forodoncente::all();
+
+
+  $proyectos = ProyectoForo::all();
+  //dd($proyectoForo);
+  return view('alumno.estadoAlumno',compact('foro','proyectoForo','ProyectoForoAlumno','notificacione','alumnoenproyecto','alumno','docente','Forodoncente','proyectos'));
+}
+
+
+public function registroIr($id)
+{
+  $id =Crypt::decrypt($id);
+  $notificacione=Notificacione::where('id_alumno',Auth::guard('alumnos')->user()->id)->where('envio',1)->count();
+  $ProyectoForoAlumno = ProyectoForoAlumno::all();
+  $alumnoss=ProyectoForoAlumno::where('id_alumno',$id)->first();
+  return view('alumno.proyectosForo',compact('ProyectoForoAlumno','alumnoss','notificacione'));
+
+}
+
+
+
+public function detalleSeminario($id)
+{
+
+  $proyectos = ProyectoForo::all();
+
+    $notificacione=Notificacione::where('id_alumno',Auth::guard('alumnos')->user()->id)->where('envio',1)->count();
+
+    $vista = true;
+
+    return view('alumno.dictamen', compact('proyectos', 'notificacione', 'vista'));
+  
+}
+
+
+
+
+
 }

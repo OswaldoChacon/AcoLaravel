@@ -14,8 +14,14 @@
     .itemsHours {
         background: #DEDEDE;
     }
+    span{
+        font-weight: bold;
+    }
 </style>
 <div class="card">
+    @if(Session::has('mesage'))
+        <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('mesage') }}</p>
+    @endif
     <h5 class="card-header">Proyectos participantes ({{count($proyectos)}})</h5>
     <div class="card-body">
         <div class="table-responsive">
@@ -40,7 +46,7 @@
                         <td>
                             <ul class="list-unstyled components">
                                 <li>
-                                    {{$maestro->nombre}} ({{count($maestro->horario)}})
+                                    {{$maestro->nombre}}
                                 </li>
                                 @foreach($intervalosContainer as $keyFechas => $horas)
                                 <!-- <ul class="list-unstyled components"> -->
@@ -60,10 +66,16 @@
                                         @endforeach
                                         @endforeach
                                         <!-- </ul> -->
-                                </li>
+                                </li>                                
                             </ul>
+                            @endforeach                            
+                            </ul>                            
+                            <span>Cantidad de ET: {{count($maestro->horario)}}</span><br>
+                            @foreach($cantidadProyectosMA as $item)
+                            @if($maestro->nombre == $item->nombre)
+                                <span>Cantidad de proyectos: {{$item->cantidad}}</span>                                
+                            @endif
                             @endforeach
-                            </ul>
                         </td>
                         @endforeach
                         <td colspan="5">
@@ -71,7 +83,7 @@
                                 <li>
                                     <!-- {{$maestro->nombre}} ({{count($maestro->horario)}}) -->
                                     <!-- <span>Esp. de tiempo en comunsssssssssssssss</span> -->
-                                    <span>({{count($proyecto->espaciosComun)}})</span>
+                                    <span>Cantidad: {{count($proyecto->espaciosComun)}}</span>
                                 </li>
                                 @foreach($intervalosContainer as $keyFechas => $horas)
                                 <!-- <ul class="list-unstyled components"> -->
@@ -91,7 +103,7 @@
                                         @endif
                                         @endforeach
                                         @endforeach
-                                    </ul>
+                                    </ul>                                                                        
                                 </li>
                                 <!-- </ul> -->
                                 @endforeach

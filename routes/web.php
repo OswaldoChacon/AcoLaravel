@@ -56,6 +56,7 @@ Route::post('actualizarDuracion/{id}', 'OficinaController@actualizarDuracion')->
 Route::post('numAulas/{id}', 'OficinaController@numAulas')->name('numAulas');
 Route::post('numMaestros/{id}', 'OficinaController@numMaestros')->name('numMaestros');
 Route::post('prefijoProyecto/{id}', 'OficinaController@prefijoProyecto')->name('prefijoProyecto');
+Route::get('/generarHorario', 'Horario\HorarioController@generarHorarioView');
 /////////////////////////////////						GET					/////////////////////////////////////////
 
 Route::get('oficina', 'OficinaController@index')->name('oficina');
@@ -83,8 +84,10 @@ Route::get('/archivoForo1/{id}', 'OficinaController@archivoForo1')->name('archiv
 Route::get('/archivoForo2/{id}', 'OficinaController@archivoForo2')->name('archivoForo');
 Route::get('/jurado/{id}', 'OficinaController@jurado')->name('jurado');
 Route::get('/cerrar/{id}', 'OficinaController@cerrar')->name('cerrar');
+Route::get('/evento_et',function(){
+    return view('oficina.horarios.eventoET');
+});
 
-Route::get('/generarHorario', 'Horario\HorarioController@generarHorarioView');
 // function () {
 //     $salones = Foro::select('num_aulas')->where('acceso', 1)->get()->first();
 //     // dd($salones);
@@ -245,7 +248,7 @@ Route::get('horarioGenerado', function () {
     return view('oficina.horarios.horarioGenerado');
 });
 
-Route::get('proyectos', 'Horario\HorarioController@proyectosHorarioMaestros');
+Route::get('proyectosJurado', 'Horario\HorarioController@proyectosHorarioMaestros');
 
 Route::post('actualizarHorarioForo/{id}', 'Horario\HorarioController@actualizarHorarioForo')->name('actualizarHorarioForo');
 
@@ -278,3 +281,10 @@ Route::get('excel','Horario\HorarioController@excel');
 // });
 
 // Route::post('agregarProfeAforo/{id}','OficinaController@agregarProfeAforo')->name('agregarProfeAforo');
+
+
+//mis rutas sunny
+Route::get('EstadoDeProyectoAlumno/{id}','AlumnoController@EstadoDeProyectoAlumno')->name('EstadoDeProyectoAlumno');
+Route::get('registroIr/{id}', 'AlumnoController@registroIr');
+Route::get('detalleSeminario', 'AlumnoController@detalleSeminario');
+Route::get('solicitarResidencia/{id}', 'AlumnoController@solicitarResidencia');

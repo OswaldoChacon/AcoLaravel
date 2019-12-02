@@ -22,7 +22,7 @@ class Problema
         foreach ($maestros_et as $jurado) {
             $this->maestros[] = new Maestros($jurado->nombre, $jurado->horas);
         }
-        // dd($this->maestros);    
+        //dd($eventosConMaestros);    
         foreach ($eventosConMaestros as $evento) {
             unset($aux_maestro);
             foreach ($this->maestros as $maestro) {
@@ -57,18 +57,10 @@ class Problema
     }
     public function getEspaciosEnComun($evento)
     {
+        //dd($this->eventos);
         $test =array();
         // unset($this->aux_timeslot_common);
-        $maestro_1 = sizeof($evento->maestroList[0]->horario);
-        $maestro_2 = sizeof($evento->maestroList[1]->horario);
-        $maestro_3 = sizeof($evento->maestroList[2]->horario);
-
-        $maestro_1 = ($evento->maestroList[0]->horario);
-        $maestro_2 = ($evento->maestroList[1]->horario);
-        $maestro_3 = ($evento->maestroList[2]->horario);
-
-        $aux_timeslot_common = array_intersect($maestro_1, $maestro_2,$maestro_3);        
-        $aux_timeslot_common = array_values($aux_timeslot_common);       
+        
         
         foreach($evento->maestroList as $maestros){
             $test[] = $maestros->horario;
@@ -95,7 +87,7 @@ class Problema
                     $flag = true;
                 }
             }
-        }
+        }        
     }
     public function validarExisteEspaciosEnComun()
     {

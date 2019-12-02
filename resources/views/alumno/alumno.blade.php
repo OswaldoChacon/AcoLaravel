@@ -52,9 +52,18 @@
 				<li>
 					<a href="{{ route('dictamen') }}">Calificación del seminario</a>
 				</li>
-			</ul>
-		</nav>
 
+					@if (Auth::guard('alumnos')->user()->acceso==0)
+                <li>
+				<a class="list-group-item" href="/EstadoDeProyectoAlumno/{{Crypt::encrypt(Auth::guard('alumnos')->user()->id)}}">Estado de Proyecto</a>
+					{{-- @endif --}}
+					
+					</li>
+				@endif
+			</ul>
+			
+		</nav>
+	
 		<!-- Page Content  -->
 		<div id="content">
 			<nav class="navbar navbar-expand-lg navbar-light fixed-top">
