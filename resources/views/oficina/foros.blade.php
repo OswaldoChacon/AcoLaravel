@@ -33,32 +33,15 @@
             <td>{{$for->noforo}}</td>
             <td>{{$for->titulo}}</td>
             <td>
-              <button class="btn btn-success btn-xs bnt-block" onclick="location.href='configurarForo/{{Crypt::encrypt($for->id)}}'">Configuración</button>
-              <button class="btn btn-info btn-xs bnt-block" onclick="location.href='proyecto/{{Crypt::encrypt($for->id)}}'">Proyectos</button>
-              <a href="/eliminarForo/{{$for->id}}"class="btn btn-danger btn-sm btnbreak">Borrar</a>
+              <button class="btn btn-success btn-sm bnt-block" onclick="location.href='configurarForo/{{Crypt::encrypt($for->id)}}'">Configuración</button>
+              <button class="btn btn-info btn-sm bnt-block" onclick="location.href='proyecto/{{Crypt::encrypt($for->id)}}'">Proyectos</button>
+              <a href="/eliminarForo/{{$for->id}}" class="btn btn-danger btn-sm btnbreak">Borrar</a>
             </td>
           </tr>
           @endforeach
         </tbody>
       </table>
-    </div>
-    @foreach($foro as $foroitem)
-    <div class="container" style="">
-      <div class="row">
-        <div class="col-md-1">
-          {{$foroitem->noforo}}
-        </div>
-        <div class="col-lg-7">
-          {{$foroitem->titulo}}
-        </div>
-        <div class="col-lg-4">
-        <button class="btn btn-success btn-sm bnt-block" onclick="location.href='configurarForo/{{Crypt::encrypt($for->id)}}'">Configuración</button>
-                <button class="btn btn-info btn-sm bnt-block" onclick="location.href='proyecto/{{Crypt::encrypt($for->id)}}'">Proyectos</button>
-                <a href="/eliminarForo/{{$for->id}}"class="btn btn-danger btn-sm btnbreak">Borrar</a>
-        </div>
-      </div>
-    </div>
-    @endforeach
+    </div>    
   </div>
 </div>
 @endsection

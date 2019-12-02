@@ -157,7 +157,7 @@
                         <form class="form-inline" method="post" action="/actualizarDuracion/{{Crypt::encrypt($foro->id)}} ">
                         {{csrf_field()}}
                             <td>Duración de exposición por evento: <strong> {{$foro->duracion}} min </strong></td>
-                            <td><input class="form-inline" type="number" name="duracion" class="form-control" min="10" pattern="[0-9]" style='width:70px; height:25px' required /></td>
+                            <td><input class="form-inline" type="number" name="duracion" value="{{$foro->duracion}}" class="form-control" min="10" pattern="[0-9]" style='width:70px; height:25px' required /></td>
                             <td> <button class="btn btn-primary form-inline btn-sm" value="Registrar" name="btnGuardar">Guardar</button></td>
                             {!! $errors->first('duracion','<span class="help-block alert alert-danger">:message</span>')!!}
                             </td>

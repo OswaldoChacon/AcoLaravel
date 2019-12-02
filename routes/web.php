@@ -228,10 +228,10 @@ Route::post('addHourDocente/{id}', 'Horario\addHourController@addHourDocente')->
 Route::post('/generarHorarioAnt', 'Horario\HorarioController@generarHorario');
 Route::post('addHour/setHorarioJurado', 'Horario\HorarioJuradoController@setHorarioJurado');
 /////////////////////////////////						GET				/////////////////////////////////////////
-Route::get('horarios', 'Horario\HorarioProyectosController@index');
+Route::get('/horarios', 'Horario\HorarioProyectosController@index');
 Route::get('horarios/get-proyectos-foro-horario', 'Horario\HorarioProyectosController@getProyectosForo');
 Route::get('addHour', 'Horario\HorarioJuradoController@index');
-Route::get('profes/horarios/{id?}', 'Horario\addHourController@agregarHorarios')->name('horariomaestro');
+Route::get('profes/horarios/{id}', 'Horario\addHourController@agregarHorarios')->name('horariomaestro');
 Route::get('Jprojects/get-proyectos-foro', 'OficinaController@getProyectosForo');
 
 
