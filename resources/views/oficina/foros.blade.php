@@ -35,13 +35,13 @@
             <td>
               <button class="btn btn-success btn-sm bnt-block" onclick="location.href='configurarForo/{{Crypt::encrypt($for->id)}}'">Configuración</button>
               <button class="btn btn-info btn-sm bnt-block" onclick="location.href='proyecto/{{Crypt::encrypt($for->id)}}'">Proyectos</button>
-              <a href="/eliminarForo/{{$for->id}}" class="btn btn-danger btn-sm btnbreak">Borrar</a>
+              <a href="/eliminarForo/{{$for->id}}"class="btn btn-danger btn-sm btnbreak">Borrar</a>
             </td>
           </tr>
           @endforeach
         </tbody>
       </table>
-    </div>    
+    </div>
   </div>
 </div>
 @endsection
