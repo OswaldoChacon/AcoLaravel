@@ -138,7 +138,7 @@ class AlumnoController extends Controller
       if($contador < 10)
       {
         strval($contador);
-        $temp= " 0 " . $contador;
+        $temp= "0" . $contador;
       }
       else{
         strval($contador);
@@ -149,7 +149,7 @@ class AlumnoController extends Controller
     else{
       $contador=1;
       strval($contador);
-      $temp= " 0 " . $contador;
+      $temp= "0" . $contador;
     }
 
     $id_proyecto=$p . $temp;
