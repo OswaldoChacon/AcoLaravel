@@ -14,7 +14,7 @@ class Horariodocente extends Model
      */
     public $timestamps = false;
     protected $fillable = [
-        'id','id_docente', 'dia', 'hora_inicio','hora_entrada','fecha'
+        'id','id_docente', 'id_horarioforos', 'hora','disponible','posicion'
     ];
 
     /**
@@ -27,6 +27,6 @@ class Horariodocente extends Model
     ];
     public function horasDocente()
     {
-    	return $this->belongsTo(Docente::class,'id','id_foro');
+    	return $this->belongsTo(Docente::class,'id','id_docente');
     }
 }

@@ -7,68 +7,78 @@
 
 <div class="card">
     <div class="card-body">
-        <!-- <form action="/generarHorarioAnt" method="POST">
-        @csrf -->
-        <meta name="csrf-token" content="{{ csrf_token() }}">
-        @if (Session::has('message'))
-        <div class="alert alert alert-danger" id="alert-fade">({{ Session::get('message') }})</div>
-        @endif
-        <div class="row">
-            <!--<div class="form-group col-md-4 col-xl-2 ">
-                <label for="alpha">Alfa</label>
-                </div>-->
-            <input type="hidden" step="any" name="alpha" class="form-control" value="1">                                    
-            <input type="hidden" name="beta" class="form-control" value="2">                                    
-            <input type="hidden" name="Q" class="form-control" value="1">                                
-            <input type="hidden" name="evaporation" class="form-control" value="0.1">
-            <input type="hidden" name="t_minDenominador" class="form-control" id="test" value="10">            
-            <div class="form-group col-md-4 col-xl-3">
-                <label for="iterations">Número de iteraciones</label>
-                <input type="number" name="iterations" class="form-control" value="2">
+         <!--<form action="/generarHorarioAnt" method="POST">
+        @csrf-->
+        @if($salones != null)
+        
+            <meta name="csrf-token" content="{{ csrf_token() }}">
+            @if (Session::has('message'))
+            <div class="alert alert alert-danger" id="alert-fade">({{ Session::get('message') }})</div>
+            @endif
+            <div class="row">
+                <!--<div class="form-group col-md-4 col-xl-2 ">
+                    <label for="alpha">Alfa</label>
+                    </div>-->
+                <input type="hidden" name="alpha" class="form-control" value="1">                                    
+                <input type="hidden" name="beta" class="form-control" value="2">                                    
+                <input type="hidden" name="Q" class="form-control" value="1">                                
+                <input type="hidden" name="evaporation" class="form-control" value="0.1">
+                <input type="hidden" name="t_minDenominador" class="form-control" id="test" value="1">            
+                <div class="form-group col-md-4 col-xl-3">
+                    <label for="iterations">Número de iteraciones</label>
+                    <input type="number" name="iterations" class="form-control" value="400">
+                </div>
+                <div class="form-group col-md-4 col-xl-3">
+                    <label for="ants">Número de hormigas</label>
+                    <input type="number" name="ants" class="form-control" value="10">
+                </div>
+                <div class="form-group col-md-4 col-xl-3">
+                    <label for="estancado">Número de estancamiento</label>
+                    <input type="number" name="estancado" class="form-control" value="25">
+                </div>                        
             </div>
-            <div class="form-group col-md-4 col-xl-3">
-                <label for="ants">Número de hormigas</label>
-                <input type="number" name="ants" class="form-control" value="5">
-            </div>
-            <div class="form-group col-md-4 col-xl-3">
-                <label for="estancado">Número de estancamiento</label>
-                <input type="number" name="estancado" class="form-control" value="5">
-            </div>                        
-        </div>
-        <button type="button" class="btn btn-sm btn-primary " id="generarHorario">Generar horario</button>        
-        <!-- <button type="submit" class="btn btn-sm btn-primary " id="generarHorari">Generar horario</button>
-        </form> -->
-        <div class="container no-content" style="margin-top:10px; ">
-        <!-- <div class="remove">
+            <button type="button" class="btn btn-sm btn-primary " id="generarHorario">Generar horario</button> 
+            <!--<button type="submit" class="btn btn-sm btn-primary " id="generarHorari">Generar horario</button>
+            </form> -->
+            <div class="container no-content" style="margin-top:10px; ">
+            <!-- <div class="remove">
 
-        </div> -->
+            </div> -->
+            </div>
+
+
+        <div class="table-responsive">
+        <!-- {{$salones}} -->
+        <table class="table" id="horarioGenerado">
+            <thead>
+                <tr>
+                    <?php
+                    echo ('<th>Fecha</th>');
+                    echo ('<th>Hora</th>');
+                    echo ('<th class="not-export">Violaciones</th>');
+                    for ($z = 0; $z < $salones->num_aulas; $z++) {
+                        echo ('<th>Clave</th>');
+                        for ($y = 0; $y < $maestrosTable; $y++) {
+                            echo ('<th>Maestro</th>');
+                        }
+                    }                
+                    ?>
+                </tr>
+            </thead>
+            <tbody id="myTableBody" style="table-layout:fixed">
+            </tbody>
+        </table>
         </div>
+        @else
+        <div class="alert-danger">
+            <span>NO EXISTE UN FORO ACTIVO</span>
+        </div>
+        @endif
     </div>
 </div>
 
 
-<div class="table-responsive">
-    <!-- {{$salones}} -->
-    <table class="table" id="horarioGenerado">
-        <thead>
-            <tr>
-                <?php
-                echo ('<th>Fecha</th>');
-                echo ('<th>Hora</th>');
-                echo ('<th class="not-export">Violaciones</th>');
-                for ($z = 0; $z < $salones; $z++) {
-                    echo ('<th>Clave</th>');
-                    for ($y = 0; $y < $maestrosTable; $y++) {
-                        echo ('<th>Maestro</th>');
-                    }
-                }                
-                ?>
-            </tr>
-        </thead>
-        <tbody id="myTableBody" style="table-layout:fixed">
-        </tbody>
-    </table>
-</div>
+
 @endsection
 
 
@@ -98,9 +108,7 @@
         var iterations = $('input[name="iterations"]').val();
         var ants = $('input[name="ants"]').val();
         var estancado = $('input[name="estancado"]').val();
-        var t_minDenominador = $('input[name="t_minDenominador"]').val();
-        var salones = $('input[name="salones"]').val();
-        var maestrosTable = $('input[name="maestrosTable"]').val();        
+        var t_minDenominador = $('input[name="t_minDenominador"]').val();        
         $(".loaderContainer").addClass('active');
         $.ajax({
             headers: {
@@ -120,7 +128,7 @@
             },
             success: function(data) {
                 if(data==null)     {
-                    $('.no-content').after('<div class="remove"><span class="text-danger">Existe al menos un proyecto que no contiene espacios en comun entre los maestros</span><a href="proyectos" class="btn-primary btn-sm btn">Ver eventos</a></div>');
+                    $('.no-content').after('<div class="remove"><span class="text-danger">Verifica que todos los maestros tengan la misma disponibilidad como de proyectos o que un proyecto al menos tenga un espacio en comun entre los maestros</span><a href="proyectosJurado" class="btn-primary btn-sm btn">Ver eventos</a></div>');
                 }               
                 $(".loaderContainer").removeClass('active');
                 var tableHour = '';
