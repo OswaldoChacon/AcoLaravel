@@ -258,7 +258,13 @@ class DocenteController extends Controller
     'proyectos.id_proyecto as idpp'
     )
     ->join('proyectos','horariogenerado.id_proyecto','=','proyectos.id')
-    ->where('id_docente',$docente)->get();    
+    ->where('id_docente',$docente)->get();
+    if ($horario == null){
+        Session::flash('mensages', "AÚN NO TIENE UN HORARIO ASIGNADO PARA SU PARTICIPACIÓN ");
+        Session::flash('alert-class', 'alert-warning');
+    }
+    // dd($horario);
+    // dd($horario);
     return view('docentes.horariogeneradoDocente',compact('horario','name'));
 
   }
