@@ -25,7 +25,6 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
-use Mail;
 use SebastianBergmann\Environment\Console;
 use lIluminate\Database\Query\save;
 
@@ -68,6 +67,13 @@ class OficinaController extends Controller
     {
         $tokendocente = Tokendocente::all();
         return view('oficina.tokenProfe', compact('tokendocente'));
+    }
+
+    public function configurarForoAtributos(Request $request,$id){
+        //dd("l;");
+        $id = Crypt::decrypt($id);
+        
+
     }
     public function alumno(Request $request)
     {

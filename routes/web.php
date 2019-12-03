@@ -52,11 +52,8 @@ Route::post('areadeconocimientoguardar', 'OficinaController@areadeconocimientogu
 Route::post('guardarForo', 'OficinaController@guardarForo')->name('guardarForo');
 Route::post('agregarProfeAforo/{id}', 'OficinaController@agregarProfeAforo')->name('agregarProfeAforo');
 Route::post('agregarProfeAforoJurado/{id}', 'OficinaController@agregarProfeAforoJurado')->name('agregarProfeAforoJurado');
-Route::post('actualizarDuracion/{id}', 'OficinaController@actualizarDuracion')->name('actualizarDuracion');
-Route::post('numAulas/{id}', 'OficinaController@numAulas')->name('numAulas');
 Route::post('numMaestros/{id}', 'OficinaController@numMaestros')->name('numMaestros');
-Route::post('prefijoProyecto/{id}', 'OficinaController@prefijoProyecto')->name('prefijoProyecto');
-Route::get('/generarHorario', 'Horario\HorarioController@generarHorarioView');
+Route::post('/configurarForoAtributos/{id}','OficinaController@configurarForoAtributos');
 /////////////////////////////////						GET					/////////////////////////////////////////
 
 Route::get('oficina', 'OficinaController@index')->name('oficina');
@@ -78,7 +75,6 @@ Route::get('/activar/{id}', 'OficinaController@activar')->name('activar');
 Route::get('/desactivar/{id}', 'OficinaController@desactivar')->name('desactivar');
 Route::get('proyecto/{id}', 'OficinaController@proyecto')->name('proyecto');
 Route::get('proyectoDescripcion/{id}', 'OficinaController@proyectoDescripcion')->name('proyectoDescripcion');
-Route::post('actulizar/{id}', 'OficinaController@actulizar')->name('actulizar');
 Route::get('/archivoForo/{id}', 'OficinaController@archivoForo')->name('archivoForo');
 Route::get('/archivoForo1/{id}', 'OficinaController@archivoForo1')->name('archivoForo');
 Route::get('/archivoForo2/{id}', 'OficinaController@archivoForo2')->name('archivoForo');
@@ -87,7 +83,7 @@ Route::get('/cerrar/{id}', 'OficinaController@cerrar')->name('cerrar');
 Route::get('/evento_et',function(){
     return view('oficina.horarios.eventoET');
 });
-
+Route::get('/generarHorario', 'Horario\HorarioController@generarHorarioView');
 // function () {
 //     $salones = Foro::select('num_aulas')->where('acceso', 1)->get()->first();
 //     // dd($salones);

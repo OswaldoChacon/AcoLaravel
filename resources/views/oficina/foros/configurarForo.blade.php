@@ -20,7 +20,7 @@
 
 <div class="card">
     <div class="card-header">
-        <h5 class="card-title">Configuracion del Foro: {{$foro->noforo}}º</h5>
+        <!--<h5 class="card-title">Configuracion del Foro: {{$foro->noforo}}º</h5>-->
         <ul class="nav justify-content-end">
             <li class="nav-item">
                 <a class="nav-link" onclick="mostrar('contenido1','addHour')" id="agregarProfesor" href="#">Agregar profesor</a>
@@ -57,7 +57,7 @@
         @if ($foro->acceso==1)
         <!-- Formullario para agregar un docente como maestro de taller de investigación -->
         <form class="oculto" id="contenido1" method="post" action="/agregarProfeAforo/{{Crypt::encrypt($foro->id)}}" class="form-center">
-        {{csrf_field()}}
+            {{csrf_field()}}
             <br>
             <!-- <div class="container"> -->
             <div class="form-group col-12">
@@ -79,7 +79,7 @@
 
 
         <form method="post" action="/addHourForo/{{Crypt::encrypt($foro->id)}}" class="form-center">
-        {{csrf_field()}}
+            {{csrf_field()}}
             <div id="addHour" class="oculto">
                 <div class="row">
                     <div class="form-group col-md-6">
@@ -88,8 +88,8 @@
                     <div class="form-group col-md-6">
                         <!-- <div class="btn-group btn-group-sm" role="group"> -->
                         <!-- <div> -->
-                            <button type="button" class="btn btn-primary btn-sm" value="Registrar" onclick="capturar()">Generar</button>
-                            <button type="button" class="btn btn-warning btn-sm" onclick="limpiar()">Cancelar</button>
+                        <button type="button" class="btn btn-primary btn-sm" value="Registrar" onclick="capturar()">Generar</button>
+                        <button type="button" class="btn btn-warning btn-sm" onclick="limpiar()">Cancelar</button>
                         <!-- </div> -->
                     </div>
                 </div>
@@ -102,7 +102,6 @@
                 </div>
         </form>
     </div>
-
     @endif
 
     <div class="table-responsive">
@@ -134,72 +133,61 @@
                     <td colspan="2"> {{$name_jefe}}</td>
                 </tr>
                 @foreach ($doc as $p)
-                <tr>
-                    <td colspan="1">Profesor de Taller: </td>
-                    <td colspan="2">{{$p->prefijo}} {{$p->nombre}} {{$p->paterno}} {{$p->materno}}</td>
-                </tr>
-                @endforeach
-                <tr>
-                    <div class="row">
-                        <form class="form-inline" method="post" action="/actulizar/{{Crypt::encrypt($foro->id)}}">
-                        {{csrf_field()}}
+                <form action="/configurarForoAtributos/{{Crypt::encrypt($foro->id)}}" method="POST">
+                {{csrf_field()}}
+                    <tr>
+                        <td colspan="1">Profesor de Taller: </td>
+                        <td colspan="2">{{$p->prefijo}} {{$p->nombre}} {{$p->paterno}} {{$p->materno}}</td>
+                    </tr>
+                    @endforeach
+                    <tr>
+                        <div class="row">
                             <td>Limite de alumnos por proyecto: <strong>{{$foro->lim_alumnos}}</strong> </td>
-                            <td><input class="form-inline" type="number" name="no_alumnos" inputmode="Numero de  foro" style='width:70px; height:25px' required /></td>
-                            <td><button type="submit" class="btn btn-primary btn-sm" class="form-inline" value="Registrar" name="lim">Guardar</button>
-                                {!! $errors->first('no_alumnos','<span class="help-block alert alert-danger">:message</span>')!!}
+                            <td><input class="form-inline" type="number" value="{{$foro->lim_alumnos}}" name="no_alumnos" inputmode="Numero de  foro" style='width:70px; height:25px' required /></td>
+                            <!--<td><button type="submit" class="btn btn-primary btn-sm" class="form-inline" value="Registrar" name="lim">Guardar</button>-->
+                            {!! $errors->first('no_alumnos','<span class="help-block alert alert-danger">:message</span>')!!}
                             </td>
-                        </form>
-                    </div>
-                    <!-- <p id="agregarHora">&nbsp;</p> -->
-                </tr>
-                <tr>
-                    <div class="row">
-                        <form class="form-inline" method="post" action="/actualizarDuracion/{{Crypt::encrypt($foro->id)}} ">
-                        {{csrf_field()}}
+                        </div>
+                        <!-- <p id="agregarHora">&nbsp;</p> -->
+                    </tr>
+                    <tr>
+                        <div class="row">
                             <td>Duración de exposición por evento: <strong> {{$foro->duracion}} min </strong></td>
                             <td><input class="form-inline" type="number" name="duracion" value="{{$foro->duracion}}" class="form-control" min="10" pattern="[0-9]" style='width:70px; height:25px' required /></td>
-                            <td> <button class="btn btn-primary form-inline btn-sm" value="Registrar" name="btnGuardar">Guardar</button></td>
+                            <!-- <td> <button class="btn btn-primary form-inline btn-sm" value="Registrar" name="btnGuardar">Guardar</button></td> -->
                             {!! $errors->first('duracion','<span class="help-block alert alert-danger">:message</span>')!!}
                             </td>
-                        </form>
-                    </div>
-                </tr>
-                <tr>
-                    <div class="row">
-                        <form class="form-inline" method="post" action="/numAulas/{{Crypt::encrypt($foro->id)}} ">
-                        {{csrf_field()}}
+                        </div>
+                    </tr>
+                    <tr>
+                        <div class="row">
                             <td>Número de aulas a utilizar en el evento: <strong> {{$foro->num_aulas}} </strong></td>
-                            <td><input class="form-inline" type="number" name="numAulas" class="form-control" min="1" max="5" pattern="[0-9]" style='width:70px; height:25px' required /></td>
-                            <td> <button class="btn btn-primary form-inline btn-sm" value="Registrar" name="numeroAulas">Guardar</button></td>
+                            <td><input class="form-inline" type="number" name="numAulas" value="{{$foro->num_aulas}}" class="form-control" min="1" max="5" pattern="[0-9]" style='width:70px; height:25px' required /></td>
+                            <!-- <td> <button class="btn btn-primary form-inline btn-sm" value="Registrar" name="numeroAulas">Guardar</button></td> -->
                             {!! $errors->first('num_aulas','<span class="help-block alert alert-danger">:message</span>')!!}
                             </td>
-                        </form>
-                    </div>
-                </tr>
-                <tr>
-                    <div class="row">
-                        <form class="form-inline" method="post" action="/numMaestros/{{Crypt::encrypt($foro->id)}} ">
-                        {{csrf_field()}}
+                        </div>
+                    </tr>
+                    <tr>
+                        <div class="row">
                             <td>Número de maestros a considerar como jueces para cada proyecto: <strong> {{$foro->num_maestros}} </strong></td>
-                            <td><input class="form-inline" type="number" name="numMaestros" class="form-control" min="1" max="5" pattern="[0-9]" style='width:70px; height:25px' required /></td>
-                            <td> <button class="btn btn-primary form-inline btn-sm" value="Registrar" name="numeroMaestros">Guardar</button></td>
+                            <td><input class="form-inline" type="number" name="numMaestros" class="form-control" min="1" value="{{$foro->num_maestros}}" pattern="[0-9]" style='width:70px; height:25px' /></td>
+                            <!-- <td> <button class="btn btn-primary form-inline btn-sm" value="Registrar" name="numeroMaestros">Guardar</button></td> -->
                             {!! $errors->first('num_maestros','<span class="help-block alert alert-danger">:message</span>')!!}
                             </td>
-                        </form>
-                    </div>
-                </tr>
-                <tr>
-                    <div class="row">
-                        <form class="form-inline" method="post" action="/prefijoProyecto/{{Crypt::encrypt($foro->id)}} ">
-                        {{csrf_field()}}
+                        </div>
+                    </tr>
+                    <tr>
+                        <div class="row">
                             <td>Asignar prefijo del proyecto: <strong> {{$foro->prefijo_proyecto}} </strong></td>
-                            <td><input class="form-inline" value="-" name="prefijoProyecto" class="form-control"  style='width:70px; height:25px' required /></td>
-                            <td> <button title="¡NO OLVIDE EL GUIÓN!" class="btn btn-primary form-inline btn-sm" value="Registrar">Guardar</button></td>
+                            <td><input class="form-inline" value="-" name="prefijoProyecto" class="form-control" style='width:70px; height:25px' required /></td>
+                            <!-- <td> <button title="¡NO OLVIDE EL GUIÓN!" class="btn btn-primary form-inline btn-sm" value="Registrar">Guardar</button></td> -->
                             {!! $errors->first('prefijo_proyecto','<span class="help-block alert alert-danger">:message</span>')!!}
                             </td>
-                        </form>
-                    </div>
-                </tr>
+                        </div>
+                    </tr>
+                    <button type="submit" class="btn-sm btn-primary">Guardar</button>
+                </form>
             </tbody>
         </table>
     </div>
@@ -259,7 +247,7 @@
                                     </div>
                                     <div class="modal-body">
                                         <form class="form-center">
-                                        {{csrf_field()}}
+                                            {{csrf_field()}}
                                             <input type="hidden" name="idHorario" value="{{$object->id}}" />
 
                                             <div class="form-group">
@@ -298,7 +286,7 @@
                                     </div>
                                     <div class="modal-body">
                                         <form class="form-center">
-                                        {{csrf_field()}}
+                                            {{csrf_field()}}
                                             <input type="hidden" name="idHorario1" value="{{$object->id}}" />
 
                                             <div class="form-group">
@@ -362,7 +350,7 @@
         </table>
     </div>
     <form action="/guardarHorarioPDF" method="post" enctype="multipart/form-data">
-    {{csrf_field()}}
+        {{csrf_field()}}
         <input type="file" class="fomr-control" name="file">
         <!-- F-8" enctype="multipart/form-data" -->
         <button type="submit" class="btn btn-primary btn-sm">Subir horario</button>
@@ -392,7 +380,7 @@
             var contenedor = document.createElement("div");
             contenedor.setAttribute("class", "form-group");
             contenedor.innerHTML =
-            "<label for='matricula'> Día #" + i + "</label>" +
+                "<label for='matricula'> Día #" + i + "</label>" +
                 '<div class="form-group row">' +
                 // contenedor.innerHTML = "<label for='matricula'> Matricula #" + i + "</label>" +
                 '<div class="form-group col-xl-3"><label>Fecha</label><input type="date" name="fecha[]" class="form-control" min="<?php $hoy = date('Y-m-d');
