@@ -33,9 +33,45 @@
             <td>{{$for->noforo}}</td>
             <td>{{$for->titulo}}</td>
             <td>
-              <button class="btn btn-success btn-sm bnt-block" onclick="location.href='configurarForo/{{Crypt::encrypt($for->id)}}'">Configuración</button>
+              <?php    
+                $conteo = 0;          
+                foreach($foro as $foroitem){
+                  if($foroitem->acceso == 1)
+                  $conteo++;
+                }                                              
+                if ($for->acceso == 1 && $conteo == 1) {
+              ?>
+                <a method="POTS" href="/desactivar/{{Crypt::encrypt($for->id)}}">
+                  <button class="btn btn-danger btn-sm bnt-block">Desactivar</button>                  
+                </a>
+                <button class="btn btn-success btn-sm bnt-block" onclick="location.href='configurarForo/{{Crypt::encrypt($for->id)}}'">Configuración</button>
+              <?php
+              }
+              elseif($conteo == 0){   
+                $meses = array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
+                $fechas_foro = explode("-", $for->periodo);
+                $mes_actual = date("m");       
+                if (array_search($fechas_foro[0], $meses) + 1 <= $mes_actual && $mes_actual <= array_search($fechas_foro[1], $meses) + 1 &&  date("Y") <= $for->anoo) {    
+              ?>
+              <a method="POTS" href="/activar/{{Crypt::encrypt($for->id)}} ">
+                <button class="btn btn-success btn-sm bnt-block">Activar</button>                
+              </a>
+              <?php
+                }
+              }
+              ?>
+              <?php
+              
+              
+                ?>
+               
+              <?php
+              // }
+              ?>
+
+
               <button class="btn btn-info btn-sm bnt-block" onclick="location.href='proyecto/{{Crypt::encrypt($for->id)}}'">Proyectos</button>
-              <a href="/eliminarForo/{{$for->id}}"class="btn btn-danger btn-sm btnbreak">Borrar</a>
+              <a href="/eliminarForo/{{$for->id}}" class="btn btn-danger btn-sm btnbreak">Borrar</a>
             </td>
           </tr>
           @endforeach

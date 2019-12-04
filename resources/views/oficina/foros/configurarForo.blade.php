@@ -64,14 +64,13 @@
                 <select name="maestro" class="form-control">
                     <option disabled selected class="dropdown-toggle">Profesores</option>
                     @foreach($docente as $docs)
-
-                    <option value="{{$docs->id}}">{{$docs->prefijo}} {{$docs->nombre}} {{$docs->paterno}} {{$docs->materno}}</option>
-
+                        <option value="{{$docs->id}}">{{$docs->prefijo}} {{$docs->nombre}} {{$docs->paterno}} {{$docs->materno}}</option>
                     @endforeach
                 </select>
             </div>
             <div class="form-group col-12">
-                <button type="submit" class="btn btn-primary" value="Registrar">Registrar</button>
+                <button type="submit" class="btn btn-primary btn-sm" value="Registrar">Registrar</button>
+                <button type="button" class="btn btn-warning btn-sm" onclick="cancelar('contenido1')">Cancelar</button>
                 <!-- <a href="#" class="btn btn-danger" onclick="mostrar('contenido1','addHour')">Cancelar</a> -->
             </div>
             <!-- </div> -->
@@ -89,7 +88,7 @@
                         <!-- <div class="btn-group btn-group-sm" role="group"> -->
                         <!-- <div> -->
                         <button type="button" class="btn btn-primary btn-sm" value="Registrar" onclick="capturar()">Generar</button>
-                        <button type="button" class="btn btn-warning btn-sm" onclick="limpiar()">Cancelar</button>
+                        <button type="button" class="btn btn-warning btn-sm" onclick="cancelar('addHour')">Cancelar</button>
                         <!-- </div> -->
                     </div>
                 </div>
@@ -113,13 +112,12 @@
                 </th>
                 <div class="btn-group btn-group-sm" role="group">
                     <th colspan="2" <ul class="list-inline">
-                        <a method="POTS" href="/activar/{{Crypt::encrypt($foro->id)}} ">
+                        <!-- <a method="POTS" href="/activar/{{Crypt::encrypt($foro->id)}} ">
                             <button class="btn btn-success btn-sm bnt-block">Activar</button>
                         </a>
-                        <a method="POTS" href="/desactivar/{{Crypt::encrypt($foro->id)}}">
-                            <!-- {{Crypt::encrypt($foro->id)}} -->
+                        <a method="POTS" href="/desactivar/{{Crypt::encrypt($foro->id)}}">                            
                             <button class="btn btn-danger btn-sm bnt-block">Desactivar</button>
-                        </a>
+                        </a> -->
                         <a method="POTS" href="/cerrar/{{$foro->id}}">
                             <button class="btn btn-danger btn-sm bnt-block">Cerrar Registro</button>
                         </a>
@@ -394,9 +392,8 @@
 
     function limpiar() {
         var div = document.getElementById("main");
-        var botonGuardar = document.getElementById("guardar");
-        botonGuardar.style.display = "none";
-        // var cantidad = document.getElementById("cantidadToken").value = "";
+        var botonGuardar = document.getElementById("guardar");        
+        botonGuardar.style.display = "none";        
         if (div !== null) {
             cantidad = "";
             while (div.hasChildNodes()) {
@@ -404,6 +401,14 @@
             }
         }
     }
+
+    function cancelar(divclass){
+        limpiar();                
+        var elementssssss = document.getElementById(divclass);        
+        elementssssss.style.display = "none";        
+    }
+
+
     $(document).ready(function() {
         var duration = 4000; // 4 seconds
         setTimeout(function() {

@@ -69,10 +69,32 @@ class OficinaController extends Controller
         return view('oficina.tokenProfe', compact('tokendocente'));
     }
 
-    public function configurarForoAtributos(Request $request,$id){        
+    public function configurarForoAtributos(Request $request, $id)
+    {
         $id = Crypt::decrypt($id);
-        
+        // dd($request);
+        $foro = Foro::find($id);
+        $foro->lim_alumnos = $request->no_alumnos;
 
+        if ($foro->duracion != $request->duracion) {
+            $horarioforos = DB::table('horarioforos')->select(
+                'horarioforos.id as id',
+                'foros.id as idf'
+            )
+                ->join('foros', 'horarioforos.id_foro', '=', 'foros.id')
+                ->where('id_foro', $id)->get();
+
+            foreach ($horarioforos as $hf) {
+                $deletes = DB::table('horariodocentes')
+                    ->where('id_horarioforos', $hf->id)
+                    ->delete();
+            }
+        }
+
+        $foro->duracion = $request->duracion;
+        $foro->num_aulas = $request->numAulas;
+        $foro->save();
+        return redirect()->back();
     }
     public function alumno(Request $request)
     {
@@ -135,11 +157,11 @@ class OficinaController extends Controller
         }
     }
     public function dartokenAlumno(Request $request)
-    {        
+    {
         $doc = Docente::all();
         $nocontrol = count($request->nocontrol, COUNT_RECURSIVE);
         $uso = 0;
-        $con = 0;       
+        $con = 0;
 
         $idprofe = Forodoncente::select('forodoncentes.id_docente')
             ->join('foros', 'forodoncentes.id_foro', '=', 'foros.id')
@@ -232,7 +254,7 @@ class OficinaController extends Controller
         $id = Crypt::decrypt($id);
         $user = User::find($id);
         return view('oficina.editar', compact('user'));
-    }   
+    }
     public function guardar(Request $request, $id)
     {
 
@@ -338,7 +360,7 @@ class OficinaController extends Controller
         // $docente = Docente::where('id', Auth::guard('docentes')->user()->id)->first();
         // $user1 = $user->prefijo . '  ' . $user->nombre . '  ' . $user->paterno . '  ' . $user->materno;
         $foro = Foro::where('noforo', $request->noforo)->first();
-        $anoo = Foro::where('anoo',$request->anoo)->get();
+        $anoo = Foro::where('anoo', $request->anoo)->get();
 
         if ($foro == null && count($anoo) < 2) {
 
@@ -351,8 +373,8 @@ class OficinaController extends Controller
                     'lim_alumnos' => 0,
                     'duracion' => 0,
                     'acceso' => 0,
-                    'num_aulas'=> 0,
-                    'num_maestros'=>0,
+                    'num_aulas' => 0,
+                    'num_maestros' => 0,
                     'id_user' => $user->id,
                 ],
             ]);
@@ -368,7 +390,7 @@ class OficinaController extends Controller
 
     public function foros()
     {
-        $foro = Foro::all();
+        $foro = Foro::all();            
         return view('oficina.foros.foros', compact('foro'));
     }
 
@@ -378,10 +400,10 @@ class OficinaController extends Controller
 
         $f = DB::table('foros')->where('id', $id)->first();
         if ($f != null) {
-        $deletes = DB::table('foros')
-            ->where('id', $f->id)
-            ->delete();
-            }
+            $deletes = DB::table('foros')
+                ->where('id', $f->id)
+                ->delete();
+        }
         return back();
     }
 
@@ -515,7 +537,8 @@ class OficinaController extends Controller
         }
 
         $id = Crypt::encrypt($id);
-        return redirect("configurarForo/$id");
+        //return redirect("configurarForo/$id");
+        return redirect()->back();
     }
     public function desactivar($id)
     {
@@ -544,7 +567,8 @@ class OficinaController extends Controller
         }
 
         $id = Crypt::encrypt($id);
-        return redirect("configurarForo/$id");
+        // return redirect("configurarForo/$id");
+        return redirect()->back();
     }
 
     public function proyecto($id)
@@ -639,76 +663,19 @@ class OficinaController extends Controller
         return $proyectos_aceptados;
     }
 
-    public function actulizar(Request $r, $id)
-    {
 
-        $id = Crypt::decrypt($id);
-        $activar = Foro::find($id);
-        $activar->lim_alumnos = $r->no_alumnos;
-        // $activar->no_profesores = $r->no_profesores;
-        $activar->save();
-        $id = Crypt::encrypt($id);
-        return redirect("configurarForo/$id");
-    }
 
     public function numMaestros(Request $requ, $id)
     {
 
         $id = Crypt::decrypt($id);
         $numMaestros = Foro::find($id);
-        $numMaestros->num_maestros= $requ->numMaestros;
+        $numMaestros->num_maestros = $requ->numMaestros;
         $numMaestros->save();
 
         $id = Crypt::encrypt($id);
         return redirect("configurarForo/$id");
     }
-    public function prefijoProyecto(Request $req, $id)
-    {
-
-        $id = Crypt::decrypt($id);
-        $prefijoProyecto = Foro::find($id);
-        $prefijoProyecto->prefijo_proyecto= $req->prefijoProyecto;
-        $prefijoProyecto->save();
-
-        $id = Crypt::encrypt($id);
-        return redirect("configurarForo/$id");
-    }
-
-    public function actualizarDuracion(Request $request, $id)
-    {
-        $id = Crypt::decrypt($id);
-        $duracio = Foro::find($id);
-        $duracio->duracion = $request->duracion;
-        $duracio->save();
-
-        $horarioforos = DB::table('horarioforos')->select(
-            'horarioforos.id as id',
-            'foros.id as idf'
-        )
-            ->join('foros', 'horarioforos.id_foro', '=', 'foros.id')
-            ->where('id_foro', $id)->get();
-
-        foreach ($horarioforos as $hf) {
-            $deletes = DB::table('horariodocentes')
-                ->where('id_horarioforos', $hf->id)
-                ->delete();
-        }
-
-
-        $id = Crypt::encrypt($id);
-        return redirect("configurarForo/$id");
-    }
-    public function numAulas(Request $requ, $id)
-    {
-        $id = Crypt::decrypt($id);
-        $numerodeaulas = Foro::find($id);
-        $numerodeaulas->num_aulas = $requ->numAulas;
-        $numerodeaulas->save();
-        $id = Crypt::encrypt($id);
-        return redirect("configurarForo/$id");
-    }
-
-
     public function archivoForo($id)
     {
         $user = Archivo::where('id_proyecto', $id)->first();
