@@ -16,6 +16,10 @@
           <th>Salon</th>
         </thead>
         <tbody>
+        @if(Session::has('mensage'))
+        <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('mensages') }}</p>
+        @endif
+        @if($horario != null)
           @foreach ($horario as $h)
           <tr>
             <td>{{$h->fecha}}</td>
@@ -24,6 +28,7 @@
             <td>{{$h->salon}}</td>
           </tr>
           @endforeach
+        @endif
         </tbody>
 
 		</div>

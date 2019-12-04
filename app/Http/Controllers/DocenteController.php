@@ -252,17 +252,18 @@ class DocenteController extends Controller
       return view('docentes.index', compact('notificacione', 'docente'));
   }
   public function horario(){
-
-
     $docente = Auth::id();
     $name= DB::table('docentes')->select('prefijo','nombre','paterno','materno')->where('id',$docente)->first();
-//  dd($name);
     $horario= DB::table('horariogenerado')->select('horariogenerado.fecha','horariogenerado.hora','horariogenerado.id_proyecto','horariogenerado.salon',
     'proyectos.id as idp',
-    'proyectos.id_proyecto as idpp',
+    'proyectos.id_proyecto as idpp'
     )
     ->join('proyectos','horariogenerado.id_proyecto','=','proyectos.id')
     ->where('id_docente',$docente)->get();
+    if ($horario == null){
+        Session::flash('mensages', "AÚN NO TIENE UN HORARIO ASIGNADO PARA SU PARTICIPACIÓN ");
+        Session::flash('alert-class', 'alert-warning');
+    }
     // dd($horario);
     // dd($horario);
     return view('docentes.horariogeneradoDocente',compact('horario','name'));

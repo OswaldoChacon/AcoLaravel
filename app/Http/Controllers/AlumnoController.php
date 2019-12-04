@@ -138,7 +138,7 @@ class AlumnoController extends Controller
       if($contador < 10)
       {
         strval($contador);
-        $temp= " 0 " . $contador;
+        $temp= "0" . $contador;
       }
       else{
         strval($contador);
@@ -149,7 +149,7 @@ class AlumnoController extends Controller
     else{
       $contador=1;
       strval($contador);
-      $temp= " 0 " . $contador;
+      $temp= "0" . $contador;
     }
 
     $id_proyecto=$p . $temp;
@@ -465,7 +465,7 @@ class AlumnoController extends Controller
 
     $alumno = Auth::id();
     $name= DB::table('alumnos')->select('nombre','paterno','materno','id_proyecto')->where('id',$alumno)->first();
-    
+
     $idproyecto=DB::table('alumnos')->select('id_proyecto')->where('id',$alumno)->first();
     $id=$idproyecto->id_proyecto;
     $clave=DB::table('proyectos')->select('id_proyecto')->where('id',$id)->first();
@@ -474,7 +474,11 @@ class AlumnoController extends Controller
 
     // dd($id);
     $horario= DB::table('horariogenerado')->select('fecha','hora','salon')->where('id_proyecto',$id)->first();
-    // dd($horario);
+    if ($horario == null){
+        Session::flash('mensage', "AÚN NO TIENES UN HORARIO ASIGNADO PARA TU PRESENTACIÓN ");
+        Session::flash('alert-class', 'alert-warning');
+    }
+
     return view('alumno.horariogeneradoAlumno',compact('horario','name','id_prefijo'));
 
   }
@@ -486,15 +490,15 @@ public function EstadoDeProyectoAlumno($id)
 {
 
   $alumno = Auth::id();
-  
+
   $name= DB::table('alumnos')->select('nombre','paterno','materno','id_proyecto')->where('id',$alumno)->first();
   //dd($name);
   $control= DB::table('alumnos')->select('nocontro','id_proyecto','nombre','paterno','materno','id_proyecto')->where('id',$alumno)->first();
-  
+
   $idp =  DB::table('alumnos')->select('id_proyecto')->where('id','=',$alumno)->first();
   //var_dump( $idp );
   //$stm->bindValue(":id",$rut);
-  $bar = (array) $idp; 
+  $bar = (array) $idp;
 
   //$gsent->fetchColumn();
  // dd($idp);
@@ -516,15 +520,15 @@ public function solicitarResidencia($id)
 {
 
   $alumno = Auth::id();
-  
+
   $name= DB::table('alumnos')->select('nombre','paterno','materno','id_proyecto')->where('id',$alumno)->first();
   //dd($name);
   $control= DB::table('alumnos')->select('nocontro','id_proyecto','nombre','paterno','materno','id_proyecto')->where('id',$alumno)->first();
-  
+
   $idp =  DB::table('alumnos')->select('id_proyecto')->where('id','=',$alumno)->first();
   //var_dump( $idp );
   //$stm->bindValue(":id",$rut);
-  $bar = (array) $idp; 
+  $bar = (array) $idp;
 
   //$gsent->fetchColumn();
  // dd($idp);
@@ -533,10 +537,10 @@ public function solicitarResidencia($id)
 
   $proyectos = DB::table('proyectos')->select('titulo')->where('id',$bar)->first();
   $asesor = DB::table('proyectos')->select('id_asesor')->where('id',$bar)->first();
-  $bar2 = (array) $asesor; 
+  $bar2 = (array) $asesor;
   $asesorP = DB::table('docentes')->select('prefijo','nombre','paterno','materno')->where('id',$bar2)->first();
   //dd($asesorP);
-  
+
   //$proyectos = DB::table('proyectos')->select('id')->where('id_proyecto',$alumno)->first();
 
   //dd($proyectos);
@@ -587,7 +591,7 @@ public function detalleSeminario($id)
     $vista = true;
 
     return view('alumno.dictamen', compact('proyectos', 'notificacione', 'vista'));
-  
+
 }
 
 

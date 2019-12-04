@@ -127,8 +127,7 @@ class Main
         $this->penalizarEmpalmeMaestro($this->currentGlobalBest);
         $this->imprimirSolucion($this->currentGlobalBest);        
 
-        $this->matrizSolucion = array_combine($this->problema->timeslotsHoras, $this->matrizSolucion);        
-        $this->matrizViolacionesSuaves();        
+        $this->matrizSolucion = array_combine($this->problema->timeslotsHoras, $this->matrizSolucion);               
     }  
     public function imprimirSolucion($ant)
     {

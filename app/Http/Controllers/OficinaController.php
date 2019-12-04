@@ -25,7 +25,6 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
-use Mail;
 use SebastianBergmann\Environment\Console;
 use lIluminate\Database\Query\save;
 
@@ -68,6 +67,12 @@ class OficinaController extends Controller
     {
         $tokendocente = Tokendocente::all();
         return view('oficina.tokenProfe', compact('tokendocente'));
+    }
+
+    public function configurarForoAtributos(Request $request,$id){        
+        $id = Crypt::decrypt($id);
+        
+
     }
     public function alumno(Request $request)
     {
@@ -130,15 +135,11 @@ class OficinaController extends Controller
         }
     }
     public function dartokenAlumno(Request $request)
-    {
-        //  dd($request->profe);
+    {        
         $doc = Docente::all();
         $nocontrol = count($request->nocontrol, COUNT_RECURSIVE);
         $uso = 0;
-        $con = 0;
-        // $idprofe =  DB::table('docentes')->select('id')
-        // ->where(DB::raw('CONCAT(prefijo," ",nombre," ",paterno," ", materno) '),'=',$request->profe)
-        // ->get();
+        $con = 0;       
 
         $idprofe = Forodoncente::select('forodoncentes.id_docente')
             ->join('foros', 'forodoncentes.id_foro', '=', 'foros.id')
@@ -231,11 +232,7 @@ class OficinaController extends Controller
         $id = Crypt::decrypt($id);
         $user = User::find($id);
         return view('oficina.editar', compact('user'));
-    }
-    //
-    //
-    //
-    //
+    }   
     public function guardar(Request $request, $id)
     {
 
@@ -274,7 +271,6 @@ class OficinaController extends Controller
             'clave' => 'required',
             'linea' => 'required',
         ]);
-
         $linea1 = Lineadeinvestigacion::where('clave', $request->clave)->first();
         $linea2 = Lineadeinvestigacion::where('linea', $request->clave)->first();
         if ($linea1 == null && $linea2 == null) {
@@ -373,7 +369,7 @@ class OficinaController extends Controller
     public function foros()
     {
         $foro = Foro::all();
-        return view('oficina.foros', compact('foro'));
+        return view('oficina.foros.foros', compact('foro'));
     }
 
     public function eliminarForo(Request $requ, $id)

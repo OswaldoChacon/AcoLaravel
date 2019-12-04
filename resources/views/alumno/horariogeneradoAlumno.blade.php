@@ -16,14 +16,21 @@
 
         </thead>
         <tbody>
+        @if(Session::has('mensage'))
+        <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('mensage') }}</p>
+        @endif
+
+        @if($horario != null)
 
           <tr>
             <td>{{$horario->fecha}}</td>
             <td>{{$horario->hora}}</td>
             <td>{{$id_prefijo}}</td>
             <td>{{$horario->salon}}</td>
-
           </tr>
+
+        @endif
+
 
         </tbody>
 

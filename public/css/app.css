@@ -172,6 +172,8 @@ a, a:hover, a:focus {
     background: #fff;
     color: #000;
     transition: all 0.3s;
+
+    overflow-y: auto;
 }
 
 #sidebar.active {
