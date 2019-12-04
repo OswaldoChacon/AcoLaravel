@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="card">
-    <h5 class="card-header">Asignar Jurado</h5>
+    <h5 class="card-header">Segumiento con actor ofisina</h5>
     <div class="card-body">
         <div class="table-responsive">
             {{csrf_field()}}
@@ -12,7 +12,7 @@
                     <th>
                         <select name="foros" class="form-control">
                             <option value="seleccione"> Elige foro</option>
-                            @foreach($foros as $foro)
+                             @foreach($foros as $foro)
                             <option value="{{$foro->id}}">{{$foro->noforo}}</option>
                             @endforeach
                         </select>
@@ -24,7 +24,6 @@
                 <thead>
                     <th>Folio</th>
                     <th>Título del proyecto</th>
-                    <th>Jurado</th>
                     <th>Acciones</th>
                 </thead>
                 <tbody style="table-layout:fixed">
@@ -55,7 +54,7 @@
                 'X-CSRF-TOKEN': $('input[name="_token"]').val()
             },
             type: 'get',
-            url: '/Jprojects/get-proyectos-foro',
+            url: '/horarios/get-proyectos-foro-horario',
             data: {
                 idForo: idForo
             },
@@ -71,11 +70,9 @@
                     <td>
                         ${this.titulo}
                     </td>
+                  
                     <td>
-
-                    </td>
-                    <td>
-                    <a class="btn btn-info btn-xs" href="/jurados/edit/${this.id}">Asignar Jurado</a>
+                    <a class="btn btn-info btn-xs" href="/jurados/edit/${this.id}">Seguimiento de Proyecto</a>
                     </td>
                     </tr>
                     `);

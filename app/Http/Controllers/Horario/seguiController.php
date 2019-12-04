@@ -5,13 +5,13 @@ namespace App\Http\Controllers\Horario;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
-class HorarioProyectosController extends Controller
+class seguiController extends Controller
 {
     public function index()
     {
         $foros = DB::table('foros')->get();
 
-        return view('oficina.horarios.horarios', compact('foros'));
+        return view('oficina.horarios.prueba2', compact('foros'));
     }
     public function editarParticipa(Request $request){
         $id = $request->get('id');

@@ -285,3 +285,22 @@ Route::get('EstadoDeProyectoAlumno/{id}','AlumnoController@EstadoDeProyectoAlumn
 Route::get('registroIr/{id}', 'AlumnoController@registroIr');
 Route::get('detalleSeminario', 'AlumnoController@detalleSeminario');
 Route::get('solicitarResidencia/{id}', 'AlumnoController@solicitarResidencia');
+//rutas de oficina
+Route::get('se', 'OficinaController@editarParticipa2');
+
+Route::get('jurados/prueba', 'JuradosController@projectsSegui')->name('juradosprojects2');
+//Route::get('horariosalv/get-proyectos-foro-horario', 'Horario\seguiController@getProyectosForo2');
+//rutas de docente
+//Route::get('proyectosDoc','DocenteController@obtenerProyectos')->name('proyectosDoc');
+Route::get('docentes/proyectosDoc','DocenteController@obtenerProyectos')->name('proyectosDoc');
+
+//Route::get('jurados/pruebaj','JuradosController@projectsSeguiDoc')->name('proyectosDoc');
+//asi quedaria hay que probar mañana para que en la vista proyectos 2 valla @extends('seminario.layout')
+
+
+
+
+//Route::get('jurados/pruebaj','JuradosController@projectsSeguiDoc')->name('proyectosDoc');
+
+//Route::get('horariosalv2/get-proyectos-foro-horario', 'Horario\seguiDocenteController@getProyectosForo2n');
+//Route::get('jurados/prueba', 'JuradosController@projectsSegui')->name('juradosprojects2');

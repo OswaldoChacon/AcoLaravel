@@ -114,4 +114,30 @@ class JuradosController extends Controller
 
         return view('seminario.jurados.Jprojects',compact('foros'));
     }
+
+    public function projectsSegui()
+    {
+
+        // $proyectos = ProyectoForo::find($id)->where([
+        //                     ['id_foro', '=', $id]
+        //                 ])
+        //                 ->get();
+        $foros=Foro::all();
+
+        return view('seminario.jurados.prueba',compact('foros'));
+    }
+
+    public function projectsSeguiDoc()
+    {
+
+        // $proyectos = ProyectoForo::find($id)->where([
+        //                     ['id_foro', '=', $id]
+        //                 ])
+        //                 ->get();
+        $foros=Foro::all();
+        $proyectos = ProyectoForo::all();
+
+        return view('seminario.jurados.pruebaj',compact('foros','proyectos'));
+    }
+
 }

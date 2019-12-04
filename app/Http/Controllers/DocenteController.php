@@ -18,6 +18,7 @@ use App\Docente;
 use App\Archivo;
 use App\Foro;
 use App\Alumno;
+use App\Juradotwo;
 use Auth;
 use DB;
 
@@ -267,4 +268,51 @@ class DocenteController extends Controller
     return view('docentes.horariogeneradoDocente',compact('horario','name'));
 
   }
+
+
+
+
+  public function obtenerProyectos(){
+    
+   // $foros = DB::table('foros')->get();
+    $foros=Foro::all();
+    $docente =Auth::id();
+
+    
+    //dd($docente);
+    
+    $idp =  DB::table('jurados')->select('id_proyecto')->where('id_docente','=',$docente)->first();
+    $idp2 = DB::table('jurados')->where('id_docente','=',$docente)->get();
+   
+
+
+   // $idp2 = DB::table('jurados')->select('id_proyecto')->where('id_docente',$docente)->get();
+ 
+    //$proyectos = ProyectoForo::all();
+   //dd($idp2);
+   //$user = User::find(Auth()->user()->id);
+   $bar2 = (array) $idp2;  // hasta aqui obtengo los ids de los prouyectos que tiene el docente
+   //dd($bar2);
+   $proyectos = ProyectoForo::all();
+   //$proyectos = DB::table('proyectos')->select('id','titulo')->where('id',$idp2)->get();
+   //$proyectos = ProyectoForo::where('id',$idp2)->get();
+  // $alumnoss=ProyectoForoAlumno::where('id_alumno',$id)->first();
+ //dd($proyectos);
+    //dd($bar2);
+  //dd($proyectos);
+    //dd($idp2nuevo);
+    
+    //dd($alvp);
+  
+ //dd($alvp);
+    $name=DB::table('docentes')->select('prefijo','nombre','paterno','materno')->where('id',$docente)->first();
+
+    //  dd($name);
+   //retornaria a return view('seminario.jurados.vistaproyectoDoc',compact('foros'));
+    return view('docentes.vistaProyectosDoc',compact('name','foros','idp2','proyectos','idp'));
+
+  }
+
+  
+
 }

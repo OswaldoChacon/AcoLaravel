@@ -1,9 +1,10 @@
-@extends('seminario.layout')
+
+@extends('docentes.docente')
 
 @section('content')
 
 <div class="card">
-    <h5 class="card-header">Asignar Jurado</h5>
+    <h5 class="card-header">seguimiento con actor docente</h5>
     <div class="card-body">
         <div class="table-responsive">
             {{csrf_field()}}
@@ -11,6 +12,7 @@
                 <thead>
                     <th>
                         <select name="foros" class="form-control">
+                        
                             <option value="seleccione"> Elige foro</option>
                             @foreach($foros as $foro)
                             <option value="{{$foro->id}}">{{$foro->noforo}}</option>
@@ -24,16 +26,17 @@
                 <thead>
                     <th>Folio</th>
                     <th>Título del proyecto</th>
-                    <th>Jurado</th>
                     <th>Acciones</th>
                 </thead>
                 <tbody style="table-layout:fixed">
+                 
                 </tbody>
         </div>
     </div>
 
 </div>
 @endsection
+
 @push('participaControl')
 <script>
     /* Procedimiento para mostrar proyectos por foro */
@@ -55,7 +58,7 @@
                 'X-CSRF-TOKEN': $('input[name="_token"]').val()
             },
             type: 'get',
-            url: '/Jprojects/get-proyectos-foro',
+            url: '/horarios/get-proyectos-foro-horario',
             data: {
                 idForo: idForo
             },
@@ -71,11 +74,9 @@
                     <td>
                         ${this.titulo}
                     </td>
+                  
                     <td>
-
-                    </td>
-                    <td>
-                    <a class="btn btn-info btn-xs" href="/jurados/edit/${this.id}">Asignar Jurado</a>
+                    <a class="btn btn-info btn-xs" >Seguimiento de Proyecto</a>
                     </td>
                     </tr>
                     `);

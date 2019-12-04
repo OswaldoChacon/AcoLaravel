@@ -839,4 +839,16 @@ class OficinaController extends Controller
             }
         }
     }
+
+    public function projectsSegui()
+    {
+
+        // $proyectos = ProyectoForo::find($id)->where([
+        //                     ['id_foro', '=', $id]
+        //                 ])
+        //                 ->get();
+        $foros=Foro::all();
+
+        return view('seminario.jurados.prueba',compact('foros'));
+    }
 }

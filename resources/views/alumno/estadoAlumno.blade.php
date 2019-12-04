@@ -96,8 +96,7 @@
 			  <tr>        
             <th>Foro</th>        
             <td>
-        
-					                         
+          {{$calificaciones->calificacion_foro}}                        
             </td> 
           <td><a class="list-group-item" href="{{ route('dictamen') }}">
                    Ver Detalles</a>
@@ -117,7 +116,8 @@
 			<th>Seminario</th>
             
              <td name='seminario'>
-               
+             {{$calificaciones->calificacion_seminario}}
+               {{-- {{$Calificaciones->Calificacion_seminario}} --}}
              </td> 
             
              <td><a class="list-group-item" href="{{ route('dictamen') }}">

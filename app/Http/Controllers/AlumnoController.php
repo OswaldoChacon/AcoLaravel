@@ -502,11 +502,14 @@ public function EstadoDeProyectoAlumno($id)
  //dd($jurado);
 
   $proyectos = DB::table('proyectos')->select('titulo')->where('id',$bar)->first();
- 
+
+  
+  $calificaciones = DB::table('proyectos')->select('calificacion_seminario','calificacion_foro')->where('id',$bar)->first();
+  //dd($calificaciones);
   //$proyectos = DB::table('proyectos')->select('id')->where('id_proyecto',$alumno)->first();
 
   //dd($proyectos);
-  return view('alumno.estadoAlumno',compact('alumno','name','control','proyectos','jurado'));
+  return view('alumno.estadoAlumno',compact('alumno','name','control','proyectos','jurado','calificaciones'));
 }
 
 public function solicitarResidencia($id)

@@ -97,8 +97,12 @@
 				<li>
 					<a href="{{ route('criterios') }}">Asignar criterios</a>
 				</li>
-				<li>
+			{{-- 	<li>
 					<a href="{{ route('sheets') }}">Hojas de evaluaciones del seminario</a>
+				</li> --}}
+
+				<li>
+					<a href="{{route('juradosprojects2')}}">Segumiento De Proyectos</a>
 				</li>
 			</ul>
 		</nav>

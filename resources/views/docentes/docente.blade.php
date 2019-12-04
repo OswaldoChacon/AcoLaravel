@@ -57,6 +57,10 @@
 				<li>
 					<a href="#">Proyectos</a>
 				</li>
+
+					<li>
+					<a href="{{ route('proyectosDoc') }}">Seguimiento de Proyectos</a>
+				</li>
 			</ul>
 		</nav>
 
