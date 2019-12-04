@@ -115,7 +115,7 @@
                         <!-- <a method="POTS" href="/activar/{{Crypt::encrypt($foro->id)}} ">
                             <button class="btn btn-success btn-sm bnt-block">Activar</button>
                         </a>
-                        <a method="POTS" href="/desactivar/{{Crypt::encrypt($foro->id)}}">                            
+                        <a method="POTS" href="/desactivar/{{Crypt::encrypt($foro->id)}}">
                             <button class="btn btn-danger btn-sm bnt-block">Desactivar</button>
                         </a> -->
                         <a method="POTS" href="/cerrar/{{$foro->id}}">
@@ -347,13 +347,13 @@
             </tbody>
         </table>
     </div>
-    <form action="/guardarHorarioPDF" method="post" enctype="multipart/form-data">
+    <!-- <form action="/guardarHorarioPDF" method="post" enctype="multipart/form-data">
         {{csrf_field()}}
         <input type="file" class="fomr-control" name="file">
         <!-- F-8" enctype="multipart/form-data" -->
-        <button type="submit" class="btn btn-primary btn-sm">Subir horario</button>
+        <!-- <button type="submit" class="btn btn-primary btn-sm">Subir horario</button>
     </form>
-    <br>
+    <br> -->
     <!-- </div> -->
 </div>
 <!-- </div> -->
@@ -392,8 +392,8 @@
 
     function limpiar() {
         var div = document.getElementById("main");
-        var botonGuardar = document.getElementById("guardar");        
-        botonGuardar.style.display = "none";        
+        var botonGuardar = document.getElementById("guardar");
+        botonGuardar.style.display = "none";
         if (div !== null) {
             cantidad = "";
             while (div.hasChildNodes()) {
@@ -403,9 +403,9 @@
     }
 
     function cancelar(divclass){
-        limpiar();                
-        var elementssssss = document.getElementById(divclass);        
-        elementssssss.style.display = "none";        
+        limpiar();
+        var elementssssss = document.getElementById(divclass);
+        elementssssss.style.display = "none";
     }
 
 

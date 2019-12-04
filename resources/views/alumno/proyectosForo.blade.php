@@ -2,19 +2,22 @@
 
 @section('content')
 <div class="card">
-  <h5 class="card-header">Total de Proyectos:</h5>
+  <h5 class="card-header">Detalles del Proyecto:</h5>
   <div class="card-body">
     <div class="table-responsive">
       <table class="table table-striped table-hover">
         <thead>
           <th>Foro</th>
-          <th>Folio</th>>
+          <th>Folio</th>
           <th>Titulo</th>
           <th>Objetivo</th>
           <th>Empresa</th>
           <TH>Acciones</TH>
         </thead>
         <tbody>
+        @if(Session::has('men'))
+        <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('men') }}</p>
+        @endif
     @foreach($proyecto as $pro)
           <tr>
             <td>{{$foro->noforo}}</td>

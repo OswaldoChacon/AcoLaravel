@@ -236,12 +236,20 @@ class AlumnoController extends Controller
     $proyect= DB::TABLE('alumnos')->select('id_proyecto')->where('id',$alumno)->first();
     $p=$proyect->id_proyecto;
     $proyecto= db::table('proyectos')->where('id',$p)->get();
-    $idforo= db::table('proyectos')->select('id_foro')->where('id',$p)->first();
-    $idf=$idforo->id_foro;
-    $foro =db::table('foros')->select('noforo')->where('id',$idf)->first();
+    $pro=db::table('proyectos')->select('id_proyecto')->where('id',$p)->first();
+    if ($pro == null){
+        Session::flash('men', "AÚN NO TIENES UN PROYECTO REGISTRADO");
+        Session::flash('alert-class', 'alert-warning');
 
+        return view('alumno.proyectosForo', compact('proyect','pro','alumno','proyecto'));
+    }
+    else{
+        $idforo= db::table('proyectos')->select('id_foro')->where('id',$p)->first();
+        $idf=$idforo->id_foro;
+        $foro =db::table('foros')->select('noforo')->where('id',$idf)->first();
 
-    return view('alumno.proyectosForo', compact('proyecto', 'alumno','foro'));
+        return view('alumno.proyectosForo', compact('proyecto', 'alumno','foro'));
+    }
   }
   public function proyectoDescripcionAlumno($id)
   {
@@ -466,11 +474,25 @@ class AlumnoController extends Controller
     $alumno = Auth::id();
     $name= DB::table('alumnos')->select('nombre','paterno','materno','id_proyecto')->where('id',$alumno)->first();
 
+
     $idproyecto=DB::table('alumnos')->select('id_proyecto')->where('id',$alumno)->first();
+
     $id=$idproyecto->id_proyecto;
+
     $clave=DB::table('proyectos')->select('id_proyecto')->where('id',$id)->first();
+
+    if ($clave == null){
+        Session::flash('mens', "AÚN NO TIENES UN PROYECTO REGISTRADO");
+        Session::flash('alert-class', 'alert-warning');
+
+        $horario= DB::table('horariogenerado')->select('fecha','hora','salon')->where('id_proyecto',$id)->first();
+        // if ($horario == null){
+        //     Session::flash('mensage', "AÚN NO TIENES UN HORARIO ASIGNADO PARA TU PRESENTACIÓN ");
+        //     Session::flash('alert-class', 'alert-warning');
+        // }
+        return view('alumno.horariogeneradoAlumno',compact('horario','name','clave'));
+    }
     $id_prefijo=$clave->id_proyecto;
-    // dd($id_prefijo);
 
     // dd($id);
     $horario= DB::table('horariogenerado')->select('fecha','hora','salon')->where('id_proyecto',$id)->first();
@@ -479,7 +501,7 @@ class AlumnoController extends Controller
         Session::flash('alert-class', 'alert-warning');
     }
 
-    return view('alumno.horariogeneradoAlumno',compact('horario','name','id_prefijo'));
+    return view('alumno.horariogeneradoAlumno',compact('horario','name','id_prefijo','clave'));
 
   }
 
@@ -507,7 +529,7 @@ public function EstadoDeProyectoAlumno($id)
 
   $proyectos = DB::table('proyectos')->select('titulo')->where('id',$bar)->first();
 
-  
+
   $calificaciones = DB::table('proyectos')->select('calificacion_seminario','calificacion_foro')->where('id',$bar)->first();
   //dd($calificaciones);
   //$proyectos = DB::table('proyectos')->select('id')->where('id_proyecto',$alumno)->first();
