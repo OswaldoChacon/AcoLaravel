@@ -59,7 +59,7 @@
       <span>Tokens generados: </span><span style="font-weight: bold">{{$tokealumno->count()}}</span>
       <ul class="nav justify-content-end">
         <li class="nav-item">
-          <a href="/tokenAlumno/clean-screen" class="btn btn-primary btn-sm bnt-block btnLimpiar">Limpiar Pantalla</a>
+          <a title="Quitar tokens usados" href="/tokenAlumno/clean-screen" class="btn btn-primary btn-sm bnt-block btnLimpiar"><i class="fas fa-eye-slash"></i></a>
         </li>
       </ul>
 

@@ -20,7 +20,7 @@ class RegisterController extends Controller
 
   public function showLoginFrom()
   {
-    return view('docentes.registro');
+    return view('docentes.login.registro');
   }
 
   /**
@@ -68,7 +68,7 @@ class RegisterController extends Controller
         return redirect("loginDocente");
       }
     } else {
-      return view('docentes.registro');
+      return view('docentes.login.registro');
     }
   }
 }
