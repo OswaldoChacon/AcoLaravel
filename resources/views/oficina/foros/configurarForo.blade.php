@@ -106,7 +106,7 @@
     <div class="table-responsive">
         <table class="table table-striped table-hover">
             <thead>
-                <th colspan="1">
+                <th>
                     <h6> <strong>{{$foro->noforo}}º {{$foro->titulo}}</strong></h6>
                     <h6><strong>{{$foro->periodo}} {{$foro->anoo}}</strong></h6>
                 </th>

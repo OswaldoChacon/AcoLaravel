@@ -343,26 +343,32 @@ class OficinaController extends Controller
     }
     public function crearForo(Request $request)
     {
-        return view('oficina.foros.crearForo');
+        $ultimoforo = Foro::orderBy('noforo','desc')->get()->first();        
+        return view('oficina.foros.crearForo',compact('ultimoforo'));
     }
     public function guardarForo(Request $request)
-    {
-        $validator = $this->validate(request(), [
+    {        
+        $validator = $this->validate($request, [
             'noforo' => 'required',
             'titulo' => 'required',
             'periodo' => 'required',
             'anoo' => 'required',
-        ]);
-        $doc = Docente::all();
-        $tama = count($doc, COUNT_RECURSIVE);
-        // $user = User::find(1);
-        $user = User::find(Auth()->user()->id);
-        // $docente = Docente::where('id', Auth::guard('docentes')->user()->id)->first();
-        // $user1 = $user->prefijo . '  ' . $user->nombre . '  ' . $user->paterno . '  ' . $user->materno;
+        ]);        
+        //prefijo
+        $prefijo = str_split($request->anoo);
+        $prefijo = $prefijo[2] . $prefijo[3] ;
+        if($request->periodo == "Agosto-Diciembre"){
+            $prefijo = $prefijo."02-";
+        }else{
+            $prefijo = $prefijo."01-";
+        }                        
+        $user = User::find(Auth()->user()->id); 
+        // dd($user);
         $foro = Foro::where('noforo', $request->noforo)->first();
-        $anoo = Foro::where('anoo', $request->anoo)->get();
+        $anoo = Foro::where('anoo', $request->anoo)->where('periodo',$request->periodo)->get();
+        // dd($anoo,$request->periodo);
 
-        if ($foro == null && count($anoo) < 2) {
+        if ($foro == null && count($anoo) == 0) {
 
             DB::table('foros')->insert([
                 [
@@ -379,11 +385,14 @@ class OficinaController extends Controller
                 ],
             ]);
             Session::flash('message', "Foro Creado");
-            $foro = Foro::all();
-            // return view('oficina.foros', compact('foro'));
+            $foro = Foro::all();            
             return redirect()->route('foros');
-        } else {
-            Session::flash('message', "Numero de foro ya existente o hay un foro en un periodo y año duplicado");
+        } elseif($foro!=null) {
+            Session::flash('message', "Numero de foro ya existente");
+            return redirect()->route('crearForo');
+        }
+        elseif(count($anoo)>0){
+            Session::flash('message', "Ya existe un foro con el mismo periodo y año");
             return redirect()->route('crearForo');
         }
     }

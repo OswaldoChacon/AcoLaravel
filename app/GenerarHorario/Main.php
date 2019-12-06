@@ -52,9 +52,9 @@ class Main
         $this->estancado = $estancado;
         $this->t_max = 1 / $this->rho;
         $this->t_minDenominador = $t_minDenominador;        
-        $this->salones = $num_aulas;
+        $this->salones = $num_aulas;        
         foreach ($receso as $itemReceso) {
-            $this->receso[] = $itemReceso->posicion;
+            $this->breaks[] = $itemReceso->posicion;
         }        
         
         $this->pheromone = 0.0;
@@ -79,9 +79,11 @@ class Main
                 $ant->ViolacionesDuras[] = 0;
                 $ant->Ai[] = null;
             }
-            // foreach($receso as $break){
-            foreach ($this->receso as $break) {                
-                $ant->cListAlready[$break] = true;                
+            // foreach($receso as $break){      
+            if($this->breaks != null)      {
+                foreach ($this->breaks as $break) {                
+                    $ant->cListAlready[$break] = true;                
+                }
             }
         }        
     }
@@ -338,7 +340,7 @@ class Main
                 $z++;
                 // dd(($this->receso));
                 // dd("espacios de tiempo recso",($this->timeslot - sizeof($this->receso)));
-                if ($z > ($this->timeslot - sizeof($this->receso))) {                                             
+                if ($z > ($this->timeslot - sizeof($this->breaks))) {                                             
                     // echo ($z);
                     // echo ("\n\n\n Entró a L2");
                     // if ($z == ($this->timeslot)) {                                            
@@ -350,7 +352,7 @@ class Main
                         // dd($this->eventosProgramados);
                         //evitar receso
                         // 
-                        if ($k != $currentTimeslot && !in_array($k, $this->receso)) {
+                        if ($k != $currentTimeslot && !in_array($k, $this->breaks)) {
                             // dd(($this->receso));
                             // dd("violaciones duras l2");
                             for ($j = 0; $j < sizeof($this->currentLocalBest->Ai); $j++) {
@@ -471,7 +473,7 @@ class Main
                     // nuevocode                    
                     // $posicionEventosProgramados = array();              
                     // echo ("\nentró a L1 ".$timeslotMove." valor de Z:".$z);
-                    if (!in_array($timeslotMove, $this->receso)) {                                                
+                    if (!in_array($timeslotMove, $this->breaks)) {                                                
                         if ($timeslotMove < $this->timeslot) {
                         // dd($this->ants);                        
                             // dd($timeslotMove,$this->receso,!in_array($timeslotMove,$this->receso),$this->currentLocalBest->Ai);                        
@@ -579,7 +581,7 @@ class Main
                 while ($nextTS == false) {
                     $z++;
                     // if ($z == ($this->timeslot - sizeof($this->receso))) {
-                    if ($z == ($this->timeslot - sizeof($this->receso))) {
+                    if ($z == ($this->timeslot - sizeof($this->breaks))) {
                         $nextTS = true;                        
                         //System.exit(0);
                     } else {
@@ -591,7 +593,7 @@ class Main
                         //evitar receso
                         // && !in_array($timeslotMove,$this->receso)
                         if ($timeslotMove < $this->timeslot) {
-                            if (!in_array($timeslotMove, $this->receso)) {
+                            if (!in_array($timeslotMove, $this->breaks)) {
                                 $this->eventosProgramados = array();
                                 //System.out.println("TimeslotMove antes de camiar " + timeslotMove);
                                 for ($j = 0; $j < sizeof($this->currentLocalBest->Ai); $j++) {
@@ -651,6 +653,7 @@ class Main
             $newValue = 0;
             global $timeloslot;
             $timeloslot = 0;            
+            //dd($ant,$ant->Ai[$j],$this->problema->eventos[$j]->espaciosComun,$this->eventos);
             //for (int k = 0; k < indice; k++) {
             // if ($this->problema->eventos[$j]->espaciosComun . contains(ant . Ai . get(j))) {
             if (in_array($ant->Ai[$j], $this->problema->eventos[$j]->espaciosComun)) {
@@ -825,10 +828,12 @@ class Main
             $this->Ni_et[$l] = (1 / (1.0 + $ant->Vi[$l]));
         }
         // evitar receso CalcularProbabilidades
-        foreach ($this->receso as $break) {
-            // dd($this->receso);            
-            $this->Ni_et[$break]=0.0;
-            // $this->probabilidad[$break->posicion] = 0.0; //.set(l, 0.0);                             
+        if($this->breaks != null){
+            foreach ($this->breaks as $break) {
+                // dd($this->receso);            
+                $this->Ni_et[$break]=0.0;
+                // $this->probabilidad[$break->posicion] = 0.0; //.set(l, 0.0);                             
+            }
         }
         // dd($this->Ni_et);
         //        System.out.println("Valor heuristico: " + Ni_et);
@@ -873,7 +878,7 @@ class Main
                 $ant->cListAlready[$j] = false; //.set(j, false);
                 $this->probabilidad[$j]=0.0;
             }
-            foreach ($this->receso as $break) {
+            foreach ($this->breaks as $break) {
                 // dd($this->receso);
                 $ant->cListAlready[$break] = true;
                 $this->Ni_et[$break]=0.0;

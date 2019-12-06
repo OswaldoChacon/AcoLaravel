@@ -28,7 +28,7 @@
 
             <table class="table">
                 <thead>
-                    <th>Folio</th>
+                    <th colspan="2">Folio</th>
                     @for($i = 0; $i< sizeof($proyectos[0]->maestroList); $i++)
                         <th>Maestro</th>
                         @endfor
@@ -39,7 +39,7 @@
                 <tbody>
                     @foreach($proyectos as $proyecto)
                     <tr>
-                        <td>{{$proyecto->id}}</td>
+                        <td colspan="2">{{$proyecto->id}}</td>
                         <!-- <td>{{$proyecto->name}}</td> -->
                         @foreach($proyecto->maestroList as $key => $maestro)
                         <!-- <td>{{$maestro->nombre}}</td> -->
