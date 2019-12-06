@@ -343,17 +343,17 @@ class OficinaController extends Controller
     }
     public function crearForo(Request $request)
     {
-        $ultimoforo = Foro::orderBy('noforo','desc')->get()->first();        
+        $ultimoforo = Foro::orderBy('noforo','desc')->get()->first();
         return view('oficina.foros.crearForo',compact('ultimoforo'));
     }
     public function guardarForo(Request $request)
-    {        
+    {
         $validator = $this->validate($request, [
             'noforo' => 'required',
             'titulo' => 'required',
             'periodo' => 'required',
             'anoo' => 'required',
-        ]);        
+        ]);
         //prefijo
         $prefijo = str_split($request->anoo);
         $prefijo = $prefijo[2] . $prefijo[3] ;
@@ -361,8 +361,8 @@ class OficinaController extends Controller
             $prefijo = $prefijo."02-";
         }else{
             $prefijo = $prefijo."01-";
-        }                        
-        $user = User::find(Auth()->user()->id); 
+        }
+        $user = User::find(Auth()->user()->id);
         // dd($user);
         $foro = Foro::where('noforo', $request->noforo)->first();
         $anoo = Foro::where('anoo', $request->anoo)->where('periodo',$request->periodo)->get();
@@ -385,7 +385,7 @@ class OficinaController extends Controller
                 ],
             ]);
             Session::flash('message', "Foro Creado");
-            $foro = Foro::all();            
+            $foro = Foro::all();
             return redirect()->route('foros');
         } elseif($foro!=null) {
             Session::flash('message', "Numero de foro ya existente");
@@ -399,7 +399,7 @@ class OficinaController extends Controller
 
     public function foros()
     {
-        $foro = Foro::all();            
+        $foro = Foro::all();
         return view('oficina.foros.foros', compact('foro'));
     }
 
@@ -777,11 +777,11 @@ class OficinaController extends Controller
             ->where('posicion', $posicion)
             ->get();
 
-
         if (count($horariobreak) > 0) {
             $deletes = DB::table('horariobreak')
                 ->where('id', $horariobreak[0]->id)
                 ->delete();
+
         } else {
             DB::table('horariobreak')->insert([
                 [

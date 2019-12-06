@@ -247,7 +247,11 @@
                                         <form class="form-center">
                                             {{csrf_field()}}
                                             <input type="hidden" name="idHorario" value="{{$object->id}}" />
-
+                                            <div class="form-group">
+                                                <label for="message-text" class="col-form-label"> ¡ ADVERTENCIA ! </label>
+                                                <label for="message-text" class="col-form-label">Si edita el horario deberá registrar el horario break y
+                                                la disponibilidad de horario de los maestros participantes nuevamente de la fecha modificada .
+                                            </div>
                                             <div class="form-group">
                                                 <label for="recipient-name" class="col-form-label">Fecha </label>
                                                 <input type="date" name="fecha" value="{{$object->fecha}}" class="form-control" min="<?php $hoy = date('Y-m-d');
