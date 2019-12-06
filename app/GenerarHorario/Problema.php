@@ -36,6 +36,8 @@ class Problema
         // dd($this->eventos);
         foreach ($this->eventos as $evento) {
             $evento->setPosibleEspaciosT($this->getEspaciosEnComun($evento));
+            // dd($evento->espaciosComun);
+            // if($evento->espaciosComun !=null)
             $evento->setSizeComun(sizeof($evento->espaciosComun));
         }
         // dd($espaciosDeTiempo);
@@ -58,6 +60,7 @@ class Problema
     }
     public function getEspaciosEnComun($evento)
     {
+        global $result;
         //dd($this->eventos);
         $test = array();
         // unset($this->aux_timeslot_common);
@@ -66,14 +69,12 @@ class Problema
         foreach ($evento->maestroList as $maestros) {
             $test[] = $maestros->horario;
         }
-        //dd($test);
-        if ($test != null) {
+        //  dd($evento);
+        // if ($test != null || sizeof($test)>1) {
             $result = call_user_func_array('array_intersect', $test);
             $result = array_values($result);
-        }
-        else{
-            return response()->noContent();
-        }
+        // }
+       
         // dd($result);
         // return $aux_timeslot_common;
         return $result;
