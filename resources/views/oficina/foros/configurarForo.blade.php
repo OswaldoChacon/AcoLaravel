@@ -31,14 +31,18 @@
         </ul>
     </div>
     <div class="card-body">
-        @if(session('mensaje'))
+        @if(session('buenos'))
         <div class="alert alert-success" id="alert-fade">
-            <p>{{session('mensaje')}}</p>
+            @foreach(session('buenos') as $item)
+                <p>{{$item}} ha sido registrado correctamente.</p>
+            @endforeach
         </div>
         @endif
-        @if(session('mensaje1'))
-        <div class="alert alert-success" id="alert-fade">
-            <p>{{session('mensaje1')}}</p>
+        @if(session('errores'))
+        <div class="alert alert-danger" id="alert-fade">
+            @foreach(session('errores') as $item)
+                <p>{{$item}} no fue registrado. Puede que la fecha caiga un fin de semana o ya esté registrada.</p>
+            @endforeach
         </div>
         @endif
 

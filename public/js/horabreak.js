@@ -18,6 +18,7 @@ $(document).on("click",".checkHorarioBreak",function(){
             $(".messageContainer .message .icon").append('<i class="fas fa-envelope"></i>');
             $(".messageContainer .message .title p").text('¡Registro Actualizado!');
             $(".messageContainer .message .description p").text('Su registro ha sido actualizado correctamente');
+            location.reload();
             setTimeout(() => {
                 $(".messageContainer").removeClass('active');
             }, 1000);

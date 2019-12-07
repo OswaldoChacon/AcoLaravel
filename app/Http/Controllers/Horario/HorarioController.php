@@ -35,7 +35,8 @@ class HorarioController extends Controller
     }
     public function addHourForo(Request $request, $id)
     {
-        $data = array();
+        $dataBad = array();
+        $dataGood = array();
         $id = Crypt::decrypt($id);
         $fecha = count($request->fecha, COUNT_RECURSIVE);
         // dd($request);
@@ -59,17 +60,16 @@ class HorarioController extends Controller
             $countFechas = Horarioforo::where('fecha_foro', '=', $request->fecha[$i])
                 ->where('id_foro', '=', $id)
                 ->count();
+            $temp = " ";
             $dayOfWeek = date("l", strtotime($request->fecha[$i]));
+            // print_r($countFechas);
+            // print_r($dayOfWeek);
             if ($countFechas > 0 || $dayOfWeek == 'Saturday' || $dayOfWeek == 'Sunday') {
-                $data[$i] = [
-                    'id_foro' => $id,
-                    "fecha" => $request->fecha,
-                    "h_in" => $request->h_inicio,
-                    "h_end" => $request->h_end
-                ];
-                //return back()->with('mensaje1', 'Horario NO registrado la fecha es repetida o es fin de semana');
-                // mandar mensaje de los registros que no se guardaron
+                $temp= $request->fecha[$i];
+                array_push($dataBad, $temp);
             } else {
+                $temp= $request->fecha[$i];
+                array_push($dataGood, $temp);
                 DB::table('horarioforos')->insert([
                     [
                         'id_foro' => $id,
@@ -78,11 +78,13 @@ class HorarioController extends Controller
                         'fecha_foro' => $request->fecha[$i],
                     ],
                 ]);
-                return back()->with('mensaje', 'Horario del foro registrado');
             }
         }
+        //dd($dataBad, $dataGood);
+        // dd($dataGood);
+        return back()->with(['errores' => $dataBad, 'buenos'=>$dataGood]);
         $id = Crypt::encrypt($id);
-        return redirect("configurarForo/$id");
+        //return redirect("configurarForo/$id", compact('data'));
     }
     public function generarHorario(Request $request)
     {
@@ -197,15 +199,15 @@ class HorarioController extends Controller
         $salones = Foro::where('acceso', 1)->get()->first();
 
 
-        //Nuevo 05 dic        
+        //Nuevo 05 dic
         $cantidadMaestro_Jurado = DB::select('SELECT jurados.* FROM jurados inner join proyectos on jurados.id_proyecto=proyectos.id INNER join foros on proyectos.id_foro=foros.id where foros.acceso=1 and proyectos.participa=1 group by jurados.id_docente');
         $horarioDocentes = DB::select('SELECT horariodocentes.* FROM `horariodocentes` inner join horarioforos on horariodocentes.id_horarioforos=horarioforos.id inner join foros on horarioforos.id_foro=foros.id group by id_docente');
-        $cantidadDeET = count($intervalosUnion) * $salones->num_aulas;         
-        if ($horarioDocentes < $cantidadMaestro_Jurado  || $cantidadMaestro_Jurado < $horarioDocentes || $cantidadMaestro_Jurado==null || $horarioDocentes== null || $cantidadDeET < sizeof($proyectos_maestros)) {               
-            // count($cantidadMaestro_Jurado) == 0  count($horarioDocentes) == 0            
+        $cantidadDeET = count($intervalosUnion) * $salones->num_aulas;
+        if ($horarioDocentes < $cantidadMaestro_Jurado  || $cantidadMaestro_Jurado < $horarioDocentes || $cantidadMaestro_Jurado == null || $horarioDocentes == null || $cantidadDeET < sizeof($proyectos_maestros)) {
+            // count($cantidadMaestro_Jurado) == 0  count($horarioDocentes) == 0
             return response()->noContent();
         }
-        //Nuevo 05 dic        
+        //Nuevo 05 dic
         $main = new Main($proyectos_maestros, $maestro_et, $intervalosUnion, $request->alpha, $request->beta, $request->Q, $request->evaporation, $request->iterations, $request->ants, $request->estancado,  $request->t_minDenominador, $salones->num_aulas, $receso);
         //validacion ultima
         $cantidadProyectosMA = DB::table('jurados')->select(DB::raw('count(id_docente) as cantidad, group_concat(distinct docentes.prefijo," ",docentes.nombre," ",docentes.paterno," ",docentes.materno) as nombre'))
@@ -216,8 +218,8 @@ class HorarioController extends Controller
             ->groupBy('id_docente')
             ->orderBy('cantidad')->get();
 
-        $cantidadETMaestros = DB::select('select id_docente, count(hora) as cantidad from horariodocentes,docentes,horarioforos,foros where horariodocentes.id_docente = docentes.id and horariodocentes.id_horarioforos = horarioforos.id and horarioforos.id_foro = foros.id and foros.acceso = 1 group by id_docente order by cantidad asc');        
-        $maestro_foro = $salones->num_maestros;        
+        $cantidadETMaestros = DB::select('select id_docente, count(hora) as cantidad from horariodocentes,docentes,horarioforos,foros where horariodocentes.id_docente = docentes.id and horariodocentes.id_horarioforos = horarioforos.id and horarioforos.id_foro = foros.id and foros.acceso = 1 group by id_docente order by cantidad asc');
+        $maestro_foro = $salones->num_maestros;
         if ($main->problema->eventos[0]->sizeComun == 0) {
             return response()->noContent();
         }
@@ -227,7 +229,7 @@ class HorarioController extends Controller
             if ($maestro_evento < $maestro_foro) {
                 return response()->noContent();
             }
-        }        
+        }
         $main->start();
         $matrizSolucion = $main->matrizSolucion;
         $resultado_aux = array();
@@ -411,7 +413,7 @@ class HorarioController extends Controller
             ->orderBy('cantidad')->get();
         //dd($cantidadProyectosMA);
         //select DISTINCT id_docente, count(id_docente),group_concat( Distinct docentes.prefijo," ",docentes.nombre," ",docentes.paterno," ",docentes.materno)
-        //from `jurados` inner join `docentes` on `jurados`.`id_docente` = `docentes`.`id` inner join `proyectos` on `jurados`.`id_proyecto` = `proyectos`.`id` 
+        //from `jurados` inner join `docentes` on `jurados`.`id_docente` = `docentes`.`id` inner join `proyectos` on `jurados`.`id_proyecto` = `proyectos`.`id`
         //where `proyectos`.`participa` = 1 group by id_docente order by id_docente
 
         // dd($proyectos);
