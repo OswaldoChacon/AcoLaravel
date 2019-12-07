@@ -291,11 +291,11 @@ class OficinaController extends Controller
     {
         $validator = $this->validate(request(), [
             'clave' => 'required',
-            'linea' => 'required',
+            'nombre' => 'required',
         ]);
-        $linea1 = Lineadeinvestigacion::where('clave', $request->clave)->first();
-        $linea2 = Lineadeinvestigacion::where('linea', $request->clave)->first();
-        if ($linea1 == null && $linea2 == null) {
+        $clave = Lineadeinvestigacion::where('clave', $request->clave)->first();
+        $nombre = Lineadeinvestigacion::where('linea', $request->nombre)->first();                
+        if ($clave == null && $nombre == null) {
 
             DB::table('lineadeinvestigacions')->insert([
                 [
@@ -303,12 +303,24 @@ class OficinaController extends Controller
                     'linea' => $request->linea,
                 ]
             ]);
-            Session::flash('message1', "Linea de Investigacion Registrado");
-        } else {
-            Session::flash('message', "Linea de investigación ya existente");
+            Session::flash('success', "Linea de investigacion registrado");
         }
+        elseif($clave != null && $nombre != null) {
+            Session::flash('error', "Clave nombre y repetida");
+        }
+         elseif($clave!=null) {
+            Session::flash('error', "Clave repetida");
+        }
+        elseif($nombre !=null){
+            Session::flash('error', "Nombre de linea repetida");
+        }        
         // $lineadeinvestigacion = Lineadeinvestigacion::all();
         return redirect()->route('lineaDeInvetigacion');
+    }
+    public function LineaDeInvestigacioneliminar($id){
+        $id = Crypt::decrypt($id);
+        $l=Lineadeinvestigacion::where('id',$id)->delete();
+
     }
 
 

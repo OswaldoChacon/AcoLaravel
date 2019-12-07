@@ -54,6 +54,7 @@ Route::post('agregarProfeAforo/{id}', 'OficinaController@agregarProfeAforo')->na
 Route::post('agregarProfeAforoJurado/{id}', 'OficinaController@agregarProfeAforoJurado')->name('agregarProfeAforoJurado');
 Route::post('numMaestros/{id}', 'OficinaController@numMaestros')->name('numMaestros');
 Route::post('/configurarForoAtributos/{id}','OficinaController@configurarForoAtributos');
+
 /////////////////////////////////						GET					/////////////////////////////////////////
 
 Route::get('oficina', 'OficinaController@index')->name('oficina');

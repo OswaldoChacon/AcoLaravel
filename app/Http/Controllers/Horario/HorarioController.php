@@ -414,15 +414,16 @@ class HorarioController extends Controller
         //from `jurados` inner join `docentes` on `jurados`.`id_docente` = `docentes`.`id` inner join `proyectos` on `jurados`.`id_proyecto` = `proyectos`.`id` 
         //where `proyectos`.`participa` = 1 group by id_docente order by id_docente
 
-        // dd($proyectos);
-        // dd($intervalosContainer);
+        // dd($proyectos);           
+        $aulas = Foro::where('acceso',1)->get()->first();
+        $aulas = $aulas->num_aulas * sizeof($intervalosUnion);                
         $horarios = DB::table('horarioforos')
             ->select('horario_inicio as inicio', 'horario_termino as termino', 'fecha_foro as fecha', 'horarioforos.id as id')
             ->join('foros', 'horarioforos.id_foro', '=', 'foros.id')
             ->where('foros.acceso', 1)
             ->get();
         // dd($proyectos);
-        return view('oficina.horarios.proyectos', compact('proyectos', 'intervalosContainer', 'cantidadProyectosMA'));
+        return view('oficina.horarios.proyectos', compact('proyectos', 'intervalosContainer', 'cantidadProyectosMA','aulas'));
     }
     public function actualizarHorarioForo(Request $request)
     {

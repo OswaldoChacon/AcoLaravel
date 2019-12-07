@@ -9,8 +9,8 @@
     </div>
     <!-- <button type="submit" class="btn btn-primary" value="Registrar" name="">Acceder</button> -->
     {!! $errors->first('password','<span class="help-block">:message</span>')!!}
-    <button type="submit" class="btn btn-primary" value="Registrar" onclick="capturar()">Generar</button>
-    <button type="button" class="btn btn-warning" value="Registrar" onclick="limpiar()">Cancelar</button>
+    <button type="submit" class="btn btn-primary btn-sm" value="Registrar" onclick="capturar()">Generar</button>
+    <button type="button" class="btn btn-warning btn-sm" value="Registrar" onclick="limpiar()">Cancelar</button>
 
     <br>
     <br>

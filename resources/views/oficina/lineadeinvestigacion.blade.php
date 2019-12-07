@@ -4,15 +4,15 @@
 <!-- <div class="container-fluid"> -->
 <div class="row">
   <div class="card col-xl-4 col-md-5">
-  <h5 class="card-header">Registrar linea de investigación</h5>
-    <div class="card-body">      
+    <h5 class="card-header">Registrar linea de investigación</h5>
+    <div class="card-body">
       <form method="post" action="{{ route('lineaDeInvetigacionguardar') }}" class="form-center">
         {{csrf_field()}}
-        @if (Session::has('message'))
-        <div class="alert alert alert-danger" id="alert-fade">({{ Session::get('message') }})</div>
+        @if (Session::has('success'))
+        <div class="alert alert alert-success" id="alert-fade">({{ Session::get('success') }})</div>
         @endif
-        @if (Session::has('message1'))
-        <div class="alert alert alert-info" id="alert-fade">({{ Session::get('message1') }})</div>
+        @if (Session::has('error'))
+        <div class="alert alert alert-danger" id="alert-fade">({{ Session::get('error') }})</div>
         @endif
         <div class="form-group ">
           <label for="name">Clave</label>
@@ -23,12 +23,12 @@
         </div>
         <div class="form-group">
           <label for="name">Nombre</label>
-          <input class="form-control" type="text" name="linea" placeholder='Lineas de Investigacion'>
+          <input class="form-control" type="text" name="nombre" placeholder='Lineas de Investigacion'>
           @if ($errors->has('linea'))
-          <span class="text-danger">{{ $errors->first('linea') }}</span>
+          <span class="text-danger">{{ $errors->first('nombre') }}</span>
           @endif
         </div>
-        <button type="submit" class="btn btn-primary" value="Registrar" name="">Registrar</button>
+        <button type="submit" class="btn btn-primary btn-sm" value="Registrar" name="">Registrar</button>
       </form>
     </div>
   </div>
@@ -50,6 +50,7 @@
             <tr>
               <td>{{$linea->clave}}</td>
               <td>{{$linea->linea}}</td>
+              <td><a href="{{url('/LineaDeInvestigacioneliminar/'.Crypt::encrypt($linea->id)) }}" class="btn btn-danger btn-sm"><i class="far fa-trash-alt"></i></a></td>                            
             </tr>
             @endforeach
           </tbody>

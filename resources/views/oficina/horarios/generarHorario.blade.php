@@ -128,7 +128,10 @@
             },
             success: function(data) {
                 if(data==null)     {
-                    $('.no-content').after('<div class="remove"><span class="text-danger">Verifica que todos los maestros tengan la misma disponibilidad como de proyectos o que un proyecto al menos tenga un espacio en comun entre los maestros</span><a href="proyectosJurado" class="btn-primary btn-sm btn">Ver eventos</a></div>');
+                    $('.no-content').after('<div class="remove">Verifica<ul><li class="text-danger">Que todos los maestros tengan la misma cantidad de espacio de tiempo como de proyectos</li>'+
+                     '<li class="text-danger">Que un proyecto tenga al menos un espacio en comun entre los maestros</span></li>'+
+                     '<li class="text-danger">Que exista la suficiente cantidad de espacios de tiempo para asignar todos los proyectos</li></ul>'+
+                    '<a href="proyectosJurado" class="btn-primary btn-sm btn">Ver eventos</a></div><br>');
                 }               
                 $(".loaderContainer").removeClass('active');
                 var tableHour = '';
