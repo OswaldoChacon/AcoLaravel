@@ -76,7 +76,7 @@ class AlumnoController extends Controller
     $notificacione = 0;//Notificacione::where('id_alumno', Auth::guard('alumnos')->user()->id)->where('envio', 1)->count();
     $forodoncente = Forodoncente::all();
     $docente = Docente::all();
-    $alumno = Alumno::all();
+    $alumnos = Alumno::all();
     $lineadeinvestigacion = Lineadeinvestigacion::all();
     $aredeconocimiento = Aredeconocimiento::all();
     $foro = Foro::where('acceso', 1)->first();
@@ -90,7 +90,7 @@ class AlumnoController extends Controller
          echo $resultado; // imprime "ue"*/
     //echo foro;
     //return view('alumno.registraProyecto',compact('foro','docente','lineadeinvestigacion','aredeconocimiento','forodoncente','ni','alumno','idalumno1','notificacione'));
-    return view('alumno.registraProyecto', compact('foro', 'docente', 'lineadeinvestigacion', 'aredeconocimiento', 'forodoncente', 'alumno', 'notificacione'));
+    return view('alumno.registraProyecto', compact('foro', 'docente', 'lineadeinvestigacion', 'aredeconocimiento', 'forodoncente', 'alumnos', 'notificacione'));
   }
   public function RegistarProyecto(Request $request, $id)
   {

@@ -15,79 +15,66 @@
   });
 </script>
 
+<div class="card">
+  <div class="card-body">
+    <form method="post" action="/RegistarProyecto/{{$foro->id}}" class="form-center">
+      {{csrf_field()}}
+      <div class="row">
+        <div class="col form-group">
+          <label for="titulo">Titulo</label>
+          <input type="text" class="form-control" type="text" name="titulo" placeholder=" Titulo" />
+          {!! $errors->first('email','<span class="help-block alert alert-danger">:message</span>')!!}
+        </div>
+        <div class="col form-group">
+          <label for="" class="control-label"> Linea de investigacion</label>
+          <select name="categorias" id="categorias" class="form-control">
+            <option value="">Linea de investigacion</option>
+            @foreach($lineadeinvestigacion as $linea)
+            <option value="{{$linea->id}}">{{$linea->linea}}</option>
+            @endforeach
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="Objetivo">Objetivo</label>
+        <textarea class="form-control" type="text" name="objetivo" placeholder="Objetivo"></textarea>
+        {!! $errors->first('objetivo','<span class="help-block alert alert-danger">:message</span>')!!}
+      </div>
+      <div class="row">
+        <div class="col form-group">
+          <label for="" class="control-label">Tipo de Titulación</label>
+          <select class="form-control" name="productos" id="productos">
+            <option value="">Tipo de Titulación</option>
+            @foreach ($aredeconocimiento as $area)
+            <option value="{{$area->id}}">{{$area-> areade}}</option>
+            @endforeach
+          </select>
+        </div>
+        <div class="col form-group">
+          <label for="" class="control-label">Asesor</label>
+          <select class="form-control" name="assesor" id="assesor">
+            <option>Asesor</option>
+            @foreach($docente as $fd)
+            <option value="{{$fd->id}}">{{$fd->prefijo}} {{$fd->nombre}} {{$fd->paterno}} {{$fd->materno}}</option>
+            @endforeach
+          </select>
+        </div>
+      </div>
+    </form>    
+    <h6>{{Auth::guard('alumnos')->user()->nombre}} {{Auth::guard('alumnos')->user()->paterno}} {{Auth::guard('alumnos')->user()->materno}} </h6>
 
-<div name='foro' class="panel-heading">
-{{$foro->noforo}}º {{$foro->titulo}}
-  <br>
-  <th> {{$foro->periodo}} {{$foro->anoo}} </th>
-  <br>
-</div>
-<div class="panel-body">
-@if(Session::has('mensage'))
-                    <p class="alert {{ Session::get('alert-class', 'alert-success') }}">{{ Session::get('mensage') }}</p>
-                    @endif
-  <form method="post" action="/RegistarProyecto/{{$foro->id}}" class="form-center">
-    {{csrf_field()}}
-    <label for="titulo">Titulo</label>
-    <textarea class="form-control" type="text" name="titulo" placeholder=" Titulo "></textarea>
-    {!! $errors->first('email','<span class="help-block alert alert-danger">:message</span>')!!}
-    <br><br>
-
-    <label for="Objetivo">Objetivo</label>
-    <textarea class="form-control" type="text" name="objetivo" placeholder=" Objetivo "></textarea>
-    {!! $errors->first('objetivo','<span class="help-block alert alert-danger">:message</span>')!!}
-    <br><br>
-
-    <div class="col-md-3">
-      <label for="" class="control-label"> Linea de investigacion</label>
-      <select name="categorias" id="categorias" class="form-control">
-        <option value="">Linea de investigacion</option>
-        @foreach($lineadeinvestigacion as $linea)
-        <option value="{{$linea->id}}">{{$linea->linea}}</option>
-        @endforeach
-      </select>
-    </div>
-
-    <div class="col-md-3">
-      <label for="" class="control-label">Tipo de Titulación</label>
-      <select class="form-control" name="productos" id="productos">
-        <option value="">Tipo de Titulación</option>
-        @foreach ($aredeconocimiento as $area)
-        <option value="{{$area->id}}">{{$area->	areade}}</option>
-        @endforeach
-      </select> <br>
-      <p>Otro</p><input name="id_input" id="id_input" type="text" disabled>
-    </div>
-    <div class="col-md-3">
-      <label for="" class="control-label">Asesor</label>
-      <select class="form-control" name="assesor" id="assesor">
-        <option>Asesor</option>
-        @foreach($docente as $fd)
-        <option value="{{$fd->id}}">{{$fd->prefijo}} {{$fd->nombre}} {{$fd->paterno}} {{$fd->materno}}</option>
-        @endforeach
-      </select><br><br>
-    </div>
-    <br><br>
-    <br><br> <br><br><br>
-    <th>Alumno #1</th>
-    <br>
-    <h4>{{Auth::guard('alumnos')->user()->nombre}} {{Auth::guard('alumnos')->user()->paterno}} {{Auth::guard('alumnos')->user()->materno}} </h4>
-    <br>
-
-    @foreach (range(2,$foro->no_alumnos) as $token)
-    @if ($token>=2)
+    @foreach(range(1,$foro->lim_alumnos-1) as $token)    
     <div class="form-group">
-      <label for="" class="control-label">alumno #{{$token}}</label>
+      <!-- <label class="control-label">alumno #{{$token}}</label> -->
       <select class="form-control" name="alumno[]">
         <option>alumos</option>
-        @foreach($alumno as $fd)
-        @if (Auth::guard('alumnos')->user()->id!=$fd->id && $fd->acceso==0)
-        <option value="{{$fd->id}}">{{$fd->nombre}} {{$fd->paterno}} {{$fd->materno}}</option>
+        @foreach($alumnos as $alumno)
+        @if (Auth::guard('alumnos')->user()->id!=$alumno->id && $alumno->acceso==0)
+        <option value="{{$fd->id}}">{{$alumno->nombre}} {{$alumno->paterno}} {{$alumno->materno}}</option>
         @endif
         @endforeach
       </select>
-    </div>
-    @endif
+    </div>    
     @endforeach
     <br>
 
@@ -99,7 +86,18 @@
     <!-- <td name='oficina'>{{$foro->oficina}}</td> -->
     <br><br>
     <button type="submit" class="btn btn-primary" value="Registrar" name="">Guardar</button>
-  </form>
+    </form>
+  </div>
+</div>
+
+<div name='foro' class="panel-heading">
+  {{$foro->noforo}}º {{$foro->titulo}}
+  <br>
+  <th> {{$foro->periodo}} {{$foro->anoo}} </th>
+  <br>
+</div>
+<div class="panel-body">
+
 </div>
 </div>
 

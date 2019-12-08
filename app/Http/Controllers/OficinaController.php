@@ -20,6 +20,7 @@ use App\Tokenalumno;
 use App\Tokendocente;
 use App\User;
 use DB;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
@@ -300,7 +301,7 @@ class OficinaController extends Controller
             DB::table('lineadeinvestigacions')->insert([
                 [
                     'clave' => $request->clave,
-                    'linea' => $request->linea,
+                    'linea' => $request->nombre,
                 ]
             ]);
             Session::flash('success', "Linea de investigacion registrado");
@@ -317,10 +318,32 @@ class OficinaController extends Controller
         // $lineadeinvestigacion = Lineadeinvestigacion::all();
         return redirect()->route('lineaDeInvetigacion');
     }
-    public function LineaDeInvestigacioneliminar($id){
-        $id = Crypt::decrypt($id);
-        $l=Lineadeinvestigacion::where('id',$id)->delete();
-
+    public function LineaDeInvestigacioneliminar($id){        
+        $id = Crypt::decrypt($id);                        
+        try{
+            $l=Lineadeinvestigacion::where('id',$id)->delete();
+            Session::flash('success', "Linea de investigación borrada");            
+        }catch(Exception $e){
+            Session::flash('error', "Error al eliminar");
+        }        
+        return redirect()->route('lineaDeInvetigacion');
+        // return Redirect::back()->withErrors(['error', 'The Message']);
+    }
+    public function LineaDeInvestigacioneditar(Request $request){        
+        // $id = $request->get('idLinea');
+        // $clave = $request->get('clave');
+        // $nombre = $request->get('nombre');        
+        
+        $validator = $this->validate(request(), [
+            'clave' => 'required',
+            'nombre' => 'required',
+        ]);                
+        $lineaUpdate = Lineadeinvestigacion::where('id',$request->idLinea)->first();        
+        $lineaUpdate->clave = $request->clave;
+        $lineaUpdate->linea = $request->nombre;        
+        $lineaUpdate->save();
+        Session::flash('success', "Linea de investigación actualizada");
+        // return redirect()->route('lineaDeInvetigacion');
     }
 
 
