@@ -146,7 +146,8 @@ class Main
             for ($i = 1; $i <= $this->salones; $i++) {
                 //Verifico si el "salon" esta vacio para poderlo asignar, si no lo pasó al siguiente, esto solo en la matriz de solución
                 if ($this->matrizSolucion[$ant->Ai[$k]][$i] == null) {                    
-                    $this->matrizSolucion[$ant->Ai[$k]][$i] = $this->problema->eventos[$k]->name;
+                    // dd($this->problema->eventos[$k]);
+                    $this->matrizSolucion[$ant->Ai[$k]][$i] = $this->problema->eventos[$k]->id;
                     for ($j = 0; $j < sizeof($this->problema->eventos[$k]->maestroList); $j++) {
                         $this->matrizSolucion[$ant->Ai[$k]][$i] .= "," . $this->problema->eventos[$k]->maestroList[$j]->nombre;
                         // $this->matrizSolucion[$ant->Ai[$k]][$this->problema->eventos[$k]->name] = $this->problema->eventos[$k]->maestroList[$j]->nombre;                        

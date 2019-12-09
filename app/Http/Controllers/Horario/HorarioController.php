@@ -65,10 +65,10 @@ class HorarioController extends Controller
             // print_r($countFechas);
             // print_r($dayOfWeek);
             if ($countFechas > 0 || $dayOfWeek == 'Saturday' || $dayOfWeek == 'Sunday') {
-                $temp= $request->fecha[$i];
+                $temp = $request->fecha[$i];
                 array_push($dataBad, $temp);
             } else {
-                $temp= $request->fecha[$i];
+                $temp = $request->fecha[$i];
                 array_push($dataGood, $temp);
                 DB::table('horarioforos')->insert([
                     [
@@ -82,7 +82,7 @@ class HorarioController extends Controller
         }
         //dd($dataBad, $dataGood);
         // dd($dataGood);
-        return back()->with(['errores' => $dataBad, 'buenos'=>$dataGood]);
+        return back()->with(['errores' => $dataBad, 'buenos' => $dataGood]);
         $id = Crypt::encrypt($id);
         //return redirect("configurarForo/$id", compact('data'));
     }
@@ -201,10 +201,11 @@ class HorarioController extends Controller
 
         //Nuevo 05 dic
         $cantidadMaestro_Jurado = DB::select('SELECT jurados.* FROM jurados inner join proyectos on jurados.id_proyecto=proyectos.id INNER join foros on proyectos.id_foro=foros.id where foros.acceso=1 and proyectos.participa=1 group by jurados.id_docente');
-        $horarioDocentes = DB::select('SELECT horariodocentes.* FROM `horariodocentes` inner join horarioforos on horariodocentes.id_horarioforos=horarioforos.id inner join foros on horarioforos.id_foro=foros.id group by id_docente');
+        $horarioDocentes = DB::select('SELECT horariodocentes.* FROM `horariodocentes` inner join horarioforos on horariodocentes.id_horarioforos=horarioforos.id inner join foros on horarioforos.id_foro=foros.id inner join jurados on horariodocentes.id_docente=jurados.id_docente inner join proyectos on jurados.id_proyecto=proyectos.id where foros.acceso=1 and proyectos.participa=1 group by id_docente');
         $cantidadDeET = count($intervalosUnion) * $salones->num_aulas;
-        if ($horarioDocentes < $cantidadMaestro_Jurado  || $cantidadMaestro_Jurado < $horarioDocentes || $cantidadMaestro_Jurado == null || $horarioDocentes == null || $cantidadDeET < sizeof($proyectos_maestros)) {
-            // count($cantidadMaestro_Jurado) == 0  count($horarioDocentes) == 0
+        //dd($cantidadMaestro_Jurado,$horarioDocentes,$cantidadDeET,sizeof($proyectos_maestros));
+        // dd($proyectos_maestros,$maestro_et);
+        if (sizeof($horarioDocentes) != sizeof($cantidadMaestro_Jurado) || $cantidadDeET < sizeof($proyectos_maestros)) {         
             return response()->noContent();
         }
         //Nuevo 05 dic
@@ -219,6 +220,7 @@ class HorarioController extends Controller
             ->orderBy('cantidad')->get();
 
         $cantidadETMaestros = DB::select('select id_docente, count(hora) as cantidad from horariodocentes,docentes,horarioforos,foros where horariodocentes.id_docente = docentes.id and horariodocentes.id_horarioforos = horarioforos.id and horarioforos.id_foro = foros.id and foros.acceso = 1 group by id_docente order by cantidad asc');
+        // dd($horarioDocentes,"l",$cantidadMaestro_Jurado);
         $maestro_foro = $salones->num_maestros;
         if ($main->problema->eventos[0]->sizeComun == 0) {
             return response()->noContent();
@@ -290,9 +292,11 @@ class HorarioController extends Controller
                         $cont++;
                         // dd($hours,$event,$events,$cont);
                         foreach ($events as $keyItem => $item) {
+                            //dd($item);
                             $project = DB::table('proyectos')->select('proyectos.id as id')
                                 ->join('foros', 'proyectos.id_foro', '=', 'foros.id')
-                                ->where('proyectos.titulo', '=', $event)->where('foros.acceso', 1)->first();
+                                ->where('proyectos.id_proyecto', '=', $event)->where('foros.acceso', 1)->first();
+                              //  dd($project);
                             $docentes = DB::TABLE('docentes')->select('id')
                                 ->where(DB::raw("CONCAT(prefijo,' ',nombre, ' ', paterno,' ', materno)"), '=', $item)->first();
                             array_push($testFinal, $date, $hour, $project->id, $docentes->id, $cont);
@@ -326,7 +330,7 @@ class HorarioController extends Controller
     {
         $salones = Foro::select('num_aulas')->where('acceso', 1)->get()->first();
         //$salones = $salones->num_aulas;
-        $proyectos_maestros = DB::table('jurados')->select('proyectos.id', 'proyectos.titulo', DB::raw('group_concat( Distinct docentes.prefijo," ",docentes.nombre," ",docentes.paterno," ",docentes.materno) as maestros'))
+        $proyectos_maestros = DB::table('jurados')->select('proyectos.id', 'proyectos.id_proyecto', DB::raw('group_concat( Distinct docentes.prefijo," ",docentes.nombre," ",docentes.paterno," ",docentes.materno) as maestros'))
             ->join('docentes', 'jurados.id_docente', '=', 'docentes.id')
             ->join('proyectos', 'jurados.id_proyecto', '=', 'proyectos.id')
             ->where('proyectos.participa', 1)
@@ -417,15 +421,15 @@ class HorarioController extends Controller
         //where `proyectos`.`participa` = 1 group by id_docente order by id_docente
 
         // dd($proyectos);           
-        $aulas = Foro::where('acceso',1)->get()->first();
-        $aulas = $aulas->num_aulas * sizeof($intervalosUnion);                
+        $aulas = Foro::where('acceso', 1)->get()->first();
+        $aulas = $aulas->num_aulas * sizeof($intervalosUnion);
         $horarios = DB::table('horarioforos')
             ->select('horario_inicio as inicio', 'horario_termino as termino', 'fecha_foro as fecha', 'horarioforos.id as id')
             ->join('foros', 'horarioforos.id_foro', '=', 'foros.id')
             ->where('foros.acceso', 1)
             ->get();
         // dd($proyectos);
-        return view('oficina.horarios.proyectos', compact('proyectos', 'intervalosContainer', 'cantidadProyectosMA','aulas'));
+        return view('oficina.horarios.proyectos', compact('proyectos', 'intervalosContainer', 'cantidadProyectosMA', 'aulas'));
     }
     public function actualizarHorarioForo(Request $request)
     {

@@ -31,8 +31,10 @@ class Problema
                     $aux_maestro[] = $maestro;
             }
             //dd($aux_maestro);
+            //dd($evento);
             $this->eventos[] = new Eventos($evento->id_proyecto, $evento->titulo, $aux_maestro);
         }
+
         // dd($this->eventos);
         foreach ($this->eventos as $evento) {
             $evento->setPosibleEspaciosT($this->getEspaciosEnComun($evento));
