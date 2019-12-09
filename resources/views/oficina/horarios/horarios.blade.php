@@ -2,30 +2,32 @@
 
 @section('content')
 <div class="card">
-    <h5 class="card-header">Seleccione proyectos participantes</h5>
+    <h5 class="card-header">Seleccione proyectos participantes del foro activo</h5>
     <div class="card-body">
         <div class="table-responsive">
             {{csrf_field()}}
             <table class="table table-striped table-hover tableForos">
-                <thead>
-                    <th>
-                        <select name="foros" class="form-control">
-                            <option value="seleccione"> Elige foro</option>
-                            @foreach($foros as $foro)
-                            <option value="{{$foro->id}}">{{$foro->noforo}}</option>
-                            @endforeach
-                        </select>
-                    </th>
-                    <th>
-                        <button class="btn btn-success btn-xs bnt-block btnBuscarForos">Buscar</button>
-                    </th>
-                </thead>
                 <thead>
                     <th>Folio</th>
                     <th>Título del proyecto</th>
                     <th>Participa</th>
                 </thead>
                 <tbody style="table-layout:fixed">
+                    @foreach( $proyectos_aceptados as $pa)
+                    <tr>
+                    <td>
+                    {{$pa->id_proyecto}}
+                    </td>
+                    <td>
+                    {{$pa->titulo}}
+                    </td>
+                    <td>
+                    <input id-proyecto-foro="{{$pa->id_foro}}" style="width: 22px; height: 22px" type="checkbox" name="status" value=""{{$pa->participa  == 0 ?'' : 'checked' }}>
+                    </td>
+                    </tr>
+
+                    @endforeach
+
 
                 </tbody>
         </div>
@@ -39,14 +41,14 @@
     $(".btnBuscarForos").on('click', function() {
         var idForo = $('select[name="foros"]').val();
         if (idForo == "seleccione") {
-            // $(".messageContainer").addClass('active');
-            // $(".messageContainer .message .icon").html('');
-            // $(".messageContainer .message .icon").append('<i class="fas fa-exclamation-triangle"></i>');
-            // $(".messageContainer .message .title p").text('¡Atención!');
-            // $(".messageContainer .message .description p").text('Debe seleccionar un foro antes');
-            // setTimeout(() => {
-            //     $(".messageContainer").removeClass('active');
-            // }, 2000);
+            $(".messageContainer").addClass('active');
+            $(".messageContainer .message .icon").html('');
+            $(".messageContainer .message .icon").append('<i class="fas fa-exclamation-triangle"></i>');
+            $(".messageContainer .message .title p").text('¡Atención!');
+            $(".messageContainer .message .description p").text('Debe seleccionar un foro antes');
+            setTimeout(() => {
+                $(".messageContainer").removeClass('active');
+            }, 2000);
         }
         $(".loaderContainer").addClass('active');
         $.ajax({
@@ -79,12 +81,12 @@
             },
             error: function() {
                 $(".loaderContainer").removeClass('active');
-                // $(".messageContainer").addClass('active');
-                // $(".messageContainer .message .title p").text('¡Error!');
-                // $(".messageContainer .message .description p").text('Ocurrió un error al intentar conectar al servidor. Inténtelo más tarde.');
-                // setTimeout(() => {
-                //     $(".messageContainer").removeClass('active');
-                // }, 3000);
+                $(".messageContainer").addClass('active');
+                $(".messageContainer .message .title p").text('¡Error!');
+                $(".messageContainer .message .description p").text('Ocurrió un error al intentar conectar al servidor. Inténtelo más tarde.');
+                setTimeout(() => {
+                    $(".messageContainer").removeClass('active');
+                }, 3000);
             }
         });
     });

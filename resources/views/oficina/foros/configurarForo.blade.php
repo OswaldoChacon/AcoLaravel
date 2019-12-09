@@ -254,7 +254,7 @@
                                             <div class="form-group">
                                                 <label for="message-text" class="col-form-label"> ¡ ADVERTENCIA ! </label>
                                                 <label for="message-text" class="col-form-label">Si edita el horario deberá registrar el horario break y
-                                                la disponibilidad de horario de los maestros participantes nuevamente de la fecha modificada .
+                                                la disponibilidad de horario de los maestros participantes nuevamente de la fecha modificada.
                                             </div>
                                             <div class="form-group">
                                                 <label for="recipient-name" class="col-form-label">Fecha </label>
