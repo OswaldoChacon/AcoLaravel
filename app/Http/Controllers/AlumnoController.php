@@ -101,7 +101,7 @@ class AlumnoController extends Controller
       'area_conoc' => 'required',
       'asesor' => 'required',
       'empresa' => 'required',
-    ]);    
+    ]);
 
     $alumno = Alumno::where('nombre', Auth::guard('alumnos')->user()->nombre)->first();
     $alumno->acceso = 1;
@@ -115,7 +115,7 @@ class AlumnoController extends Controller
     $ProyectoForo->titulo = $request->titulo;
     $ProyectoForo->objetivo = $request->objetivo;
     $ProyectoForo->lineadeinvestigacion_id = $request->lineainv;
-    $ProyectoForo->aredeconocimiento_id = $request->area_conoc;    
+    $ProyectoForo->aredeconocimiento_id = $request->area_conoc;
     $ProyectoForo->id_asesor = $request->assesor;
     // dd($request->assesor);
 
@@ -489,7 +489,7 @@ class AlumnoController extends Controller
     // dd($id);
     $horario = DB::table('horariogenerado')->select('fecha', 'hora', 'salon')->where('id_proyecto', $id)->first();
     if ($horario == null) {
-      Session::flash('mensage', "AÚN NO TIENES UN HORARIO ASIGNADO PARA TU PRESENTACIÓN ");
+      Session::flash('mensage', "AÚN NO TIENES UN HORARIO ASIGNADO PARA TU PRESENTACIÓN");
       Session::flash('alert-class', 'alert-warning');
     }
 

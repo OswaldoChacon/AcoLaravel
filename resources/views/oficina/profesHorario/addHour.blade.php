@@ -60,9 +60,15 @@
                                             @endphp
                                             @endforeach
                                             <li>
-                                                <div class="inputContainer">
-                                                    <input {{$horaExistente == false ? '' : 'checked'}} {{$horaB == false ? '' : 'disabled'}} posicion="{{$posicion}}" class="checkHorarioJurado" id-docente="{{$item->id_docente}}" id-horario-foros="{{$itemB->id}}" style="width: 25px; height: 25px" type="checkbox" name="status" value="participa">
+                                                <div class="inputContainer" style="background-color: {{$horaB == false ? ''  : '#ffcdd2' }}; width: 180px; height: 26px;">
+                                                    <input {{$horaExistente == false ? '' : 'checked'}}
+
+                                                    {{$horaB == false ? ''  : 'disabled' }} posicion="{{$posicion}}"
+                                                    class="checkHorarioJurado" id-docente="{{$item->id_docente}}"
+                                                    id-horario-foros="{{$itemB->id}}" style="width: 25px; height: 25px;"
+                                                    type="checkbox" name="status" value="participa">
                                                     <small>{{$intervalosContainer[$i][$j]}}</small>
+
                                                 </div>
                                             </li>
                                             @php

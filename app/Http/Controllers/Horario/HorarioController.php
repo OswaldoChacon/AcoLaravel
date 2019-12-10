@@ -64,7 +64,7 @@ class HorarioController extends Controller
             $dayOfWeek = date("l", strtotime($request->fecha[$i]));
             // print_r($countFechas);
             // print_r($dayOfWeek);
-            if ($countFechas > 0 || $dayOfWeek == 'Saturday' || $dayOfWeek == 'Sunday') {
+            if ($countFechas > 0 ) {
                 $temp = $request->fecha[$i];
                 array_push($dataBad, $temp);
             } else {
@@ -205,7 +205,7 @@ class HorarioController extends Controller
         $cantidadDeET = count($intervalosUnion) * $salones->num_aulas;
         //dd($cantidadMaestro_Jurado,$horarioDocentes,$cantidadDeET,sizeof($proyectos_maestros));
         // dd($proyectos_maestros,$maestro_et);
-        if (sizeof($horarioDocentes) != sizeof($cantidadMaestro_Jurado) || $cantidadDeET < sizeof($proyectos_maestros)) {         
+        if (sizeof($horarioDocentes) != sizeof($cantidadMaestro_Jurado) || $cantidadDeET < sizeof($proyectos_maestros)) {
             return response()->noContent();
         }
         //Nuevo 05 dic
@@ -420,7 +420,7 @@ class HorarioController extends Controller
         //from `jurados` inner join `docentes` on `jurados`.`id_docente` = `docentes`.`id` inner join `proyectos` on `jurados`.`id_proyecto` = `proyectos`.`id`
         //where `proyectos`.`participa` = 1 group by id_docente order by id_docente
 
-        // dd($proyectos);           
+        // dd($proyectos);
         $aulas = Foro::where('acceso', 1)->get()->first();
         $aulas = $aulas->num_aulas * sizeof($intervalosUnion);
         $horarios = DB::table('horarioforos')
@@ -480,13 +480,19 @@ class HorarioController extends Controller
     {
         $idHorario = $request->get('idHorario');
 
-        $horariof = DB::table('horarioforos')->select('id as id')
-            ->where('id', $idHorario)->get();
-        if (count($horariof) > 0) {
-            $deletes = DB::table('horarioforos')
-                ->where('id', $horariof[0]->id)
+        $hdocentes = DB::table('horariodocentes')->select(
+            'horariodocentes.id as id',
+            'horariodocentes.id_horarioforos as id_horarioforos',
+            'horarioforos.id as idhf'
+        )
+            ->join('horarioforos', 'horariodocentes.id_horarioforos', '=', 'horarioforos.id')
+            ->where('id_horarioforos', $idHorario)->get();
+         foreach ($hdocentes as $hd) {
+            $deletes = DB::table('horariodocentes')
+                ->where('id', $hd->id)
                 ->delete();
         }
+
         $hbreak = DB::table('horariobreak')->select(
             'horariobreak.id as id',
             'horariobreak.id_horarioforo as id_horarioforo',
@@ -501,18 +507,13 @@ class HorarioController extends Controller
                 ->delete();
         }
 
-        $hdocentes = DB::table('horariodocentes')->select(
-            'horariodocentes.id as id',
-            'horariodocentes.id_horarioforos as id_horarioforos',
-            'horarioforos.id as idhf'
-        )
-            ->join('horarioforos', 'horariodocentes.id_horarioforos', '=', 'horarioforos.id')
-            ->where('id_horarioforos', $idHorario)->get();
-
-        foreach ($hdocentes as $hd) {
-            $deletes = DB::table('horariodocentes')
-                ->where('id', $hd->id)
+        $horariof = DB::table('horarioforos')->select('id as id')
+            ->where('id', $idHorario)->get();
+        if (count($horariof) > 0) {
+            $deletes = DB::table('horarioforos')
+                ->where('id', $horariof[0]->id)
                 ->delete();
         }
+
     }
 }
