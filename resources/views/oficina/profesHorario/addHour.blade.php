@@ -60,7 +60,7 @@
                                             @endphp
                                             @endforeach
                                             <li>
-                                                <div class="inputContainer" style="background-color: {{$horaB == false ? ''  : '#ffcdd2' }}; width: 180px; height: 26px;">
+                                                <div class="inputContainer" style="background-color: {{$horaB == false ? ''  : '#ff8a80' }}; width: 180px; height: 26px;">
                                                     <input {{$horaExistente == false ? '' : 'checked'}}
 
                                                     {{$horaB == false ? ''  : 'disabled' }} posicion="{{$posicion}}"
