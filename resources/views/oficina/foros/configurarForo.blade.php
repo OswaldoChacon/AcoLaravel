@@ -253,8 +253,8 @@
                                             <input type="hidden" name="idHorario" value="{{$object->id}}" />
                                             <div class="form-group">
                                                 <label for="message-text" class="col-form-label"> ¡ ADVERTENCIA ! </label>
-                                                <label for="message-text" class="col-form-label">Si edita el horario deberá registrar el horario break y
-                                                la disponibilidad de horario de los maestros participantes nuevamente de la fecha modificada.
+                                                <label for="message-text" class="col-form-label">Si edita el horario se borrará los registros de la disponibilidad
+                                                de horario de los maestros participantes que no se encuentren en el rango del horario actualizado.
                                             </div>
                                             <div class="form-group">
                                                 <label for="recipient-name" class="col-form-label">Fecha </label>
