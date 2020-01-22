@@ -33,6 +33,7 @@
                     <li><a href="{{ route('loginDocente') }}">Docentes</a></li>
                     <li><a href="{{ route('loginAlumno') }}">Alumno</a></li>
                     <li><a href="{{ url('/') }}">Oficina</a></li>
+                    <li><a href="{{ route('loginCoordinador') }}">Coordinador</a></li>
                   </ul>
                 </li>
             </ul>

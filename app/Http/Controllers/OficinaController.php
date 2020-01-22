@@ -651,8 +651,11 @@ class OficinaController extends Controller
         // // $foro = Foro::find($ProyectoForoAlumno->id_foro);
         // $proyectoForo = ProyectoForo::find($pro->id);
         //return view('oficina.proyectoDescripcion',compact('foro','proyectoForo','ProyectoForoAlumno','notificacione','alumnoenproyecto','alumno','docente','Forodoncente'));
+       
         return view('oficina.proyectoDescripcion', compact('id', 'pro', 'proyectoForo', 'infoProyecto', 'docentesDeTaller', 'jefeDepartamento', 'foro'));
     }
+
+
     public function getProyectosForo(Request $request)
     {
         $idForo = $request->get('idForo');
@@ -814,4 +817,32 @@ class OficinaController extends Controller
 
         return view('seminario.jurados.prueba',compact('foros'));
     }
+
+    public function projectsSeguiDetalles()
+    {
+
+        // $proyectos = ProyectoForo::find($id)->where([
+        //                     ['id_foro', '=', $id]
+        //                 ])
+        //                 ->get();
+        $foros=Foro::all();
+
+        return view('seminario.jurados.prueba',compact('foros'));
+    }
+
+
+
+    // metodos del modulo de alan 
+    public function solicitudesResibidasCambios()
+{
+  $uso=0;
+  
+  $control= DB::table('bitacoras')->select('motivo','id_proyecto','id_tipocambio')->where('resolucion',$uso)->get();
+  
+  
+  //dd($control);
+    return view('oficina.solicitudesCambios',compact('control'));
+}
+
+
 }

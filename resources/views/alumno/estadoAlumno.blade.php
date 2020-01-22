@@ -25,6 +25,13 @@
                     {{-- <th>{{$proyectoForo->id_foro}}</th> --}}
                     
                 </tr>
+               
+                    <th colspan="2"> <a class="list-group-item" href="#">
+                   Historial de cambio</a></th>
+                
+                    {{-- <th>{{$proyectoForo->id_foro}}</th> --}}
+                    
+               
               
             </thead>
             
@@ -54,12 +61,16 @@
     </div>
 
 
-    <table class="table table-light table-hover" style="empty-cells" CELLSPACING="6" >
+    <table class="table table-light table-hover"  border="3" style="width: 750px;height: 100px;">
 
     <thead class="thead-light">
 		<tr>
-			<th><h4 class="panel-title">ETAPAS:</h4></th>
-           <th> <h4 class="panel-title"> Estatus/Calificacion: </h4></th>
+			<th style="width: 10%"><h4 class="panel-title">Etapas:</h4></th>
+      <th style="width: 20%"> <h4 class="panel-title">Estatus/Calificacion:</h4></th>
+      <th style="width: 25%"> <h4 class="panel-title">Acciones:</h4>
+     
+      
+      </th>
         </tr>
        
 </thead>
@@ -69,8 +80,8 @@
 
     <thead class="thead-light">
   <tr>
-			<th>Registro</th>
-            <td name='idProyecto'>
+			<th style="width: 20%">Registro</th>
+            <td style="width: 40%" name='idProyecto'>
             
             
                  <?php
@@ -81,7 +92,7 @@
                      }
                           ?>
             </td>
-         <td><a class="list-group-item"  href="/registroIr/{{Crypt::encrypt(Auth::guard('alumnos')->user()->id)}}">
+         <td ><a class="list-group-item"  href="/proyectoAlumno/{{Crypt::encrypt(Auth::guard('alumnos')->user()->id)}}">
                    Ver Detalles</a>
                    </td>
    </tr>
@@ -94,8 +105,8 @@
  <tr> 
 
 			  <tr>        
-            <th>Foro</th>        
-            <td>
+            <th style="width: 20%">Foro</th>        
+            <td style="width: 40%">
           {{$calificaciones->calificacion_foro}}                        
             </td> 
           <td><a class="list-group-item" href="{{ route('dictamen') }}">
@@ -113,9 +124,9 @@
     <tr>
 
             <tr> 
-			<th>Seminario</th>
+			<th style="width: 20%">Seminario</th>
             
-             <td name='seminario'>
+             <td style="width: 40%" name='seminario'>
              {{$calificaciones->calificacion_seminario}}
                {{-- {{$Calificaciones->Calificacion_seminario}} --}}
              </td> 
@@ -135,22 +146,74 @@
  <tr> 
 		        <tr>
 
-            <th>Recidencia</th>     
-            <td>Inabilitada</td>     
-            <td>
-        		 <a class="list-group-item" href="/solicitarResidencia/{{Crypt::encrypt(Auth::guard('alumnos')->user()->id)}}">
-                
-                    Solicitar
-                    </a>        
+            <th style="width: 20%">Residencia</th>    
+              
+               <td style="width: 40%"> 
+               
+               
+                @if (empty($consultarResi->id_alumno))
+           
+                  @elseif (empty($consultarResi->solicitado))
+             <?php  echo "Solicitada"; ?>
+            @else 
+            <?php    echo "Aceptada"; ?>
+                     
+                           @endif  
+
+
+{{-- 
+                            @if (empty($calificaciones->calificacion_seminario))
+           
+                  @elseif (empty($consultarResi->solicitado))
+           <//php  echo "Solicitada"; ?>
+            @else 
+            < //php    echo "Aceptada"; ?>
+                     
+                           @endif
+                           --}}
+               </td>
+
+               <td>
+
+                @if (empty($calificaciones->calificacion_seminario))
+
+                @elseif (empty($consultarResi->id_alumno))
+                  <a class="list-group-item" href="/solicitarResidencia/{{Crypt::encrypt(Auth::guard('alumnos')->user()->id)}}">
+                    A Solicitar
+                    </a>     
+              
+                @endif
+
+              
+           </td>  
+               
+                  
                              
-            
+       
+        
             </td> 
          
 </tr>
 </thead>
  </table>
 
-
+<script>
+$(document).ready(function() {
+    hideEmptyCols($("#table0"));
+});
+ 
+ 
+ function hideEmptyCols(table0) {
+    var rows = $("tr", table0).length-1;
+    var numCols = $("th", table0).length;
+    for ( var i=1; i<=numCols; i++ ) {
+        if ( $("span:empty", $("td:nth-child(" + i + ")", table0)).length == rows ) {
+            $("td:nth-child(" + i + ")", table0).hide(); //hide <td>'s
+            $("th:nth-child(" + i + ")", table0).hide(); //hide header <th>
+        }
+    }
+}
+  </script>
 
 
 
@@ -166,9 +229,9 @@
                     {{-- <label name='idsolicitante'>{{Auth::guard('alumnos')->user()->id}}</label> --}}
                    
 
-                   <a href="/cancelar/{{Crypt::encrypt(Auth::guard('alumnos')->user()->id)}}">
+                   {{-- <a href="/cancelar/{{Crypt::encrypt(Auth::guard('alumnos')->user()->id)}}">
                     <button class="btn btn-success btn-xs bnt-block">Salir</button>
-                    </a>
+                    </a> --}}
 
 
             </div>

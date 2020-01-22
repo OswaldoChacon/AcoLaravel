@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="card">
-    <h5 class="card-header">Segumiento con actor ofisina</h5>
+    <h5 class="card-header">Segumiento De Proyectos</h5>
     <div class="card-body">
         <div class="table-responsive">
             {{csrf_field()}}
@@ -18,7 +18,7 @@
                         </select>
                     </th>
                     <th>
-                        <button class="btn btn-success btn-xs bnt-block btnBuscarForos">Buscar</button>
+                        <button class="btn btn-success btn-xs bnt-block btnBuscarForos">Buscar Proyectos</button>
                     </th>
                 </thead>
                 <thead>
@@ -32,6 +32,22 @@
     </div>
 
 </div>
+<div class="card-body">
+<h5>Buscar Proyectos
+
+{{-- {{ Form::open(['route' => 'user', 'method' => 'GET', 'class' => 'form-inline pull-right']) }}
+<div class="form-group">
+             {{ Form::text('name', null, ['class' => 'form-control', 'placeholder' => 'nombre']) }}
+  </div>
+
+<div class="form-group">
+             {{ Form::text('name', null, ['class' => 'form-control', 'placeholder' => 'nombre']) }}
+ 
+{{ Form::close() }} --}}
+
+</h5>
+ </div>
+
 @endsection
 @push('participaControl')
 <script>
@@ -72,7 +88,8 @@
                     </td>
                   
                     <td>
-                    <a class="btn btn-info btn-xs" href="/jurados/edit/${this.id}">Seguimiento de Proyecto</a>
+                    <a class="btn btn-info btn-xs" href="/jurados/detallepro/${this.id}">Seguimiento de Proyecto</a>
+                
                     </td>
                     </tr>
                     `);
@@ -91,3 +108,4 @@
     });
 </script>
 @endpush
+

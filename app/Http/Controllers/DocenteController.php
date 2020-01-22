@@ -17,6 +17,7 @@ use App\Notificacione;
 use App\Docente;
 use App\Archivo;
 use App\Foro;
+use App\Tipo_cambio;
 use App\Alumno;
 use App\Juradotwo;
 use Auth;
@@ -284,8 +285,9 @@ class DocenteController extends Controller
     
     $idp =  DB::table('jurados')->select('id_proyecto')->where('id_docente','=',$docente)->first();
     $idp2 = DB::table('jurados')->where('id_docente','=',$docente)->get();
-   
-
+    $nombreProyecto = DB::table('proyectos')->select('id','titulo')->get();
+    
+    $proyectos=Foro::all();
 
    // $idp2 = DB::table('jurados')->select('id_proyecto')->where('id_docente',$docente)->get();
  
@@ -310,10 +312,121 @@ class DocenteController extends Controller
 
     //  dd($name);
    //retornaria a return view('seminario.jurados.vistaproyectoDoc',compact('foros'));
-    return view('docentes.vistaProyectosDoc',compact('name','foros','idp2','proyectos','idp'));
+    return view('docentes.vistaProyectosDoc',compact('name','foros','idp2','proyectos','idp','nombreProyecto'));
 
   }
 
+
+  public function datelleSeguimiento(Request $request, $id_pro){
+    
+    // $foros = DB::table('foros')->get();
+    //$inputs=Input::all();
+    //$escritor_id = $inputs['id_pro'];
+   
+    
+    //dd($id_pro);
+     $foros=Foro::all();
+     $docente =Auth::id();
+   
+
+
+     
+     $idp =  DB::table('jurados')->select('id_proyecto')->where('id_docente','=',$docente)->first();
+     $idp2 = DB::table('jurados')->where('id_docente','=',$docente)->get();
+    $bar2 = (array) $idp2;  // hasta aqui obtengo los ids de los prouyectos que tiene el docente
+    //dd($bar2);
+    //$idp3=DB::table('proyectos')
+    $proyectos = ProyectoForo::all();
+
+     $name=DB::table('docentes')->select('prefijo','nombre','paterno','materno')->where('id',$docente)->first();
+     $proyecto = DB::table('proyectos')->where('id','=',$id_pro)->get();
+     $alumno = DB::table('alumnos')->where('id_proyecto','=',$id_pro)->get();
+
+     $consultarResi = DB::table('residencias')->select('id','id_alumno','lugar','solicitado')->where('id',$id_pro)->first();
   
+     //dd($proyecto);
+     
+     return view('docentes.detalleSegui',compact('name','foros','idp2','proyectos','idp','proyecto','alumno','consultarResi'));
+ 
+   }
+ 
+   public function notificacionesCambios()
+    {
+       
+      $uso=0;
+      $docente =Auth::id();
+      $tipocambio =DB::table('tipo_cambios')->select('id_tipocambio','nombre_cambio')->get();
+     //dd($tipocambio);
+   //  $proyecto = DB::table('proyectos')->where('id_asesor','=',$docente)->get();
+      $proyecto = DB::table('proyectos')->select('id')->where('id_asesor','=',$docente)->get()->toArray(); 
+    //dd($proyecto);
+
+     
+
+
+      $con = DB::table('proyectos')->select('id')->where('id_asesor',$docente)->get();
+      $bar2 = (array) $proyecto; 
+     //dd($bar2);
+      //tengo que obtener el id del docente y buscarlo a que proyecto pertenece al saber que proyecto es 
+      // debo buscar en la tabla bitacoras el tipo de resolucion que tiene si tiene 0 me debe mostrar la notificacion
+      //y yo al aceptar se guarda los datos en la tabla aceptacion_asesor
+      //por cambio solo debe aparecer una respuesta de assor.(en cuestion de alumno este debe checar cuantos partisipantes hay y abace de eso cuantas respuestabas deben haber para que se pueda mostrar la notificacion a la oficina )
+  
+     $control= DB::table('bitacoras')->select('id_proyecto')->where('resolucion','=',$uso)->get()->toArray(); 
+     $datos= DB::table('bitacoras')->select('id_proyecto','motivo')->where('resolucion','=',$uso)->get();
+    
+   
+    
+    
+     $datosProyectos= DB::table('bitacoras')->select('id_proyecto','motivo','id_tipocambio')->where('id_asesor','=',$docente)->get();
+
+     $datosidtipo= DB::table('bitacoras')->select('id_tipocambio')->where('id_asesor','=',$docente)->get();
+
+     //dd($datosidtipo, $datosProyectos);
+  
+  
+  
+  
+  
+  
+  
+     // $control= DB: $datosProyectos:table('bitacoras')->select('motivo','id_proyecto','id_tipocambio')->where('id_proyecto','=',$proyecto)->get();
+    // $bar3 = (array) $control; 
+     $variable = (array) $control; 
+    //dd( $datosProyectos);
+    //dd($proyecto,$control);
+
+   // $articulos = array();
+   // $articulos2 = array();
+    $articulos[] = $control;
+    $articulos2[] = $proyecto;
+    //dd($articulos,$articulos2);
+    $bar2 = (array) $articulos; 
+    $bar3 = (array) $articulos2; 
+  // $result = array_intersect($bar2, $bar3);
+ 
+    //$bar = (array) $result; 
+  //  dd($bar2,$bar3);
+
+
+        return view('docentes.notificacionesCambios',compact('control','proyecto','bar2','bar3','datos','datosProyectos','tipocambio'));
+    }
+
+
+    public function datellSolicitudCambios(Request $request, $id_pro){
+    
+      // $foros = DB::table('foros')->get();
+      //$inputs=Input::all();
+      //$escritor_id = $inputs['id_pro'];
+      $datos= DB::table('bitacoras')->select('id_proyecto','motivo','dato_anterior','dato_nuevo')->where('id_proyecto','=',$id_pro)->get();
+      
+      //dd($datos);
+    
+    
+       
+       
+       return view('docentes.detalleSolicitudCambios',compact('datos'));
+    
+     }
 
 }

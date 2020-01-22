@@ -47,6 +47,11 @@
 				<li>
 					<a href="{{route('oficina')}}"> Inicio</a>
 				</li>
+
+				<li>
+					<a href="{{route('solicitudesCambios')}}">Notificaciones</a>
+				</li>
+
 				<li>
 					<a href="{{route('lineaDeInvetigacion')}}">Linea de investigación</a>
 				</li>
@@ -103,6 +108,7 @@
 			{{-- 	<li>
 					<a href="{{ route('sheets') }}">Hojas de evaluaciones del seminario</a>
 				</li> --}}
+				
 
 				<li>
 					<a href="{{route('juradosprojects2')}}">Segumiento De Proyectos</a>

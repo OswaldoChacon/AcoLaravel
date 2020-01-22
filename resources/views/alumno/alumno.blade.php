@@ -55,12 +55,32 @@
 
 					@if (Auth::guard('alumnos')->user()->acceso==0)
                 <li>
-				<a class="list-group-item" href="/EstadoDeProyectoAlumno/{{Crypt::encrypt(Auth::guard('alumnos')->user()->id)}}">Estado de Proyecto</a>
+				<a  href="/EstadoDeProyectoAlumno/{{Crypt::encrypt(Auth::guard('alumnos')->user()->id)}}">Estado de Proyecto</a>
 					{{-- @endif --}}
 					
 					</li>
+
+				
+             
 				@endif
+ 
+				<li class="treeview">
+				<a class="list-group-item" href="">Solicitar Cambios
+				</a>
+      <ul class="treeview-menu">
+	  
+      <a class="list-group-item" href="/cambioNombre/{{Crypt::encrypt(Auth::guard('alumnos')->user()->id)}}">Cambio de titulo</a>
+
+	 <a class="list-group-item" href="/cambioAsesor/{{Crypt::encrypt(Auth::guard('alumnos')->user()->id)}}">Cambio de asesor</a>
+	 <a class="list-group-item" href="/cambioCancelacion/{{Crypt::encrypt(Auth::guard('alumnos')->user()->id)}}">Cancelación de proyecto</a>
+	<a class="list-group-item" href="/cambioBajaA/{{Crypt::encrypt(Auth::guard('alumnos')->user()->id)}}">Baja de alumno</a>
+												</ul>					
+
+				</li>
+                            
 			</ul>
+
+			
 			
 		</nav>
 	
