@@ -16,6 +16,8 @@ $(document).on("click",".modal .borrar",function(){
             $(".messageContainer .message .icon").append('<i class="fas fa-envelope"></i>');
             $(".messageContainer .message .title p").text('¡Registro Borrado!');
             $(".messageContainer .message .description p").text('Su registro ha sido borrado exitosamente');
+
+            location.reload();
             setTimeout(() => {
                 $(".messageContainer").removeClass('active');
             }, 1000);

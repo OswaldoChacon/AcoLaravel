@@ -15,7 +15,7 @@ class Lineadeinvestigacion extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'clave', 'linea',
+        'id','clave', 'linea',
     ];
 
     /**

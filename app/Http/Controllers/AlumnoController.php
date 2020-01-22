@@ -35,14 +35,13 @@ class AlumnoController extends Controller
   }
   public function index()
   {
-    $notificacione =0;// Notificacione::where('id_alumno', Auth::guard('alumnos')->user()->id)->where('envio', 1)->count();
+    $notificacione = 0; // Notificacione::where('id_alumno', Auth::guard('alumnos')->user()->id)->where('envio', 1)->count();
     return view('alumno.alumno', compact('notificacione'));
-
   }
 
   public function editar($id)
   {
-    $notificacione = Notificacione::where('id_alumno', Auth::guard('alumnos')->user()->id)->where('envio', 1)->count();
+    // $notificacione = Notificacione::where('id_alumno', Auth::guard('alumnos')->user()->id)->where('envio', 1)->count();
     $id = Crypt::decrypt($id);
     $alumno = Alumno::find($id);
     return view('alumno.editar', compact('alumno', 'notificacione'));
@@ -75,10 +74,10 @@ class AlumnoController extends Controller
 
   public function registraProyecto()
   {
-    $notificacione = 0;//Notificacione::where('id_alumno', Auth::guard('alumnos')->user()->id)->where('envio', 1)->count();
+    $notificacione = 0; //Notificacione::where('id_alumno', Auth::guard('alumnos')->user()->id)->where('envio', 1)->count();
     $forodoncente = Forodoncente::all();
     $docente = Docente::all();
-    $alumno = Alumno::all();
+    $alumnos = Alumno::all();
     $lineadeinvestigacion = Lineadeinvestigacion::all();
     $aredeconocimiento = Aredeconocimiento::all();
     $foro = Foro::where('acceso', 1)->first();
@@ -92,7 +91,7 @@ class AlumnoController extends Controller
          echo $resultado; // imprime "ue"*/
     //echo foro;
     //return view('alumno.registraProyecto',compact('foro','docente','lineadeinvestigacion','aredeconocimiento','forodoncente','ni','alumno','idalumno1','notificacione'));
-    return view('alumno.registraProyecto', compact('foro', 'docente', 'lineadeinvestigacion', 'aredeconocimiento', 'forodoncente', 'alumno', 'notificacione'));
+    return view('alumno.registraProyecto', compact('foro', 'docente', 'lineadeinvestigacion', 'aredeconocimiento', 'forodoncente', 'alumnos', 'notificacione'));
   }
   public function RegistarProyecto(Request $request, $id)
   {
@@ -100,8 +99,9 @@ class AlumnoController extends Controller
     $validator = $this->validate(request(), [
       'titulo' => 'required',
       'objetivo' => 'required',
-      'categorias' => 'required',
-      'productos' => 'required',
+      'lineainv' => 'required',
+      'area_conoc' => 'required',
+      'asesor' => 'required',
       'empresa' => 'required',
     ]);
 
@@ -109,64 +109,56 @@ class AlumnoController extends Controller
     $alumno->acceso = 1;
     $alumno->save();
 
-    $foro =Foro::find($id);
+    $foro = Foro::find($id);
+    // dd($foro);
     $proyectoForo = ProyectoForo::all();
     $ProyectoForo = new ProyectoForo;
     $ProyectoForo->id_foro = $foro->id;
     $ProyectoForo->titulo = $request->titulo;
     $ProyectoForo->objetivo = $request->objetivo;
-    $ProyectoForo->lineadeinvestigacion_id = $request->categorias;
-    if ($request->id_input != null) {
-      $ProyectoForo->aredeconocimiento_id = $request->id_input;
-    } else {
-      $ProyectoForo->aredeconocimiento_id = $request->productos;
-    }
-    $ProyectoForo->id_asesor=$request->assesor;
-// dd($request->assesor);
+    $ProyectoForo->lineadeinvestigacion_id = $request->lineainv;
+    $ProyectoForo->aredeconocimiento_id = $request->area_conoc;
+    $ProyectoForo->id_asesor = $request->assesor;
+    // dd($request->assesor);
 
     $ProyectoForo->nombre_de_empresa = $request->empresa;
     // $ProyectoForo->seminario_id = $foro->id;
     // $ProyectoForo->alumno_id = $alumno->id;
-    $prefijo=DB::table('foros')->select('prefijo_proyecto')->where('id',$id)->first();
-    $p=$prefijo->prefijo_proyecto;
+    $prefijo = DB::table('foros')->select('prefijo_proyecto')->where('id', $id)->first();
+    $p = $prefijo->prefijo_proyecto;
 
-    $numproyectos= DB::table('proyectos')->where('id_foro',$id)->get();
-    $contador=count($numproyectos);
+    $numproyectos = DB::table('proyectos')->where('id_foro', $id)->get();
+    $contador = count($numproyectos);
 
-    if($contador>0)
-    {
+    if ($contador > 0) {
       $contador++;
 
-      if($contador < 10)
-      {
+      if ($contador < 10) {
         strval($contador);
-        $temp= "0" . $contador;
-      }
-      else{
+        $temp = "0" . $contador;
+      } else {
         strval($contador);
-        $temp=$contador;
+        $temp = $contador;
       }
-
-    }
-    else{
-      $contador=1;
+    } else {
+      $contador = 1;
       strval($contador);
-      $temp= "0" . $contador;
+      $temp = "0" . $contador;
     }
 
-    $id_proyecto=$p . $temp;
-    $ProyectoForo->id_proyecto=$id_proyecto;
+    $id_proyecto = $p . $temp;
+    $ProyectoForo->id_proyecto = $id_proyecto;
 
     $ProyectoForo->save();
 
     $alum = Auth::id();
 
-    $proyecto= DB::TABLE('proyectos')->select('id')->where('id_proyecto',$id_proyecto)->first();
-    $pro=$proyecto->id;
+    $proyecto = DB::TABLE('proyectos')->select('id')->where('id_proyecto', $id_proyecto)->first();
+    $pro = $proyecto->id;
 
-     DB::table('alumnos')
-                ->where('id', $alum)
-                ->update(['id_proyecto' => $pro]);
+    DB::table('alumnos')
+      ->where('id', $alum)
+      ->update(['id_proyecto' => $pro]);
 
     // $alumnos = count($request->alumno, COUNT_RECURSIVE);
     // for ($i = 0; $i < $alumnos; $i++) {
@@ -204,7 +196,7 @@ class AlumnoController extends Controller
     // $ProyectoForoAlumno->objetivo = $request->objetivo;
     // $ProyectoForoAlumno->save();
     Session::flash('mensage', "Proyecto Registrado");
-            Session::flash('alert-class', 'alert-success');
+    Session::flash('alert-class', 'alert-success');
     return back();
   }
 
@@ -235,15 +227,22 @@ class AlumnoController extends Controller
     // $notificacione = Notificacione::where('id_alumno', Auth::guard('alumnos')->user()->id)->where('envio', 1)->count();
     // $ProyectoForoAlumno = ProyectoForoAlumno::all();
     // $alumnoss = ProyectoForoAlumno::where('id_alumno', $id)->first();
-    $proyect= DB::TABLE('alumnos')->select('id_proyecto')->where('id',$alumno)->first();
-    $p=$proyect->id_proyecto;
-    $proyecto= db::table('proyectos')->where('id',$p)->get();
-    $idforo= db::table('proyectos')->select('id_foro')->where('id',$p)->first();
-    $idf=$idforo->id_foro;
-    $foro =db::table('foros')->select('noforo')->where('id',$idf)->first();
+    $proyect = DB::TABLE('alumnos')->select('id_proyecto')->where('id', $alumno)->first();
+    $p = $proyect->id_proyecto;
+    $proyecto = db::table('proyectos')->where('id', $p)->get();
+    $pro = db::table('proyectos')->select('id_proyecto')->where('id', $p)->first();
+    if ($pro == null) {
+      Session::flash('men', "AÚN NO TIENES UN PROYECTO REGISTRADO");
+      Session::flash('alert-class', 'alert-warning');
 
+      return view('alumno.proyectosForo', compact('proyect', 'pro', 'alumno', 'proyecto'));
+    } else {
+      $idforo = db::table('proyectos')->select('id_foro')->where('id', $p)->first();
+      $idf = $idforo->id_foro;
+      $foro = db::table('foros')->select('noforo')->where('id', $idf)->first();
 
-    return view('alumno.proyectosForo', compact('proyecto', 'alumno','foro'));
+      return view('alumno.proyectosForo', compact('proyecto', 'alumno', 'foro'));
+    }
   }
   public function proyectoDescripcionAlumno($id)
   {
@@ -262,8 +261,8 @@ class AlumnoController extends Controller
   public function notificaciones()
   {
     $alumno = Alumno::all();
-    $notificacione = 0;//Notificacione::where('id_alumno', Auth::guard('alumnos')->user()->id)->where('envio', 1)->get()->count();
-    $noticia = 0;//Notificacione::where('id_alumno', Auth::guard('alumnos')->user()->id)->where('envio', 1)->get();
+    $notificacione = 0; //Notificacione::where('id_alumno', Auth::guard('alumnos')->user()->id)->where('envio', 1)->get()->count();
+    $noticia = 0; //Notificacione::where('id_alumno', Auth::guard('alumnos')->user()->id)->where('envio', 1)->get();
     return view('alumno.notificacion', compact('notificacione', 'noticia', 'alumno'));
   }
 
@@ -463,284 +462,148 @@ class AlumnoController extends Controller
 
     return view('alumno.mostrarEvaluacion', compact('notificacione', 'hoja'));
   }
-  public function horario(){
+  public function horario()
+  {
 
     $alumno = Auth::id();
-    $name= DB::table('alumnos')->select('nombre','paterno','materno','id_proyecto')->where('id',$alumno)->first();
+    $name = DB::table('alumnos')->select('nombre', 'paterno', 'materno', 'id_proyecto')->where('id', $alumno)->first();
 
-    $idproyecto=DB::table('alumnos')->select('id_proyecto')->where('id',$alumno)->first();
-    $id=$idproyecto->id_proyecto;
-    $clave=DB::table('proyectos')->select('id_proyecto')->where('id',$id)->first();
-    $id_prefijo=$clave->id_proyecto;
-    // dd($id_prefijo);
+
+    $idproyecto = DB::table('alumnos')->select('id_proyecto')->where('id', $alumno)->first();
+
+    $id = $idproyecto->id_proyecto;
+
+    $clave = DB::table('proyectos')->select('id_proyecto')->where('id', $id)->first();
+
+    if ($clave == null) {
+      Session::flash('mens', "AÚN NO TIENES UN PROYECTO REGISTRADO");
+      Session::flash('alert-class', 'alert-warning');
+
+      $horario = DB::table('horariogenerado')->select('fecha', 'hora', 'salon')->where('id_proyecto', $id)->first();
+      // if ($horario == null){
+      //     Session::flash('mensage', "AÚN NO TIENES UN HORARIO ASIGNADO PARA TU PRESENTACIÓN ");
+      //     Session::flash('alert-class', 'alert-warning');
+      // }
+      return view('alumno.horariogeneradoAlumno', compact('horario', 'name', 'clave'));
+    }
+    $id_prefijo = $clave->id_proyecto;
 
     // dd($id);
-    $horario= DB::table('horariogenerado')->select('fecha','hora','salon')->where('id_proyecto',$id)->first();
-    if ($horario == null){
-        Session::flash('mensage', "AÚN NO TIENES UN HORARIO ASIGNADO PARA TU PRESENTACIÓN ");
-        Session::flash('alert-class', 'alert-warning');
+    $horario = DB::table('horariogenerado')->select('fecha', 'hora', 'salon')->where('id_proyecto', $id)->first();
+    if ($horario == null) {
+      Session::flash('mensage', "AÚN NO TIENES UN HORARIO ASIGNADO PARA TU PRESENTACIÓN");
+      Session::flash('alert-class', 'alert-warning');
     }
 
-    return view('alumno.horariogeneradoAlumno',compact('horario','name','id_prefijo'));
-
+    return view('alumno.horariogeneradoAlumno', compact('horario', 'name', 'id_prefijo', 'clave'));
   }
 
 
-//sunny
+  //sunny
 
-public function EstadoDeProyectoAlumno($id)
-{
+  public function EstadoDeProyectoAlumno($id)
+  {
 
-  $alumno = Auth::id();
-// dd($alumno);
+    $alumno = Auth::id();
 
-  $name= DB::table('alumnos')->select('nombre','paterno','materno','id_proyecto')->where('id',$alumno)->first();
-  //dd($name);
-  $control= DB::table('alumnos')->select('nocontro','id_proyecto','nombre','paterno','materno','id_proyecto','id')->where('id',$alumno)->first();
+    $name = DB::table('alumnos')->select('nombre', 'paterno', 'materno', 'id_proyecto')->where('id', $alumno)->first();
+    //dd($name);
+    $control = DB::table('alumnos')->select('nocontro', 'id_proyecto', 'nombre', 'paterno', 'materno', 'id_proyecto')->where('id', $alumno)->first();
 
-  $idp =  DB::table('alumnos')->select('id_proyecto')->where('id','=',$alumno)->first();
-  //var_dump( $idp );
-  //$stm->bindValue(":id",$rut);
-  $bar = (array) $idp;
+    $idp =  DB::table('alumnos')->select('id_proyecto')->where('id', '=', $alumno)->first();
+    //var_dump( $idp );
+    //$stm->bindValue(":id",$rut);
+    $bar = (array) $idp;
 
-  //$gsent->fetchColumn();
- // dd($idp);
- $jurado = DB::table('jurados')->select('id')->where('id_proyecto',$bar)->get();
- //dd($jurado);
+    //$gsent->fetchColumn();
+    // dd($idp);
+    $jurado = DB::table('jurados')->select('id')->where('id_proyecto', $bar)->get();
+    //dd($jurado);
 
-  $proyectos = DB::table('proyectos')->select('titulo')->where('id',$bar)->first();
-
-  
-  $calificaciones = DB::table('proyectos')->select('calificacion_seminario','calificacion_foro')->where('id',$bar)->first();
-  //dd($calificaciones);
-  //$proyectos = DB::table('proyectos')->select('id')->where('id_proyecto',$alumno)->first();
-  $consultarResi = DB::table('residencias')->select('id_alumno','lugar','solicitado','id_proyectos')->where('id_alumno',$alumno)->first();
-  //dd($consultarResi);
-
-  return view('alumno.estadoAlumno',compact('alumno','name','control','proyectos','jurado','calificaciones','consultarResi'));
-}
-
-public function solicitarResidencia($id)
-{
-
-  $alumno = Auth::id();
-
-  $name= DB::table('alumnos')->select('nombre','paterno','materno','id_proyecto')->where('id',$alumno)->first();
-  //dd($name);
-  $control= DB::table('alumnos')->select('nocontro','id_proyecto','nombre','paterno','materno','id_proyecto','id')->where('id',$alumno)->first();
-
-  $idp =  DB::table('alumnos')->select('id_proyecto')->where('id','=',$alumno)->first();
-  //var_dump( $idp );
-  //$stm->bindValue(":id",$rut);
-  $bar = (array) $idp;
-
-  //$gsent->fetchColumn();
- // dd($idp);
- $jurado = DB::table('jurados')->select('id')->where('id_proyecto',$bar)->get();
- //dd($jurado);
-
-  $proyectos = DB::table('proyectos')->select('titulo','nombre_de_empresa')->where('id',$bar)->first();
-  $asesor = DB::table('proyectos')->select('id_asesor')->where('id',$bar)->first();
-  $bar2 = (array) $asesor;
-  $asesorP = DB::table('docentes')->select('prefijo','nombre','paterno','materno')->where('id',$bar2)->first();
-  //dd($asesorP);
-
-  //$proyectos = DB::table('proyectos')->select('id')->where('id_proyecto',$alumno)->first();
-
-  //dd($proyectos);
-  return view('alumno.solicitarResidencia',compact('alumno','name','control','proyectos','jurado','asesor','asesorP'));
-}
+    $proyectos = DB::table('proyectos')->select('titulo')->where('id', $bar)->first();
 
 
-public function EstadoDeProyectoAlumno2($id)
-{
-  $notificacione=Notificacione::where('id_alumno',Auth::guard('alumnos')->user()->id)->where('envio',1)->get()->count();
-  $id =Crypt::decrypt($id);
-  //$ProyectoForoAlumno = ProyectoForoAlumno::find($id);
-  $ProyectoForoAlumno = ProyectoForoAlumno::where('id_alumno', '=', $id)->first();
-  $alumnoenproyecto = ProyectoForoAlumno::all();
-  $alumno = alumno::all();
-  $docente = Docente::all();
- // $docente = Docente::find($id);
-  $foro=Foro::find($ProyectoForoAlumno->id_foro);
-  $proyectoForo=ProyectoForo::find($ProyectoForoAlumno->id_proyecto);
-  $Forodoncente=Forodoncente::all();
+    $calificaciones = DB::table('proyectos')->select('calificacion_seminario', 'calificacion_foro')->where('id', $bar)->first();
+    //dd($calificaciones);
+    //$proyectos = DB::table('proyectos')->select('id')->where('id_proyecto',$alumno)->first();
+
+    //dd($proyectos);
+    return view('alumno.estadoAlumno', compact('alumno', 'name', 'control', 'proyectos', 'jurado', 'calificaciones'));
+  }
+
+  public function solicitarResidencia($id)
+  {
+
+    $alumno = Auth::id();
+
+    $name = DB::table('alumnos')->select('nombre', 'paterno', 'materno', 'id_proyecto')->where('id', $alumno)->first();
+    //dd($name);
+    $control = DB::table('alumnos')->select('nocontro', 'id_proyecto', 'nombre', 'paterno', 'materno', 'id_proyecto')->where('id', $alumno)->first();
+
+    $idp =  DB::table('alumnos')->select('id_proyecto')->where('id', '=', $alumno)->first();
+    //var_dump( $idp );
+    //$stm->bindValue(":id",$rut);
+    $bar = (array) $idp;
+
+    //$gsent->fetchColumn();
+    // dd($idp);
+    $jurado = DB::table('jurados')->select('id')->where('id_proyecto', $bar)->get();
+    //dd($jurado);
+
+    $proyectos = DB::table('proyectos')->select('titulo')->where('id', $bar)->first();
+    $asesor = DB::table('proyectos')->select('id_asesor')->where('id', $bar)->first();
+    $bar2 = (array) $asesor;
+    $asesorP = DB::table('docentes')->select('prefijo', 'nombre', 'paterno', 'materno')->where('id', $bar2)->first();
+    //dd($asesorP);
+
+    //$proyectos = DB::table('proyectos')->select('id')->where('id_proyecto',$alumno)->first();
+
+    //dd($proyectos);
+    return view('alumno.solicitarResidencia', compact('alumno', 'name', 'control', 'proyectos', 'jurado', 'asesor', 'asesorP'));
+  }
 
 
-  $proyectos = ProyectoForo::all();
-  //dd($proyectoForo);
-  return view('alumno.estadoAlumno',compact('foro','proyectoForo','ProyectoForoAlumno','notificacione','alumnoenproyecto','alumno','docente','Forodoncente','proyectos'));
-}
+  public function EstadoDeProyectoAlumno2($id)
+  {
+    $notificacione = Notificacione::where('id_alumno', Auth::guard('alumnos')->user()->id)->where('envio', 1)->get()->count();
+    $id = Crypt::decrypt($id);
+    //$ProyectoForoAlumno = ProyectoForoAlumno::find($id);
+    $ProyectoForoAlumno = ProyectoForoAlumno::where('id_alumno', '=', $id)->first();
+    $alumnoenproyecto = ProyectoForoAlumno::all();
+    $alumno = alumno::all();
+    $docente = Docente::all();
+    // $docente = Docente::find($id);
+    $foro = Foro::find($ProyectoForoAlumno->id_foro);
+    $proyectoForo = ProyectoForo::find($ProyectoForoAlumno->id_proyecto);
+    $Forodoncente = Forodoncente::all();
 
 
-public function registroIr($id)
-{
-  $id =Crypt::decrypt($id);
-  $notificacione=Notificacione::where('id_alumno',Auth::guard('alumnos')->user()->id)->where('envio',1)->count();
-  $ProyectoForoAlumno = ProyectoForoAlumno::all();
-  $alumnoss=ProyectoForoAlumno::where('id_alumno',$id)->first();
-  return view('alumno.proyectosForo',compact('ProyectoForoAlumno','alumnoss','notificacione'));
+    $proyectos = ProyectoForo::all();
+    //dd($proyectoForo);
+    return view('alumno.estadoAlumno', compact('foro', 'proyectoForo', 'ProyectoForoAlumno', 'notificacione', 'alumnoenproyecto', 'alumno', 'docente', 'Forodoncente', 'proyectos'));
+  }
 
-}
+
+  public function registroIr($id)
+  {
+    $id = Crypt::decrypt($id);
+    $notificacione = Notificacione::where('id_alumno', Auth::guard('alumnos')->user()->id)->where('envio', 1)->count();
+    $ProyectoForoAlumno = ProyectoForoAlumno::all();
+    $alumnoss = ProyectoForoAlumno::where('id_alumno', $id)->first();
+    return view('alumno.proyectosForo', compact('ProyectoForoAlumno', 'alumnoss', 'notificacione'));
+  }
 
 
 
-public function detalleSeminario($id)
-{
+  public function detalleSeminario($id)
+  {
 
-  $proyectos = ProyectoForo::all();
+    $proyectos = ProyectoForo::all();
 
-    $notificacione=Notificacione::where('id_alumno',Auth::guard('alumnos')->user()->id)->where('envio',1)->count();
+    $notificacione = Notificacione::where('id_alumno', Auth::guard('alumnos')->user()->id)->where('envio', 1)->count();
 
     $vista = true;
 
     return view('alumno.dictamen', compact('proyectos', 'notificacione', 'vista'));
-
-}
-
-
-public function RegistarResidencia(Request $request)
-{
-$residencia = new Residencia;
-$residencia->id_proyectos = $request->input('id_proyecto');
-$residencia->lugar= $request->input('lugar');
-$residencia->estado= $request->input('estado');
-$residencia->periodo_residencia = $request->input('periodo');
-$residencia->ano = $request->input('anio');
-$residencia->id_alumno= $request->input('id_alumno');
-
-$residencia->save();
- // return 'completado';
-  return view('alumno.alumno');
-}
-
-//controladores del modulo de alan
-
-
-public function SolicitarCambioNombre($id)
-{
-
-  $alumno = Auth::id();
-
-  
-    $name= DB::table('alumnos')->select('nombre','paterno','materno','id_proyecto')->where('id',$alumno)->first();
-  
-    $control= DB::table('alumnos')->select('nocontro','id_proyecto','nombre','paterno','materno','id_proyecto','id')->where('id',$alumno)->first();
-  
-    $idp =  DB::table('alumnos')->select('id_proyecto')->where('id','=',$alumno)->first();
- 
-    $bar = (array) $idp;
-  
-    $jurado = DB::table('jurados')->select('id')->where('id_proyecto',$bar)->get();
-
-    $proyectos = DB::table('proyectos')->select('titulo')->where('id',$bar)->first();
-  
-    return view('alumno.cambioNombre',compact('alumno','name','control','proyectos','jurado'));
-
-}
-
-
-public function RegistarCambioNombre(Request $request)
-{
- //dd($request->all());
-// $bar2 = (array) $asesor;
- $var = 1;
-$bitacoras = new Bitacora;
-$bitacoras->motivo = $request->input('motivoS');
-$bitacoras->dato_anterior= $request->input('dato_ante');
-$bitacoras->dato_nuevo = $request->input('tituloN');
-$bitacoras->evidencias= $request->input('evidencia');
-$bitacoras->id_tipocambio=$var;
-$bitacoras->id_proyecto= $request->input('id_proyecto');
-$bitacoras->id_solicitante= $request->input('id_solicitante');
-
-$bitacoras->save();
-  return 'completado';
-}
-
-public function SolicitarCambioAsesor($id)
-{
-
-  $alumno = Auth::id();
-
-  
-    $name= DB::table('alumnos')->select('nombre','paterno','materno','id_proyecto')->where('id',$alumno)->first();
-  
-    $control= DB::table('alumnos')->select('nocontro','id_proyecto','nombre','paterno','materno','id_proyecto','id')->where('id',$alumno)->first();
-  
-    $idp =  DB::table('alumnos')->select('id_proyecto')->where('id','=',$alumno)->first();
- 
-    $bar = (array) $idp;
-  
-    $jurado = DB::table('jurados')->select('id')->where('id_proyecto',$bar)->get();
-
-//dd($jurado);
-    $proyectos = DB::table('proyectos')->select('titulo')->where('id',$bar)->first();
-
-    $asesor = DB::table('proyectos')->select('id_asesor')->where('id',$bar)->first();
-  $bar2 = (array) $asesor;
-  $asesorP = DB::table('docentes')->select('prefijo','nombre','paterno','materno')->where('id',$bar2)->first();
-  
-    return view('alumno.cambioAsesor',compact('alumno','name','control','proyectos','jurado','asesorP'));
-
-}
-
-public function SolicitarCambioCancelacion($id)
-{
-
-  $alumno = Auth::id();
-
-  
-    $name= DB::table('alumnos')->select('nombre','paterno','materno','id_proyecto')->where('id',$alumno)->first();
-  
-    $control= DB::table('alumnos')->select('nocontro','id_proyecto','nombre','paterno','materno','id_proyecto','id')->where('id',$alumno)->first();
-  
-    $idp =  DB::table('alumnos')->select('id_proyecto')->where('id','=',$alumno)->first();
- 
-    $bar = (array) $idp;
-  
-    $jurado = DB::table('jurados')->select('id')->where('id_proyecto',$bar)->get();
-
-//dd($jurado);
-    $proyectos = DB::table('proyectos')->select('titulo','nombre_de_empresa')->where('id',$bar)->first();
-
-    $asesor = DB::table('proyectos')->select('id_asesor')->where('id',$bar)->first();
-  $bar2 = (array) $asesor;
-  $asesorP = DB::table('docentes')->select('prefijo','nombre','paterno','materno')->where('id',$bar2)->first();
-  
-    return view('alumno.cambioCancelacionP',compact('alumno','name','control','proyectos','jurado','asesorP'));
-
-}
-
-public function SolicitarCambioBajaAlumno($id)
-{
-
-  $alumno = Auth::id();
-
-  
-    $name= DB::table('alumnos')->select('nombre','paterno','materno','id_proyecto')->where('id',$alumno)->first();
-  
-    $control= DB::table('alumnos')->select('nocontro','id_proyecto','nombre','paterno','materno','id_proyecto','id')->where('id',$alumno)->first();
-  
-    $idp =  DB::table('alumnos')->select('id_proyecto')->where('id','=',$alumno)->first();
- 
-    $bar = (array) $idp;
-  
-    $jurado = DB::table('jurados')->select('id')->where('id_proyecto',$bar)->get();
-
-//dd($jurado);
-    $proyectos = DB::table('proyectos')->select('titulo','nombre_de_empresa')->where('id',$bar)->first();
-
-    $asesor = DB::table('proyectos')->select('id_asesor')->where('id',$bar)->first();
-  $bar2 = (array) $asesor;
-  $asesorP = DB::table('docentes')->select('prefijo','nombre','paterno','materno')->where('id',$bar2)->first();
-  
-    return view('alumno.cambioBajaAlumno',compact('alumno','name','control','proyectos','jurado','asesorP'));
-
-}
-
-
-
-
-
+  }
 }

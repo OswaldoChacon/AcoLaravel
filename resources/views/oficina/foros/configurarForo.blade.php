@@ -31,14 +31,18 @@
         </ul>
     </div>
     <div class="card-body">
-        @if(session('mensaje'))
+        @if(session('buenos'))
         <div class="alert alert-success" id="alert-fade">
-            <p>{{session('mensaje')}}</p>
+            @foreach(session('buenos') as $item)
+                <p>{{$item}} ha sido registrado correctamente.</p>
+            @endforeach
         </div>
         @endif
-        @if(session('mensaje1'))
-        <div class="alert alert-success" id="alert-fade">
-            <p>{{session('mensaje1')}}</p>
+        @if(session('errores'))
+        <div class="alert alert-danger" id="alert-fade">
+            @foreach(session('errores') as $item)
+                <p>{{$item}} no fue registrado. Puede que la fecha caiga un fin de semana o ya esté registrada.</p>
+            @endforeach
         </div>
         @endif
 
@@ -106,7 +110,7 @@
     <div class="table-responsive">
         <table class="table table-striped table-hover">
             <thead>
-                <th colspan="1">
+                <th>
                     <h6> <strong>{{$foro->noforo}}º {{$foro->titulo}}</strong></h6>
                     <h6><strong>{{$foro->periodo}} {{$foro->anoo}}</strong></h6>
                 </th>
@@ -115,7 +119,7 @@
                         <!-- <a method="POTS" href="/activar/{{Crypt::encrypt($foro->id)}} ">
                             <button class="btn btn-success btn-sm bnt-block">Activar</button>
                         </a>
-                        <a method="POTS" href="/desactivar/{{Crypt::encrypt($foro->id)}}">                            
+                        <a method="POTS" href="/desactivar/{{Crypt::encrypt($foro->id)}}">
                             <button class="btn btn-danger btn-sm bnt-block">Desactivar</button>
                         </a> -->
                         <a method="POTS" href="/cerrar/{{$foro->id}}">
@@ -247,7 +251,11 @@
                                         <form class="form-center">
                                             {{csrf_field()}}
                                             <input type="hidden" name="idHorario" value="{{$object->id}}" />
-
+                                            <div class="form-group">
+                                                <label for="message-text" class="col-form-label"> ¡ ADVERTENCIA ! </label>
+                                                <label for="message-text" class="col-form-label">Si edita el horario se borrará los registros de la disponibilidad
+                                                de horario de los maestros participantes que no se encuentren en el rango del horario actualizado.
+                                            </div>
                                             <div class="form-group">
                                                 <label for="recipient-name" class="col-form-label">Fecha </label>
                                                 <input type="date" name="fecha" value="{{$object->fecha}}" class="form-control" min="<?php $hoy = date('Y-m-d');
@@ -347,13 +355,13 @@
             </tbody>
         </table>
     </div>
-    <form action="/guardarHorarioPDF" method="post" enctype="multipart/form-data">
+    <!-- <form action="/guardarHorarioPDF" method="post" enctype="multipart/form-data">
         {{csrf_field()}}
         <input type="file" class="fomr-control" name="file">
         <!-- F-8" enctype="multipart/form-data" -->
-        <button type="submit" class="btn btn-primary btn-sm">Subir horario</button>
+        <!-- <button type="submit" class="btn btn-primary btn-sm">Subir horario</button>
     </form>
-    <br>
+    <br> -->
     <!-- </div> -->
 </div>
 <!-- </div> -->
@@ -392,8 +400,8 @@
 
     function limpiar() {
         var div = document.getElementById("main");
-        var botonGuardar = document.getElementById("guardar");        
-        botonGuardar.style.display = "none";        
+        var botonGuardar = document.getElementById("guardar");
+        botonGuardar.style.display = "none";
         if (div !== null) {
             cantidad = "";
             while (div.hasChildNodes()) {
@@ -403,9 +411,9 @@
     }
 
     function cancelar(divclass){
-        limpiar();                
-        var elementssssss = document.getElementById(divclass);        
-        elementssssss.style.display = "none";        
+        limpiar();
+        var elementssssss = document.getElementById(divclass);
+        elementssssss.style.display = "none";
     }
 
 

@@ -9,21 +9,20 @@
 			{{csrf_field()}}
 			<div class="form-group">
 				<label for="name">Usuario</label>
-				<input class="form-control" type="text" name="name" value={{ $alumno->name }}>
-				{!! $errors->first('name','<span class="help-block alert alert-danger">:message</span>')!!}
+				<input class="form-control" type="text" name="name" value="{{ $alumno->nombre }}">
+				{!! $errors->first('name','<span class="text-danger">:message</span>')!!}
 
-				<label for="name">Correo</label>
-				<input class="form-control" type="email" name="email" value={{ $alumno->email }}>
-				{!! $errors->first('email','<span class="help-block alert alert-danger">:message</span>')!!}
+				<!-- <label for="name">Correo</label>
+				<input class="form-control" type="email" name="email" value="{{ $alumno->email }}">
+				{!! $errors->first('email','<span class="text-danger">:message</span>')!!} -->
 
 
 				<label for="name">Nombre</label>
-				<input class="form-control" type="text" name="nombre" value={{ $alumno->nombre }}>
-				{!! $errors->first('nombre','<span class="help-block alert alert-danger">:message</span>')!!}
-
+				<input class="form-control" type="text" name="nombre" value="{{ $alumno->nombre }}">
+				{!! $errors->first('nombre','<span class="text-danger">:message</span>')!!}
 
 				<label for="name">Apellido Paterno</label>
-				<input class="form-control" type="text" name="paterno" value={{ $alumno->paterno }}>
+				<input class="form-control" type="text" name="paterno" value="{{ $alumno->paterno }}">
 				{!! $errors->first('paterno','<span class="help-block alert alert-danger">:message</span>')!!}
 
 				<label for="name">Apellido Materno</label>

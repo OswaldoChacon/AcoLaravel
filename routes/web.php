@@ -39,114 +39,17 @@ Route::get('registroAlumno', 'AuthAlumno\RegisterController@showLoginFrom')->nam
 /////////////////////////////////						OFICINA CONTROLLER					/////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/////////////////////////////////						POST					/////////////////////////////////////////
 
-Route::post('/profe', 'OficinaController@profe')->name('profe');
-Route::post('/alumnoT', 'OficinaController@alumno')->name('alumnoT');
-Route::post('/guardar/{id}', 'OficinaController@guardar')->name('guardar');
-Route::post('dartokenProfe', 'OficinaController@dartokenProfe')->name('dartokenProfe');
-Route::post('dartokenAlumno', 'OficinaController@dartokenAlumno')->name('dartokenAlumno');
-Route::post('profes-envia-horario', 'OficinaController@enviaHorario');
-Route::post('lineaDeInvetigacionguardar', 'OficinaController@lineaDeInvetigacionguardar')->name('lineaDeInvetigacionguardar');
-Route::post('areadeconocimientoguardar', 'OficinaController@areadeconocimientoguardar')->name('areadeconocimientoguardar');
-Route::post('guardarForo', 'OficinaController@guardarForo')->name('guardarForo');
-Route::post('agregarProfeAforo/{id}', 'OficinaController@agregarProfeAforo')->name('agregarProfeAforo');
-Route::post('agregarProfeAforoJurado/{id}', 'OficinaController@agregarProfeAforoJurado')->name('agregarProfeAforoJurado');
-Route::post('numMaestros/{id}', 'OficinaController@numMaestros')->name('numMaestros');
-Route::post('/configurarForoAtributos/{id}','OficinaController@configurarForoAtributos');
-/////////////////////////////////						GET					/////////////////////////////////////////
 
-Route::get('oficina', 'OficinaController@index')->name('oficina');
-Route::get('tokenAlumno', 'OficinaController@tokenAlumno')->name('tokenAlumno');
-Route::get('tokenAlumno/clean-screen', 'OficinaController@cleanScreen');
-Route::get('download', 'AlumnoController@download')->name('download');
-Route::get('tokenProfe', 'OficinaController@tokenProfe')->name('tokenProfe');
-Route::get('/editar/{id}', 'OficinaController@editar')->name('editar');
-Route::get('alumnos', 'OficinaController@alumnos')->name('alumnos');
-Route::get('profes', 'OficinaController@profes')->name('profes');
-Route::get('lineaDeInvetigacion', 'OficinaController@lineaDeInvetigacion')->name('lineaDeInvetigacion');
-Route::get('areadeconocimiento', 'OficinaController@areadeconocimiento')->name('areadeconocimiento');
-Route::get('/', 'Auth\LoginController@showLoginFrom')->middleware('guest');
-Route::get('configurarForo/{id_foro}', 'OficinaController@configurarForo')->name('configurarForo');
-Route::get('eliminarForo/{id}', 'OficinaController@eliminarForo')->name('eliminarForo');
-Route::get('crearForo', 'OficinaController@crearForo')->name('crearForo');
-Route::get('foros', 'OficinaController@foros')->name('foros');
-Route::get('/activar/{id}', 'OficinaController@activar')->name('activar');
-Route::get('/desactivar/{id}', 'OficinaController@desactivar')->name('desactivar');
-Route::get('proyecto/{id}', 'OficinaController@proyecto')->name('proyecto');
-Route::get('proyectoDescripcion/{id}', 'OficinaController@proyectoDescripcion')->name('proyectoDescripcion');
-Route::get('/archivoForo/{id}', 'OficinaController@archivoForo')->name('archivoForo');
-Route::get('/archivoForo1/{id}', 'OficinaController@archivoForo1')->name('archivoForo');
-Route::get('/archivoForo2/{id}', 'OficinaController@archivoForo2')->name('archivoForo');
-Route::get('/jurado/{id}', 'OficinaController@jurado')->name('jurado');
-Route::get('/cerrar/{id}', 'OficinaController@cerrar')->name('cerrar');
-Route::get('/evento_et',function(){
-    return view('oficina.horarios.eventoET');
-});
-Route::get('/generarHorario', 'Horario\HorarioController@generarHorarioView');
-// function () {
-//     $salones = Foro::select('num_aulas')->where('acceso', 1)->get()->first();
-//     // dd($salones);
-//     return view('oficina.horarios.generarHorario');
-// });
+
+
 
 
 // Route::get('Jprojects/get-proyectos-foro', 'OficinaController@getProyectosForo');
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////						DOCENTE CONTROLLER					/////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/////////////////////////////////						POST				/////////////////////////////////////////
 
-Route::post('profes', 'DocenteController@profes')->name('profes');
-Route::post('/guardar/docente/{id}', 'DocenteController@guardar')->name('guardar');
-Route::post('dartokenAlumnoP', 'DocenteController@dartokenAlumnoP')->name('dartokenAlumnoP');
 
-/////////////////////////////////						GET					/////////////////////////////////////////
-
-Route::get('docente', 'DocenteController@index')->name('docenteLogin');
-Route::get('horariogeneradoDocente','DocenteController@horario')->name('horariogeneradoDocente');
-Route::get('/editar/docente/{id}', 'DocenteController@editar')->name('editar');
-Route::get('registaralumno', 'DocenteController@registaralumno')->name('registaralumno');
-Route::get('notificacionesdocentes', 'DocenteController@notificaciones')->name('notificacionesdocentes');
-Route::get('confirmardocentes/{id}', 'DocenteController@confirmar')->name('confirmardocentes');
-Route::get('proyectosAsessorados', 'DocenteController@proyectoDocentes')->name('proyectosAsessorados');
-Route::get('proyectoDescripcionDocente/{id}', 'DocenteController@proyectoDescripcionDocente')->name('proyectoDescripcionDocente');
-Route::get('showprojects', 'DocenteController@showprojects')->name('showprojects');
-Route::get('/archivo/{id}', 'DocenteController@archivo')->name('archivo');
-Route::get('/archivo1/{id}', 'DocenteController@archivo1')->name('archivo');
-Route::get('/archivo2/{id}', 'DocenteController@archivo2')->name('archivo');
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////						ALUMNO CONTROLLER					/////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////						POST				/////////////////////////////////////////
-
-Route::post('/guardar/alumno/{id}', 'AlumnoController@guardar')->name('guardar');
-Route::post('SubirProtocolo/{id}', 'AlumnoController@SubirProtocolo')->name('SubirProtocolo');
-Route::post('SubirDiapositiva/{id}', 'AlumnoController@SubirDiapositiva')->name('SubirDiapositiva');
-Route::post('SubirSeminario/{id}', 'AlumnoController@SubirSeminario')->name('SubirSeminario');
-Route::post('create/{id}', 'AlumnoController@save')->name('create');
-Route::post('diapositiva/{id}', 'AlumnoController@save1')->name('diapositiva');
-Route::post('Guardar/{id}', 'AlumnoController@save2')->name('Guardar');
-Route::post('RegistarProyecto/{id}', 'AlumnoController@RegistarProyecto')->name('RegistarProyecto');
-
-/////////////////////////////////						GET					/////////////////////////////////////////
-Route::get('horariogeneradoAlumno','AlumnoController@horario')->name('horariogeneradoAlumno');
-Route::get('/editar/alumno/{id}', 'AlumnoController@editar')->name('editar');
-Route::get('dictamen', 'AlumnoController@dictamen')->name('dictamen');
-Route::get('alumno', 'AlumnoController@index')->name('alumnoLogin');
-Route::get('registraProyecto', 'AlumnoController@registraProyecto')->name('registraProyecto');
-Route::get('productByCategory/{id}', 'AlumnoController@byFoundation');
-Route::get('proyectoAlumno/{id}', 'AlumnoController@proyectoAlumno');
-Route::get('proyectoDescripcionAlumno/{id}', 'AlumnoController@proyectoDescripcionAlumno')->name('proyectoDescripcionAlumno');
-Route::get('descarga/{id}', 'AlumnoController@descarga')->name('descarga');
-Route::get('notificaciones', 'AlumnoController@notificaciones')->name('notificaciones');
-Route::get('confirmar/{id}', 'AlumnoController@confirmar')->name('confirmar');
-Route::get('proyectosubir/{id}', 'AlumnoController@proyectosubir')->name('proyectosubir');
-Route::get('mostrarEvaluacion/{id}', 'AlumnoController@mostrarEvaluacion')->name('mostrarEvaluacion');
 
 
 

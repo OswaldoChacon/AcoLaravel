@@ -20,6 +20,7 @@ use App\Tokenalumno;
 use App\Tokendocente;
 use App\User;
 use DB;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
@@ -291,24 +292,58 @@ class OficinaController extends Controller
     {
         $validator = $this->validate(request(), [
             'clave' => 'required',
-            'linea' => 'required',
+            'nombre' => 'required',
         ]);
-        $linea1 = Lineadeinvestigacion::where('clave', $request->clave)->first();
-        $linea2 = Lineadeinvestigacion::where('linea', $request->clave)->first();
-        if ($linea1 == null && $linea2 == null) {
+        $clave = Lineadeinvestigacion::where('clave', $request->clave)->first();
+        $nombre = Lineadeinvestigacion::where('linea', $request->nombre)->first();                
+        if ($clave == null && $nombre == null) {
 
             DB::table('lineadeinvestigacions')->insert([
                 [
                     'clave' => $request->clave,
-                    'linea' => $request->linea,
+                    'linea' => $request->nombre,
                 ]
             ]);
-            Session::flash('message1', "Linea de Investigacion Registrado");
-        } else {
-            Session::flash('message', "Linea de investigación ya existente");
+            Session::flash('success', "Linea de investigacion registrado");
         }
+        elseif($clave != null && $nombre != null) {
+            Session::flash('error', "Clave nombre y repetida");
+        }
+         elseif($clave!=null) {
+            Session::flash('error', "Clave repetida");
+        }
+        elseif($nombre !=null){
+            Session::flash('error', "Nombre de linea repetida");
+        }        
         // $lineadeinvestigacion = Lineadeinvestigacion::all();
         return redirect()->route('lineaDeInvetigacion');
+    }
+    public function LineaDeInvestigacioneliminar($id){        
+        $id = Crypt::decrypt($id);                        
+        try{
+            $l=Lineadeinvestigacion::where('id',$id)->delete();
+            Session::flash('success', "Linea de investigación borrada");            
+        }catch(Exception $e){
+            Session::flash('error', "Error al eliminar");
+        }        
+        return redirect()->route('lineaDeInvetigacion');
+        // return Redirect::back()->withErrors(['error', 'The Message']);
+    }
+    public function LineaDeInvestigacioneditar(Request $request){        
+        // $id = $request->get('idLinea');
+        // $clave = $request->get('clave');
+        // $nombre = $request->get('nombre');        
+        
+        $validator = $this->validate(request(), [
+            'clave' => 'required',
+            'nombre' => 'required',
+        ]);                
+        $lineaUpdate = Lineadeinvestigacion::where('id',$request->idLinea)->first();        
+        $lineaUpdate->clave = $request->clave;
+        $lineaUpdate->linea = $request->nombre;        
+        $lineaUpdate->save();
+        Session::flash('success', "Linea de investigación actualizada");
+        // return redirect()->route('lineaDeInvetigacion');
     }
 
 
@@ -343,26 +378,32 @@ class OficinaController extends Controller
     }
     public function crearForo(Request $request)
     {
-        return view('oficina.foros.crearForo');
+        $ultimoforo = Foro::orderBy('noforo','desc')->get()->first();
+        return view('oficina.foros.crearForo',compact('ultimoforo'));
     }
     public function guardarForo(Request $request)
     {
-        $validator = $this->validate(request(), [
+        $validator = $this->validate($request, [
             'noforo' => 'required',
             'titulo' => 'required',
             'periodo' => 'required',
             'anoo' => 'required',
         ]);
-        $doc = Docente::all();
-        $tama = count($doc, COUNT_RECURSIVE);
-        // $user = User::find(1);
+        //prefijo
+        $prefijo = str_split($request->anoo);
+        $prefijo = $prefijo[2] . $prefijo[3] ;
+        if($request->periodo == "Agosto-Diciembre"){
+            $prefijo = $prefijo."02-";
+        }else{
+            $prefijo = $prefijo."01-";
+        }
         $user = User::find(Auth()->user()->id);
-        // $docente = Docente::where('id', Auth::guard('docentes')->user()->id)->first();
-        // $user1 = $user->prefijo . '  ' . $user->nombre . '  ' . $user->paterno . '  ' . $user->materno;
+        // dd($user);
         $foro = Foro::where('noforo', $request->noforo)->first();
-        $anoo = Foro::where('anoo', $request->anoo)->get();
+        $anoo = Foro::where('anoo', $request->anoo)->where('periodo',$request->periodo)->get();
+        // dd($anoo,$request->periodo);
 
-        if ($foro == null && count($anoo) < 2) {
+        if ($foro == null && count($anoo) == 0) {
 
             DB::table('foros')->insert([
                 [
@@ -380,17 +421,20 @@ class OficinaController extends Controller
             ]);
             Session::flash('message', "Foro Creado");
             $foro = Foro::all();
-            // return view('oficina.foros', compact('foro'));
             return redirect()->route('foros');
-        } else {
-            Session::flash('message', "Numero de foro ya existente o hay un foro en un periodo y año duplicado");
+        } elseif($foro!=null) {
+            Session::flash('message', "Numero de foro ya existente");
+            return redirect()->route('crearForo');
+        }
+        elseif(count($anoo)>0){
+            Session::flash('message', "Ya existe un foro con el mismo periodo y año");
             return redirect()->route('crearForo');
         }
     }
 
     public function foros()
     {
-        $foro = Foro::all();            
+        $foro = Foro::all();
         return view('oficina.foros.foros', compact('foro'));
     }
 
@@ -771,11 +815,11 @@ class OficinaController extends Controller
             ->where('posicion', $posicion)
             ->get();
 
-
         if (count($horariobreak) > 0) {
             $deletes = DB::table('horariobreak')
                 ->where('id', $horariobreak[0]->id)
                 ->delete();
+
         } else {
             DB::table('horariobreak')->insert([
                 [

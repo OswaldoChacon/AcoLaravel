@@ -10,8 +10,20 @@ class HorarioProyectosController extends Controller
     public function index()
     {
         $foros = DB::table('foros')->get();
+        // $idForo = $request->get('idForo');
+        $foroactivo= DB::table('foros')->select('id')->where('acceso',1)->first();
+        $fa=$foroactivo->id;
 
-        return view('oficina.horarios.horarios', compact('foros'));
+        $proyectos_aceptados = DB::table('proyectos')
+        ->where('aceptado',1)
+        ->where('id_foro','=',$fa)
+        ->get();
+        // dd($proyectos_aceptados);
+        // $checkeado= DB::table('proyectos')->select('participa')->where('participa',1);
+
+        // return $proyectos_aceptados;
+
+        return view('oficina.horarios.horarios', compact('foros','proyectos_aceptados'));
     }
     public function editarParticipa(Request $request){
         $id = $request->get('id');
@@ -37,5 +49,5 @@ class HorarioProyectosController extends Controller
         ->get();
         return $proyectos_aceptados;
     }
-  
+
 }

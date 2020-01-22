@@ -7,11 +7,11 @@
 
 <div class="card">
     <div class="card-body">
-         <!--<form action="/generarHorarioAnt" method="POST">
-        @csrf-->
+         <!-- <form action="/generarHorarioAnt" method="POST">
+        @csrf -->
         @if($salones != null)
         
-            <meta name="csrf-token" content="{{ csrf_token() }}">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
             @if (Session::has('message'))
             <div class="alert alert alert-danger" id="alert-fade">({{ Session::get('message') }})</div>
             @endif
@@ -38,7 +38,7 @@
                 </div>                        
             </div>
             <button type="button" class="btn btn-sm btn-primary " id="generarHorario">Generar horario</button> 
-            <!--<button type="submit" class="btn btn-sm btn-primary " id="generarHorari">Generar horario</button>
+            <!-- <button type="submit" class="btn btn-sm btn-primary " id="generarHorari">Generar horario</button>
             </form> -->
             <div class="container no-content" style="margin-top:10px; ">
             <!-- <div class="remove">
@@ -128,7 +128,10 @@
             },
             success: function(data) {
                 if(data==null)     {
-                    $('.no-content').after('<div class="remove"><span class="text-danger">Verifica que todos los maestros tengan la misma disponibilidad como de proyectos o que un proyecto al menos tenga un espacio en comun entre los maestros</span><a href="proyectosJurado" class="btn-primary btn-sm btn">Ver eventos</a></div>');
+                    $('.no-content').after('<div class="remove">Verifica<ul><li class="text-danger">Que todos los maestros tengan la misma cantidad de espacio de tiempo como de proyectos</li>'+
+                     '<li class="text-danger">Que un proyecto tenga al menos un espacio en comun entre los maestros</span></li>'+
+                     '<li class="text-danger">Que exista la suficiente cantidad de espacios de tiempo para asignar todos los proyectos</li></ul>'+
+                    '<a href="proyectosJurado" class="btn-primary btn-sm btn">Ver eventos</a></div><br>');
                 }               
                 $(".loaderContainer").removeClass('active');
                 var tableHour = '';

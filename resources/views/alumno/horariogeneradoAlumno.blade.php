@@ -19,8 +19,11 @@
         @if(Session::has('mensage'))
         <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('mensage') }}</p>
         @endif
+        @if(Session::has('mens'))
+        <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('mens') }}</p>
+        @endif
 
-        @if($horario != null)
+        @if($clave != null || $horario != null)
 
           <tr>
             <td>{{$horario->fecha}}</td>

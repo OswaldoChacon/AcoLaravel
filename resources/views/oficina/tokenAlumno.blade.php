@@ -14,8 +14,8 @@
     <div class="form-group ">
       <input class="form-control" type="number" name="tokenN" id="cantidadToken" placeholder="Cuantos Token desea">
     </div>
-    <button type="button" class="btn btn-primary" value="Registrar" onclick="capturar()">Generar</button>
-    <button type="button" class="btn btn-warning" onclick="limpiar()">Cancelar</button>
+    <button type="button" class="btn btn-primary btn-sm" value="Registrar" onclick="capturar()">Generar</button>
+    <button type="button" class="btn btn-warning btn-sm" onclick="limpiar()">Cancelar</button>
     <!-- {!! $errors->first('password','<span class="help-block">:message</span>')!!} -->
     <!-- </div>    -->
     <!-- </thead>
@@ -59,7 +59,7 @@
       <span>Tokens generados: </span><span style="font-weight: bold">{{$tokealumno->count()}}</span>
       <ul class="nav justify-content-end">
         <li class="nav-item">
-          <a href="/tokenAlumno/clean-screen" class="btn btn-primary btn-sm bnt-block btnLimpiar">Limpiar Pantalla</a>
+          <a title="Quitar tokens usados" href="/tokenAlumno/clean-screen" class="btn btn-primary btn-sm bnt-block btnLimpiar"><i class="fas fa-eye-slash"></i></a>
         </li>
       </ul>
 

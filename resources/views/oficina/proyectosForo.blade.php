@@ -14,6 +14,9 @@
         </thead>
         <tbody>
     </div>
+    @if(Session::has('men'))
+        <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('men') }}</p>
+        @endif
     @foreach ($proyectoForo as $proyecto)
     @foreach ($docentes as $doc)
     @if ($proyecto->id_foro==$id && $proyecto->id_asesor==$doc->id )
