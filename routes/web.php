@@ -187,18 +187,28 @@ Route::get('EstadoDeProyectoAlumno/{id}','AlumnoController@EstadoDeProyectoAlumn
 Route::get('registroIr/{id}', 'AlumnoController@registroIr');
 Route::get('detalleSeminario', 'AlumnoController@detalleSeminario');
 Route::get('solicitarResidencia/{id}', 'AlumnoController@solicitarResidencia');
+
+//ruta para registrar la solicitud de residencia
+//Route::post('RegistarProyecto/{id}', 'AlumnoController@RegistarProyecto')->name('RegistarProyecto');
+Route::post('/RegistarResi', 'AlumnoController@RegistarResidencia');
+
+
+Route::get('detalleSolicitud/{id}/{id_proyectos}', 'CoordinadorController@datelleSeguimientoResi');
+Route::post('/ActualizarResi/{id}', 'CoordinadorController@AceptarResidencia');
+
+//Route::post('lineaDeInvetigacionguardar', 'OficinaController@lineaDeInvetigacionguardar')->name('lineaDeInvetigacionguardar');
 //rutas de oficina
 Route::get('se', 'OficinaController@editarParticipa2');
-
+Route::get('oficina/detallesSeguiPro/{id}','OficinaController@datelleSeguimiento')->name('proyectosseguioficina');
+Route::get('jurados/detallepro/{id}','JuradosController@datelleSeguimiento');
 Route::get('jurados/prueba', 'JuradosController@projectsSegui')->name('juradosprojects2');
 //Route::get('horariosalv/get-proyectos-foro-horario', 'Horario\seguiController@getProyectosForo2');
 //rutas de docente
 //Route::get('proyectosDoc','DocenteController@obtenerProyectos')->name('proyectosDoc');
 Route::get('docentes/proyectosDoc','DocenteController@obtenerProyectos')->name('proyectosDoc');
-
+Route::get('docentes/detallesSegui/{id_pro}','DocenteController@datelleSeguimiento')->name('proyectossegui');
 //Route::get('jurados/pruebaj','JuradosController@projectsSeguiDoc')->name('proyectosDoc');
 //asi quedaria hay que probar mañana para que en la vista proyectos 2 valla @extends('seminario.layout')
-
 
 
 
@@ -206,3 +216,32 @@ Route::get('docentes/proyectosDoc','DocenteController@obtenerProyectos')->name('
 
 //Route::get('horariosalv2/get-proyectos-foro-horario', 'Horario\seguiDocenteController@getProyectosForo2n');
 //Route::get('jurados/prueba', 'JuradosController@projectsSegui')->name('juradosprojects2');
+//
+//rutas para el coordinador de carrera
+Route::get('/loginCoordinador', 'AuthCoordinador\LoginController@showLoginFrom')->name('loginCoordinador');
+
+
+
+Route::get('coordinador', 'CoordinadorController@index')->name('cordiLogin');
+//Route::post('docente', 'AuthDocente\LoginController@login')->name('docente');
+//Route::get('oficina', 'OficinaController@index')->name('oficina2');
+Route::post('login2', 'AuthCoordinador\LoginController@login')->name('login2');
+//Route::get('/loginDocente', 'AuthDocente\LoginController@showLoginFrom')->name('loginDocente');
+
+Route::get('/aprobados', 'CoordinadorController@solicitudesAprobadas');
+//Route::get('detalleSeminario', 'AlumnoController@detalleSeminario');
+Route::get('Coordinador', 'CoordinadorController@solicitudesResibidas')->name('solicitud');
+Route::get('Coordinador/aprobados/{id_pro}','CoordinadorController@datelleSeguimiento')->name('proyectosseguiResi');
+
+//rutas del modulo de alan 
+Route::get('cambioNombre/{id}','AlumnoController@SolicitarCambioNombre')->name('cambioNombre');
+Route::get('cambioAsesor/{id}','AlumnoController@SolicitarCambioAsesor')->name('cambioSsesor');
+Route::get('cambioCancelacion/{id}','AlumnoController@SolicitarCambioCancelacion')->name('cambioCancelacion');
+Route::get('cambioBajaA/{id}','AlumnoController@SolicitarCambioBajaAlumno')->name('cambioBajaA');
+
+Route::post('/RegistarCambioNombre', 'AlumnoController@RegistarCambioNombre');
+
+
+Route::get('Oficina', 'OficinaController@solicitudesResibidasCambios')->name('solicitudesCambios');
+Route::get('Docentes', 'DocenteController@notificacionesCambios')->name('notificacionesCambios');
+Route::get('Docentes/notificacionesCambios/{id_pro}','DocenteController@datellSolicitudCambios')->name('proyectoscambios');

@@ -6,12 +6,13 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<link rel="icon" type="image/png" sizes="32x32" href="{{URL::asset('img/favicon-32x32.png')}}">
-	<title>Departamento de proyectos de investigación</title>
+	<title>Departamento Coordinacion de carrera</title>
 
 	<!-- Bootstrap CSS CDN -->
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<!-- Our Custom CSS	 -->
 	<link rel="stylesheet" href="{{ URL::asset('css/app.css') }}">
+
 	<!-- Font Awesome JS -->
 	<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
 	<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
@@ -44,73 +45,22 @@
 			</div>
 			<ul class="list-unstyled components">
 				<li>
-					<a href="{{route('oficina')}}"> Inicio</a>
+					<a href="#"> Inicio</a>
 				</li>
-
-				<li>
-					<a href="{{route('solicitudesCambios')}}">Notificaciones</a>
-				</li>
-
-				<li>
-					<a href="{{route('lineaDeInvetigacion')}}">Linea de investigación</a>
-				</li>
-				<li>
-					<a href="{{route('tokenProfe')}}">Registrar token para docentes</a>
-				</li>
-				<li>
-					<a href="{{route('tokenAlumno')}}">Registrar token para alumnos</a>
-				</li>
+			
 				<!-- <li> -->
-				<li class="active">
-					<a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Foros</a>
-					<ul class="collapse list-unstyled" id="homeSubmenu">
-						<li>
-							<a href="{{route('crearForo')}}">Crear Foros</a>
-						</li>
-						<li>
-							<a href="{{route('foros')}}">Foros</a>
-						</li>
-					</ul>
-				</li>
-				<li>
-					<a href="#menuhorarios" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Horarios</a>
-					<ul class="collapse list-unstyled" id="menuhorarios">
-						<li>
-							<a href="/horarios">Proyectos registrados</a>
-						</li>
-						<li>
-							<a href="/addHour">Asignar horario del jurado</a>
-						</li>
-						<li>
-							<a href="/proyectosJurado">Proyectos participantes</a>
-						</li>
-						<li>
-							<a href="/generarHorario">Generar horario</a>
-						</li>						
-					</ul>
-				</li>
-				<li>
-					<a href="{{route('alumnos')}}">Alumnos</a>
-				</li>
-				<li>
-					<a href="{{route('profes')}}">Docentes</a>
-				</li>
-				<li>
-					<a href="{{ route('seminarios.create') }}">Seminario</a>
-				</li>
-				<li>
-					<a href="{{ route('juradosprojects') }}">Asignar jurado</a>
-				</li>
-				<li>
-					<a href="{{ route('criterios') }}">Asignar criterios</a>
-				</li>
+			
+			
 			{{-- 	<li>
 					<a href="{{ route('sheets') }}">Hojas de evaluaciones del seminario</a>
 				</li> --}}
-				
 
 				<li>
-					<a href="{{route('juradosprojects2')}}">Segumiento De Proyectos</a>
+					<a href="/aprobados">Proyectos Aceptados</a>
+				</li>
+
+				<li>
+					<a href="{{ route('solicitud') }}">Solicitudes a Residencia</a>
 				</li>
 			</ul>
 		</nav>
@@ -123,7 +73,7 @@
 					<button type="button" id="sidebarCollapse" class="btn btn-default">
 						<i class="fas fa-align-justify" style="color:#fff"></i>
 					</button>
-					<span style="color:#fff">Oficina de .......</span>
+					<span style="color:#fff">Oficina de Coordinacion de carrera</span>
 					<!-- Arreglar para el boton de usuario -->
 					<!-- <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 						<i class='fas fa-user' style='font-size:24px; color:#fff'></i>
@@ -180,8 +130,8 @@
 	<script src="{{asset('js/jquery.js')}}"></script>
 	<!-- Popper.JS -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
-	<!-- Bootstrap JS -->	
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<!-- Bootstrap JS -->
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
 	<script src="{{asset('js/all.js')}}"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {

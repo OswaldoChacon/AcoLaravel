@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Alumno;
+use App\Residencia;
+use App\Bitacora;
 use App\Archivo;
 use App\Aredeconocimiento;
 use App\Docente;

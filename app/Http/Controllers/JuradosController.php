@@ -140,4 +140,29 @@ class JuradosController extends Controller
         return view('seminario.jurados.pruebaj',compact('foros','proyectos'));
     }
 
+    
+    public function datelleSeguimiento(Request $request, $id){
+    
+        $foros=Foro::all();
+     
+     
+        //$idp =  DB::table('jurados')->select('id_proyecto')->where('id_docente','=',$docente)->first();
+      // $idp2 = DB::table('jurados')->where('id_docente','=',$docente)->get();
+     //  $bar2 = (array) $idp2;  // hasta aqui obtengo los ids de los prouyectos que tiene el docente
+       //dd($bar2);
+       //$idp3=DB::table('proyectos')
+       $proyectos = ProyectoForo::all();
+   
+       // $name=DB::table('docentes')->select('prefijo','nombre','paterno','materno')->where('id',$docente)->first();
+        $proyecto = DB::table('proyectos')->where('id','=',$id)->get();
+        $alumno = DB::table('alumnos')->where('id_proyecto','=',$id)->get();
+        //dd($proyecto);
+        $consultarResi = DB::table('residencias')->select('id','id_alumno','lugar','solicitado')->where('id_proyectos',$id)->first();
+       // dd($consultarResi);
+        return view('seminario.jurados.detallepro',compact('foros','proyectos','proyecto','alumno','consultarResi'));
+    
+      }
+
+
+
 }

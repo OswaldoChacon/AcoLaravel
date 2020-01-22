@@ -29,9 +29,12 @@
 				<li>
 					<a href="{{route('registaralumno')}}">Registar Alumno</a>
 				</li>
-				<li>
+				{{-- <li>
 					<!-- <a href="/registraProyecto">Registrar Poryecto</a> -->
 					<a href="{{route('notificacionesdocentes')}}">Notificaciones <span class="badge"></span></a>
+				</li> --}}
+				<li>
+					<a href="{{route('notificacionesCambios')}}">Notificaciones</a>
 				</li>
 				<li>
 					<a href="{{route('proyectosAsessorados')}}">Proyectos como asesor</a>
