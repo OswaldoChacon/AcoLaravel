@@ -41,25 +41,25 @@
 				</li>
 				<li>
 					<a href="{{route('notificaciones')}}">Notificaciones</a>
-                </li>
-                <li>
+				</li>
+				<li>
 					<a href="{{route('horariogeneradoAlumno')}}">Horario asignado para exponer</a>
 				</li>
 				<li>
 					<a href="{{ route('dictamen') }}">Calificación del seminario</a>
 				</li>
 
-					@if (Auth::guard('alumnos')->user()->acceso==0)
-                <li>
-				<a class="list-group-item" href="/EstadoDeProyectoAlumno/{{Crypt::encrypt(Auth::guard('alumnos')->user()->id)}}">Estado de Proyecto</a>
+				@if (Auth::guard('alumnos')->user()->acceso==0)
+				<li>
+					<a class="list-group-item" href="/EstadoDeProyectoAlumno/{{Crypt::encrypt(Auth::guard('alumnos')->user()->id)}}">Estado de Proyecto</a>
 					{{-- @endif --}}
-					
-					</li>
+
+				</li>
 				@endif
 			</ul>
-			
+
 		</nav>
-	
+
 		<!-- Page Content  -->
 		<div id="content">
 			<nav class="navbar navbar-expand-lg navbar-light fixed-top">
@@ -113,7 +113,7 @@
 				@yield('content')
 			</div>
 		</div>
-	</div>	
+	</div>
 	<script src="{{asset('js/jquery.js')}}"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 	<!-- Jquery CDN -->
